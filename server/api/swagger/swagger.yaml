@@ -1,0 +1,136 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Fixalicious
+
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+  
+# format of the responses to the client (Accepts)
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /session:
+    x-swagger-router-controller: session
+    get:
+      summary: Get all sessions
+      operationId: getAllSessions
+      tags : [Session]
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items: 
+              $ref: "#/definitions/SessionResource"
+        default:
+          description: Error
+          schema: 
+            $ref: "#/definitions/ErrorResponse"
+  /session/{name}:
+    x-swagger-router-controller: session
+    post:
+      summary: Create a session
+      operationId: postSession
+      tags : [Session]
+      parameters:
+        - name: name
+          in: path
+          description: Name of the session
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success   
+    delete:
+      summary: Delete a session
+      operationId: deleteSession
+      tags : [Session]
+      parameters:
+        - name: name
+          in: path
+          description: Name of the session
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success   
+  /transaction/{session}:
+    x-swagger-router-controller: transaction
+    get:
+      summary: Get all transactions
+      operationId: getAllTransactions
+      tags : [Transaction]
+      parameters:
+        - name: session
+          in: path
+          description: FIX session name
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items: 
+              $ref: "#/definitions/TransactionResource"
+        default:
+          description: Error
+          schema: 
+            $ref: "#/definitions/ErrorResponse"
+    post:
+      summary: Create a new transaction
+      operationId: createTransaction
+      tags : [Transaction]
+      parameters:
+        - name: session
+          in: path
+          description: FIX session name 
+          required: true
+          type: string
+        - name: transaction
+          in: body
+          description: JSON object containing transaction details
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/TransactionResource"
+      responses:
+        "200":
+          description: Success  
+    delete:
+      summary: Delete all transactions in a given session
+      operationId: deleteTransaction
+      tags : [Transaction]
+      parameters:
+        - name: session
+          in: path
+          description: FIX session name 
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success            
+# complex objects have schema definitions
+definitions:
+  ErrorResponse:
+    description: Login result
+  SessionResource:
+    description: Session
+    properties:
+      name:
+        type: string
+  TransactionResource:
+    description: Transaction
+    properties:
+      id:
+        type: string
+      direction:
+        type: string
+      message:
+        type: string

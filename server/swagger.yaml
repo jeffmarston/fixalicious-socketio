@@ -1,0 +1,75 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Eze library
+# basePath prefixes all resource paths 
+basePath: /api/library/v1
+# base path for app files
+x-ims-appBasePath: /app/library/v1
+
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+  
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /health:
+    x-swagger-router-controller: health
+    get: 
+      x-ims-anonymous : true
+      description: Provides a health check status
+      operationId: getHealth
+      tags : [ HealthCheck ]
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/HealthResponse"
+            
+  /author:
+    x-swagger-router-controller: authors
+    get:
+      x-ims-authorize : [ e53eaddb-41d3-4173-81fd-fd47577781b4, 59C0FE11-DECC-4A0A-90BF-3433B4DB0F62, 43e758ad-a4ff-4bb9-bd6a-0131457f800b ]
+      description: Get all the authors
+      operationId: getAuthors
+      tags : [ Author]
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/AuthorResource"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+            
+# complex objects have schema definitions
+definitions:
+  HyperLink :
+    description : A hyperlink
+    properties:
+      href :
+        type: string
+  HealthResponse:
+    description: Health result
+    properties:
+      status:
+        type: string
+  ErrorResponse:
+    description: Login result
+  AuthorResource:
+    description: Author resource
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      href:
+        type: string
+      books:
+        $ref: "#/definitions/HyperLink"

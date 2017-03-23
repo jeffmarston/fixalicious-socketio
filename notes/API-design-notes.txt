@@ -1,0 +1,102 @@
+
+
+1. whole compound object, ALL AGENCIES, ALL CODES
+
+POST to /api/v1/library/rating
+
+[
+  {
+    "ratingAgencyCode": "BLOOMBERG",
+    "ratingAgencyDescription": "Bloomberg Composite Ratings",
+    "termLength": "L",
+
+    "ratings": [
+      {
+        "RatingAgencyCD": "BLOOMBERG",
+        "RatingCD": "A1",
+        "RatingDesc": "Upper-Medium Grade - Top",
+        "RatingValue": 21
+      },
+      {
+        "RatingAgencyCD": "BLOOMBERG",
+        "RatingCD": "A2",
+        "RatingDesc": "Upper-Medium Grade - Middle",
+        "RatingValue": 20
+      }
+    ]
+  },
+
+
+  {
+    "ratingAgencyCode": "DP_L",
+    "ratingAgencyDescription": "Duff and Phelps Long-Term Ratings",
+    "termLength": "L",
+    "ratings": [
+      {
+        "RatingAgencyCD": "DP_L",
+        "RatingCD": "A",
+        "RatingDesc": "Average Credit Quality - Middle",
+        "RatingValue": 20
+      },
+      {
+        "RatingAgencyCD": "DP_L",
+        "RatingCD": "A+",
+        "RatingDesc": "Average Credit Quality - Top",
+        "RatingValue": 21
+      }
+    ]
+  }
+]
+
+
+
+
+2. one agency, ALL CODES    (you have to delete codes I don't send!!!)
+
+POST to /api/v1/library/rating/{agencyCode}
+
+    [
+      {
+        "RatingAgencyCD": "BLOOMBERG",
+        "RatingCD": "A1",
+        "RatingDesc": "Upper-Medium Grade - Top",
+        "RatingValue": 21
+      },
+      {
+        "RatingAgencyCD": "BLOOMBERG",
+        "RatingCD": "A2",
+        "RatingDesc": "Upper-Medium Grade - Middle",
+        "RatingValue": 20
+      }
+    ]
+
+
+3. one code   (you will determine which are inserts vs updates by seeing if the code already exists)
+
+POST to /api/v1/library/rating/{agencyCode}/{ratingCode}
+
+{
+        "RatingAgencyCD": "BLOOMBERG",
+        "RatingCD": "A1",
+        "RatingDesc": "Upper-Medium Grade - Top",
+        "RatingValue": 21
+}
+
+
+
+
+
+NOTES ABOUT SQL:
+---------------
+
+
+select * from ec_ratingagency
+select * from ec_ratingcode
+
+insert into ec_ratingcode values ('BLOOMBERG', 'ZZZ', 'Asleep at the Wheel', 0)
+insert into ec_ratingcode values ('LANGMAN', 'ZZZ', 'Asleep at the Wheel', 0)  -- this statement failed: The INSERT statement conflicted with the FOREIGN KEY constraint "FK_ec_RatingCode_EC_RatingAgency". The conflict occurred in database "TCSR10p7", table "dbo.ec_RatingAgency", column 'RatingAgencyCD'.
+
+
+
+
+

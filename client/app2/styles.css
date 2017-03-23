@@ -1,0 +1,127 @@
+* {
+    font-family: sans-serif;
+    font-size: 12px;
+    padding: 0;
+    margin: 0;
+}
+
+html {
+    background: #f2f2f2;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+
+div {
+    padding: 4px;
+}
+
+table {
+    width: 100%;
+    background: #fff;
+    border-collapse: collapse;
+}
+
+th { 
+    text-align: left;
+    background: linear-gradient(white, #ddd);
+    padding: 4px;
+    font-weight: normal;
+}
+
+td { 
+    padding: 0;
+    background: #eee;
+}
+td>input {
+    padding: 6px 0px 6px 0px;
+    width: 100%;
+    border: none;
+    background: transparent;
+}
+
+input {
+    width: 350px;
+}
+
+.column-text-ratingcode {
+    width: 100px;
+    padding: 0;
+    margin: 0;
+    /*margin: 15px 0px 5px 5px;*/
+}
+
+.column-text-ratingdescription {
+    width: 350px;
+    padding: 0;
+    margin: 0;
+    /*margin: 15px 0px 5px 5px;*/
+}
+
+.column-text-ratingvalue {
+    width: 85px;
+    padding: 0;
+    margin: 0;
+    /*margin: 15px 0px 5px 5px;*/
+}
+
+.column-header-with-scrollbar-space {
+    width: 100px;
+    padding: 0;
+    margin: 0;
+}
+
+.ratings-grid-div {
+    height: 300px;
+    overflow:scroll;
+    padding: 0;
+}
+
+.rating-table-row:hover {
+    background: azure;
+}
+
+td>input:hover {
+    background: white;
+}
+
+button {
+    width: 100px;
+    height: 24px;
+    margin: 4px;
+}
+
+.button-group {
+    float: right;
+}
+
+.table-wrapper {
+    /*height: 400px;*/
+    padding: 0;
+    /*overflow: auto;*/
+    border: 1px solid #ddd;
+    background: #f2f2f2;
+}
+
+.remove-item-button {
+    width: 20px;
+    height: 20px;
+    color: #777;
+    border: none;
+    background: transparent;
+}
+
+.remove-item-button:hover {
+    background: #ddd;
+}
+
+.submit-button {
+    width: 100px;
+    height: 24px;
+    margin-left:auto; 
+    margin-right:0;
+}

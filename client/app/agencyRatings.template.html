@@ -1,0 +1,60 @@
+<head>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+</head>
+
+<div id="component-div">
+    <div>
+        <label>Find:</label>
+
+        <select [(ngModel)]="uiSelectedAgencyCode" (ngModelChange)="changeUISelectedAgency()">
+                <option *ngFor="let agency of agencies" [ngValue]="agency.ratingAgencyCode">{{agency.ratingAgencyCode}}</option>
+            </select>
+    </div>
+
+    <div>
+        <label>Name:</label> 
+        <input type="text" [(ngModel)]="selectedAgency.ratingAgencyDescription" />
+    </div>
+
+    <div>
+        <label>Term:</label>
+        <select [(ngModel)]="selectedAgency.termLength">
+            <option value="L">Long</option>
+            <option value="S">Short</option>
+        </select>
+    </div>
+
+    <div class="table-wrapper">
+        <table>
+            <tr>
+                <th>RatingCD</th>
+                <th>RatingDesc</th>
+                <th>RatingValue</th>
+                <th></th>
+            </tr>
+            <tr *ngFor="let rating of ratings; let idx = index">
+                <td><input [(ngModel)]="rating.RatingCD" (ngModelChange)="markDirty()"/></td>
+                <td><input [(ngModel)]="rating.RatingDesc" (ngModelChange)="markDirty()"/></td>
+                <td><input [(ngModel)]="rating.RatingValue" (ngModelChange)="markDirty()"/></td>
+                <td class="remove-column">
+                    <button (click)="removeRating(rating)" title="Remove" class="remove-item-button">
+                        <i class="fa fa-times"></i>
+                    </button>                    
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="button-group">
+            <label class="datastatus-label"><i>{{ dataMessages[dataStatus] }}</i></label>
+            <button (click)="reloadData()">
+                <span>Reload</span>
+            </button>
+            <button (click)="addNewRatingCode()">
+                <span>Add Code</span>
+            </button>
+            <button (click)="saveChanges()">
+                <span>Save</span>
+            </button>
+    </div>
+</div>
