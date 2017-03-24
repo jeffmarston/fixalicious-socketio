@@ -3,16 +3,22 @@ html{
   height: 100%;
   padding: 0;
   margin: 0;
+  
+  overflow: hidden;
+  display: flex;
+  flex: 1 1 auto;
 }
 
 body {
   height: 100%;
+  width: 100%;
   padding: 0;
   margin: 0;
 }
 
 *{
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Titillium Web', sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 select:focus {
@@ -20,17 +26,17 @@ select:focus {
 }
 
 h1 {
-  font-family: 'Quicksand', sans-serif;
+  font-family: 'Titillium Web', sans-serif;
   margin: 0;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: normal;
 }
 
 .header-bar {
-  height: 24px; 
   background: #234; 
   padding: 12px;
   color: white;
+  box-sizing: border-box;
 }
 
 .service-status {
@@ -63,7 +69,7 @@ h1 {
 .ag-theme {
   line-height: 1.4;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
+  font-size: 12px;
   color: #222;
 /* this is for the rowGroupPanel, that appears along the top of the grid */
 /* this is for the column drops that appear in the toolPanel */
@@ -166,7 +172,7 @@ h1 {
   transition: background-color 0.1s;
 }
 .ag-theme .ag-rich-select {
-  font-size: 14px;
+  font-size: 12px;
   border: 1px solid #808080;
   background-color: #fff;
 }
@@ -319,7 +325,7 @@ h1 {
   background-color: #f6f6f6;
   cursor: default;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
+  font-size: 12px;
 }
 .ag-theme .ag-menu .ag-tab-header {
   background-color: #e6e6e6;
@@ -409,7 +415,7 @@ h1 {
 .ag-theme .ag-status-bar {
   color: #222;
   background-color: #f6f6f6;
-  font-size: 14px;
+  font-size: 12px;
   height: 22px;
   border-bottom: 1px solid #808080;
   border-left: 1px solid #808080;
@@ -491,7 +497,7 @@ h1 {
 .ag-theme .ag-select-agg-func-popup {
   cursor: default;
   position: absolute;
-  font-size: 14px;
+  font-size: 12px;
   background-color: #fff;
   border: 1px solid #808080;
 }

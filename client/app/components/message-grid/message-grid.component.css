@@ -1,4 +1,32 @@
-detail-pane {
+.frame {
+    flex: 1 1 auto;
+    overflow: auto;
+    font-size: 12px;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+td {
+  font-size: 12px;
+
+}
+
+.json-format {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 10px;
+  width: 200px;
+}
+.inline {
+    display: inline-block;
+    
+}
+
+.row:hover {
+    background: lightblue;
 }
 
 .outer-div {

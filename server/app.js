@@ -20,14 +20,19 @@ if (express.get('env') === 'development') {
   express.use(cors());
 }
 
-express.use('/angular2', expressMiddleware.static('../client'));
-express.use('/swagger', expressMiddleware.static('./docs'));
+express.use('/client', expressMiddleware.static('../client'));
 express.get('/', function (req, res) {
-  res.send(`<html><body>The droids you are looking for are here:
-  <ul>
-    <li><a href="/angular2">angular2</a></li>
-  </ul>
-  </body></html>
+  res.send(`
+<style>a {color: #112; text-decoration: none;
+  font-family: sans-serif;
+  background: #abc;padding: 10px;
+  border-radius: 8px;margin: 4px;width: 150px;}
+a:hover {background: #cde;color: #445;}
+h4{font-family: sans-serif;}
+</style>
+  <h4>Where would you like to go?</h4>
+  <a href="/client">Fixalicious Client</a>
+  <a href="/api/v1">API Documentation</a>
   `);
 });
 

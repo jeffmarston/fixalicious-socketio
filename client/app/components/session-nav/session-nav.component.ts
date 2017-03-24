@@ -54,12 +54,11 @@ import { ISession } from "../../types.d"
         }
 
         input {
-            font-family: 'Quicksand', sans-serif;
             width: 100%;
             height: 30px;
             padding-left: 10px;
             border: none;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         .editable-input {

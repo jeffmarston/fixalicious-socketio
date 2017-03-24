@@ -11,18 +11,13 @@ import { SessionNavComponent } from "./components/session-nav/session-nav.compon
 import { DetailPane } from "./components/detail-pane/detail-pane.component";
 import { SessionConfigComponent } from "./components/session-config/session-config.component";
 import { SessionService } from "./services/session.service";
-import { ChannelService, ChannelConfig, SignalrWindow } from "./services/channel.service";
-
-let channelConfig = new ChannelConfig();
-channelConfig.url = "/signalr";
-channelConfig.hubName = "EventHub";
 
 @NgModule({
     imports: [
         BrowserModule,
         HttpModule,
         FormsModule,
-        AgGridModule.forRoot()
+        AgGridModule.withComponents([])
     ],
     declarations: [
         AppComponent,
@@ -32,10 +27,7 @@ channelConfig.hubName = "EventHub";
         SessionConfigComponent
     ],
     providers: [ 
-        SessionService,
-        ChannelService,
-        { provide: SignalrWindow, useValue: window },
-        { provide: "channel.config", useValue: channelConfig }
+        SessionService
     ],
     bootstrap: [AppComponent]
 })

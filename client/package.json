@@ -16,9 +16,6 @@
   "license": "MIT",
   "homepage": "https://github.com/jeffmarston/fixalicious-signalr",
   "dependencies": {
-    "ag-grid": "8.1.x",
-    "ag-grid-angular": "8.1.x",
-
     "@angular/common": "2.4.8",
     "@angular/compiler": "2.4.8",
     "@angular/compiler-cli": "2.4.x",
@@ -28,13 +25,15 @@
     "@angular/platform-browser": "2.4.8",
     "@angular/platform-browser-dynamic": "2.4.8",
     "@angular/platform-server": "2.4.8",
-    
-    "rxjs": "5.0.x",
-    "zone.js": "0.7.x",
-    "core-js": "2.4.x",
-    "systemjs": "0.19.x",
+    "ag-grid": "8.1.x",
+    "ag-grid-angular": "8.1.x",
     "bootstrap": "3.3.6",
-    "jquery": "3.1.1"
+    "core-js": "2.4.x",
+    "es6-shim": "^0.35.3",
+    "jquery": "3.1.1",
+    "rxjs": "5.0.x",
+    "systemjs": "0.19.x",
+    "zone.js": "0.7.x"
   },
   "devDependencies": {
     "@types/core-js": "^0.9.33",

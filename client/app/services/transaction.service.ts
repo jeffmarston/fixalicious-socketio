@@ -18,9 +18,9 @@ export class TransactionApiService {
             .map(res => res.json());
     }
 
-    public createTransaction(svcId: string, symbol: string) {
-        let url = `${this.baseurl}/${svcId}?symbol=${symbol}`;
-        this.http.post(url, "")
-            .subscribe(o => { });
+    public createTransaction(sessionId: string, fixMsg: any) {
+        let url = `${this.baseurl}/${sessionId}`;
+        this.http.post(url, fixMsg )
+            .subscribe(o => { console.log(o); });
     }
 }

@@ -14,7 +14,7 @@ table {
   border: 1px solid lightgray;
   border-collapse: collapse;
   font-family: sans-serif;
-  font-size: 12px;
+  font-size: 10px;
 }
 
 td {
@@ -28,9 +28,9 @@ h4 {
 .branch-name {
   border: none;
   background: transparent;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: bold;
-  margin:10px;
+  margin: 8px;
 }
 
 .header-cell {
@@ -42,9 +42,9 @@ h4 {
 }
 
 .configure-button {
-  margin-top:4px;
+  margin-top: 4px;
   float: left;
-  font-size: 24px;
+  font-size: 20px;
   color: gray;
   background: transparent;
   border: none;

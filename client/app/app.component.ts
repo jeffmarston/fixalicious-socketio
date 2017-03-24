@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Observable } from "rxjs/Observable";
-import { ChannelService, ConnectionState } from "./services/channel.service";
 
 @Component({
     selector: 'my-app',
@@ -17,10 +16,13 @@ import { ChannelService, ConnectionState } from "./services/channel.service";
                 </div>
                 <h1>FIXalicious</h1>
             </div>
-            <message-grid 
-                style="flex: 1 1 auto; height: 100%;"
-                [session]="session"
-                ></message-grid>
+            <div class="flex-row">
+                <message-grid 
+                    style="flex: 1 1 auto;"
+                    [session]="session">
+                </message-grid>
+
+            </div>
         </div>
     </div>
     `,
@@ -43,6 +45,11 @@ import { ChannelService, ConnectionState } from "./services/channel.service";
             cursor: pointer;
             margin-right: 10px;
         }
+        .flex-row {
+            display:flex;
+            flex-direction: row;
+            flex: 1 1 auto;
+        }
     `]
 })
 export class AppComponent {
@@ -50,29 +57,7 @@ export class AppComponent {
     private session: string = "BAX";
     private isNavCollapsed: boolean;
 
-    constructor(
-            private channelService: ChannelService
-        ) {
-        // Let's wire up to the signalr observables
-        this.connectionState$ = this.channelService.connectionState$
-            .map((state: ConnectionState) => { return ConnectionState[state]; });
-
-        this.channelService.error$.subscribe(
-            (error: any) => { console.warn(error); },
-            (error: any) => { console.error("errors$ error", error); }
-        );
-
-        // Wire up a handler for the starting$ observable to log the
-        //  success/fail result
-        this.channelService.starting$.subscribe(
-            () => { console.log("signalr service has been started"); },
-            () => { console.warn("signalr service failed to start!"); }
-        );
-    }
-
     ngOnInit() {
-        // Start the signalR connection
-        this.channelService.start();
     }
 
     toggleNavBar(){

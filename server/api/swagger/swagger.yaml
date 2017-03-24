@@ -97,9 +97,7 @@ paths:
           description: JSON object containing transaction details
           required: true
           schema:
-            type: array
-            items:
-              $ref: "#/definitions/TransactionResource"
+            $ref: "#/definitions/TransactionResource"
       responses:
         "200":
           description: Success  
