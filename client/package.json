@@ -1,27 +1,45 @@
 {
-  "name": "fixalicious-socketio-client",
-  "version": "1.0.0",
+  "name": "fixalicious-signalr",
+  "version": "0.0.1",
+  "description": "Fixalicious UI using SignalR and OWIN",
   "scripts": {
-    "start": "tsc && concurrently \"npm run tsc:w\" \"npm run lite\" ",
-    "lite": "lite-server",
-    "postinstall": "typings install",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
-    "typings": "typings"
+    "lite": "lite-server",
+    "start": "concurrently \"npm run tsc:w\" \"npm run lite\" "
   },
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "Jeff Marston <jeffmarston@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/jeffmarston/fixalicious-signalr",
   "dependencies": {
-    "angular2": "2.0.0-beta.17",
-    "systemjs": "0.19.26",
-    "es6-shim": "^0.35.0",
-    "reflect-metadata": "0.1.2",
-    "rxjs": "5.0.0-beta.6",
-    "zone.js": "0.6.12"
+    "ag-grid": "8.1.x",
+    "ag-grid-angular": "8.1.x",
+
+    "@angular/common": "2.4.8",
+    "@angular/compiler": "2.4.8",
+    "@angular/compiler-cli": "2.4.x",
+    "@angular/core": "2.4.8",
+    "@angular/forms": "2.4.8",
+    "@angular/http": "2.4.8",
+    "@angular/platform-browser": "2.4.8",
+    "@angular/platform-browser-dynamic": "2.4.8",
+    "@angular/platform-server": "2.4.8",
+    
+    "rxjs": "5.0.x",
+    "zone.js": "0.7.x",
+    "core-js": "2.4.x",
+    "systemjs": "0.19.x",
+    "bootstrap": "3.3.6",
+    "jquery": "3.1.1"
   },
   "devDependencies": {
-    "concurrently": "^2.0.0",
-    "lite-server": "^2.2.0",
-    "typescript": "^1.8.10",
-    "typings":"^0.8.1"
+    "@types/core-js": "^0.9.33",
+    "concurrently": "^2.2.0",
+    "lite-server": "^2.2.2",
+    "typescript": "2.0.x"
   }
 }

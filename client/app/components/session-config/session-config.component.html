@@ -1,0 +1,83 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+<div class="wrapper">
+    <div>
+            <button (click)="toggleCollapsed()" 
+                class="configure-button"
+                title="Configure Branch">
+            <i class="fa fa-cog" aria-hidden="true"></i>
+        </button>
+        
+        <input [(value)]="session.name" class="branch-name"/>
+    </div>        
+    <form name="sessionConfigForm" [ngClass]="{'collapsed-form': hideForm }">
+        <table>
+            <tr>
+                <td colspan=4 class="header-cell">
+                    <h4>Path</h4>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Branch&nbsp;Root</label>
+                </td>
+                <td colspan=3>
+                    <input style="width: 100%; box-sizing: border-box;" 
+                        name="branchRootPath"/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan=4 class="header-cell">
+                    <h4>Database</h4>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Server</label>
+                </td>
+                <td>
+                    <input/>
+                </td>
+                <td colspan=2>
+                    <span>
+                  <input type="checkbox" checked="true"/>
+                  <label>SQL Authentication</label>
+                </span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Database</label>
+                </td>
+                <td>
+                    <input/>
+                </td>
+                <td>
+                    <label>Username</label>
+                </td>
+                <td>
+                    <input/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>ArchiveDB</label>
+                </td>
+                <td>
+                    <input/>
+                </td>
+                <td>
+                    <label>Password</label>
+                </td>
+                <td>
+                    <input type="password"/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan=4></td>
+            </tr>
+        </table>
+        <button (click)="onClick()">Save</button>
+        <button (click)="onClick()">Delete</button>
+    </form>
+</div>

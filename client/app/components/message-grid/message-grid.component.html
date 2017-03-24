@@ -1,0 +1,28 @@
+<div class="outer-div">
+    <div class="main-content">
+        <session-config 
+            [session]="selectedSession"
+            (onSave)="saveSession($event)"></session-config>
+
+        <div *ngIf="showGrid" style="height: 100%; display: flex;">
+            <ag-grid-angular #agGrid style="width: 100%; height: 100%;" class="ag-theme"
+                        [gridOptions]="gridOptions"                     
+                        [rowData]="rowData"
+                        enableColResize
+                        enableSorting
+                        enableFilter
+                        rowSelection="multiple"
+                        (cellClicked)="onCellDoubleClicked($event)"
+            >
+            </ag-grid-angular>
+            
+        <detail-pane
+            [collapsed]="showDetails"
+            [detail]="selectedMessage"
+        ></detail-pane>
+
+        </div>
+        
+
+    </div>
+</div>

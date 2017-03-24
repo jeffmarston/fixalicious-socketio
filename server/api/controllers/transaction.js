@@ -1,7 +1,7 @@
 'use strict';
 
 let _ = require('lodash');
-let RatingModel = require('../../models/rating-model');
+let TransactionModel = require('../../models/rating-model');
 let RatingResource = require('../../resources/rating-resource');
 let ErrorResource = require('../../resources/error-resource');
 let PostResponse = require('../../resources/post-response-resource');
@@ -11,7 +11,7 @@ class RatingController {
     static getAllTransactions(req, res) {
         console.log("OMS.API.GATEWAY: Request received to get all Rating Agencies and Rating Codes.");
 
-        RatingModel.getAll().then((ratingModels) => {
+        TransactionModel.getAll().then((ratingModels) => {
             res.status(200).json(_.map(ratingModels, (ratingModel) => new RatingResource(ratingModel)));
         }).catch((error) => {
             res.status(500).json(new ErrorResource(500, req.url, "Request to get all agencies and codes failed.", error));
@@ -32,8 +32,7 @@ class RatingController {
     }
 
     static deleteTransaction(req, res) {
-        let sessionName = req.swagger.params.session.value;
-        
+        let sessionName = req.swagger.params.session.value;        
         console.log("FIXALICIOUS: Request received to Delete all Transactions for [ " + sessionName + " ]");
     }
 }

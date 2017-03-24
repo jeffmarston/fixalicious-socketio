@@ -1,0 +1,52 @@
+ 
+ .wrapper {
+   display: flex;
+   flex-direction: column;
+ }
+
+ form {
+   overflow: hidden;
+   height: 200px;
+   transition: height .2s ease;
+ }
+
+table {
+  border: 1px solid lightgray;
+  border-collapse: collapse;
+  font-family: sans-serif;
+  font-size: 12px;
+}
+
+td {
+  padding: 2px 6px;
+}
+
+h4 {
+    margin: 5px 0 0 0;
+}
+
+.branch-name {
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: bold;
+  margin:10px;
+}
+
+.header-cell {
+  background: lightgray;
+}
+
+.collapsed-form {
+  height: 0;
+}
+
+.configure-button {
+  margin-top:4px;
+  float: left;
+  font-size: 24px;
+  color: gray;
+  background: transparent;
+  border: none;
+  outline: none;
+}

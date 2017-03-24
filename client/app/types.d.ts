@@ -1,14 +1,19 @@
 
-export interface IAgency {
-    ratingAgencyCode: string,
-    ratingAgencyDescription: string,
-    termLength: string,
-    ratings: IRating[]
+export interface IFixMessage {
+    direction: string,
+
+    clOrdId: string,
+    symbol?: string,
+    fillStatus?: number,
+    lastShares?: number,
+    cumQty?: number,
+    lastPx?: number,
+    avgPx?: number,
+    leavesQty?: number,
+    side?: number
 }
 
-export interface IRating {
-    RatingAgencyCD: string,
-    RatingCD: string,
-    RatingDesc: string,
-    RatingValue: number
+export interface ISession {
+    name: string;
+    selected?: boolean;
 }
