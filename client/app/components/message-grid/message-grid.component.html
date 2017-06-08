@@ -4,7 +4,7 @@
             [session]="selectedSession"
             (onSave)="saveSessionConfig($event)"></session-config>-->
 
-        <div *ngIf="showGrid" style="height: 100%; display: flex;">
+        <div *ngIf="showGrid" style="height: 100%;">
             <div class="frame">
                 <!--<table style="width: 100%;  ">
                     <tr *ngFor="let row of rowData"
@@ -16,7 +16,7 @@
                     </tr>
                 </table>-->
 
-       
+<!--       
                     <div *ngFor="let row of rowData"
                         (click)="onRowClick(row)"
                         class="row">
@@ -26,11 +26,11 @@
                         <div class="inline">{{row.direction}}</div>
                         <div class="inline">{{row.id}}</div>
                         <div class="json-format" title="{{row.pretty_message}}">{{row.message}}</div>
-                    </div>
+                    </div>-->
 
 
 
-                <!--<ag-grid-angular #agGrid class="ag-theme"
+                <ag-grid-angular #agGrid class="ag-theme"
                             [gridOptions]="gridOptions"                     
                             [rowData]="rowData"
                             enableColResize
@@ -39,10 +39,10 @@
                             rowSelection="multiple"
                             (cellClicked)="onCellClicked($event)"
                 >
-                </ag-grid-angular>-->
+                </ag-grid-angular>
             </div>
             
-        <detail-pane
+        <detail-pane class="detail-pane"
             [collapsed]="showDetails"
             [detail]="selectedMessage"
             [session]="selectedSession"

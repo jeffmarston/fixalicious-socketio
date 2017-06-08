@@ -15,7 +15,7 @@ import { ITransaction, ISession } from "../../types.d"
 export class SimpleGridComponent implements OnInit {
     @Input() session: ISession;
 
-    //private gridOptions: GridOptions;
+    private gridOptions: GridOptions;
     private showGrid: boolean;
     private rowData: ITransaction[];
     private columnDefs: any[];
@@ -25,25 +25,6 @@ export class SimpleGridComponent implements OnInit {
     private debugMessage: string;
 
     ngOnInit() {
-        // Get an observable for events emitted on this channel
-        // this.channelService.sub("transaction").subscribe(
-        //     (x: ChannelEvent) => {
-        //         var newItem: ITransaction = x.Data;
-        //         var newItems = this.rowData.concat([ newItem ]);
-        //         switch (x.ChannelName) {
-        //             case "transaction": {                        
-        //                 //this.gridOptions.api.addItems(newItems);
-
-        //                 console.log("ADDED ROWS: " + newItem.id);
-        //                 this.addRowsToDataSource([newItem]);
-        //                 //this.rowData.push(newItem);
-        //             }
-        //         }
-        //     },
-        //     (error: any) => {
-        //         console.warn("Attempt to join channel failed!", error);
-        //     }
-        // );
         this.showGrid = true;
     }
 
@@ -53,9 +34,9 @@ export class SimpleGridComponent implements OnInit {
         private http: Http) {
 
         this.createColumnDefs();
-        // this.gridOptions = <GridOptions>{
-        //     columnDefs: this.columnDefs
-        // };
+        this.gridOptions = <GridOptions>{
+            columnDefs: this.columnDefs
+        };
 
         // setTimeout(o=> {
         //     console.log("adding: " + this.selectedMessage.id);
@@ -100,7 +81,7 @@ export class SimpleGridComponent implements OnInit {
         if (!this.rowData) {
             this.rowData = newItems;
         }
-        //this.gridOptions.api.insertItemsAtIndex(0, newItems);
+        this.gridOptions.api.insertItemsAtIndex(0, newItems);
 
         newItems.forEach(item => {
             item.pretty_message = "";

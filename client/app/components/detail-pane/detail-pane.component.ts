@@ -31,14 +31,15 @@ import { ISession, IFixMessage, ITransaction } from "../../types.d"
             height: 100%;
             overflow: hidden;
             transition: width .25s ease;
-            display: flex;
-            flex-direction: column;
+            width: 25%;
+            float: left;
         }
 
         .button-section {
             display: flex;
             flex-direction: row;
             padding-left: 4px;
+            height: 25px;
         }
 
         .keyvalue-section {

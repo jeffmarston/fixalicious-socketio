@@ -7,8 +7,7 @@ import { ISession } from "../../types.d"
 @Component({
     selector: 'session-nav',
     template: `
-    <div class="container" [style.width]="isCollapsed ? '0' : '150px'" >   
-        <div class="nav-top-spacer"></div>
+    <div class="container" [style.height]="isCollapsed ? '0' : '40px'" >
         <ul>     
             <li *ngFor="let session of sessions"
                     (click)="onClick(session)"
@@ -46,17 +45,17 @@ import { ISession } from "../../types.d"
         }
 
         .container {
+            flex-direction: column;
             height: 100%;
-            background-color: #3C4A54;
+            background-color: #234;
             color: #88959E;
             overflow: hidden;
-            transition: width .25s ease;
+            transition: height .25s ease;
         }
 
         input {
             width: 100%;
             height: 30px;
-            padding-left: 10px;
             border: none;
             font-size: 14px;
         }
@@ -109,21 +108,18 @@ import { ISession } from "../../types.d"
         }
 
         li.navbar-item { 
-            padding-top: 4px;   
-            padding-bottom: 4px;      
+            float: left;
+            padding: 4px;
         }
 
         li.navbar-item:hover:not(.active) {
-            background-color: #36424B;
+            background-color: #234;
         }
 
         li.active {
-            background-color: #22303a;
+            background-color: #fff;
             color: white;
-        }
-
-        .nav-top-spacer {
-            height: 48px;
+            border-radius: 6px 6px 0 0;
         }
 
     `],
