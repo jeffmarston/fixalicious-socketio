@@ -23,6 +23,7 @@ export class SimpleGridComponent implements OnInit {
     private selectedMessage: ITransaction;
     private showDetails: boolean;
     private debugMessage: string;
+    private detailCollapsed = false;
 
     ngOnInit() {
         this.showGrid = true;
@@ -38,13 +39,18 @@ export class SimpleGridComponent implements OnInit {
             columnDefs: this.columnDefs
         };
 
+        // setInterval(o => {
+        //     this.detailCollapsed = !this.detailCollapsed;
+        //     console.log(this.detailCollapsed);
+        // }, 1000);
+
         // setTimeout(o=> {
         //     console.log("adding: " + this.selectedMessage.id);
         //         this.addRowsToDataSource([this.selectedMessage]);
         // }, 4000);
     }
 
-    private ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
+    private ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
         for (let propName in changes) {
             let changedProp = changes[propName];
 
@@ -56,7 +62,7 @@ export class SimpleGridComponent implements OnInit {
         }
     }
 
-    private saveSessionConfig(session: ISession) {  
+    private saveSessionConfig(session: ISession) {
         alert("not implemented");
     }
 
@@ -68,10 +74,11 @@ export class SimpleGridComponent implements OnInit {
         ];
     }
 
-    private createRowData(session: ISession) {       
+    private createRowData(session: ISession) {
         var src = this.apiDataService.getTransactions(session.name);
         src.subscribe(o => {
             this.addRowsToDataSource(o);
+
         }, error => {
             console.error("ERROR: " + error);
         });
@@ -85,20 +92,32 @@ export class SimpleGridComponent implements OnInit {
 
         newItems.forEach(item => {
             item.pretty_message = "";
-            let obj = JSON.parse(item.message);
-            for(let propt in obj) {
-                item.pretty_message += propt + ': ' + obj[propt] + "\n";
-            }
+            // let obj = JSON.parse(item.message);
+            // for(let propt in obj) {
+            //     item.pretty_message += propt + ': ' + obj[propt] + "\n";
+            // }
 
             this.rowData.splice(0, 0, item);
         });
+
+        var allColumnIds = [];
+        this.columnDefs.forEach(function (columnDef) {
+            allColumnIds.push(columnDef.field);
+        });
+        this.gridOptions.columnApi.autoSizeColumns(allColumnIds);
+    }
+
+    private onResize() {
+        this.gridOptions.api.doLayout();
+
     }
 
     private onCellClicked($event) {
         this.selectedMessage = $event.data;
     }
 
-    private onRowClick(row) {
-        this.selectedMessage = row;
+    private toggleDetails() {
+        console.log(this.detailCollapsed);
+        this.detailCollapsed = !this.detailCollapsed;
     }
 }

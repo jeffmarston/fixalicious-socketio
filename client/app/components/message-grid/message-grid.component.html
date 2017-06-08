@@ -1,54 +1,30 @@
-<div class="outer-div">
-    <div class="main-content">
+<div class="outer-div"
+    (window:resize)="onResize()">
+    <div class="all-content">
         <!--<session-config 
             [session]="selectedSession"
             (onSave)="saveSessionConfig($event)"></session-config>-->
 
-        <div *ngIf="showGrid" style="height: 100%;">
-            <div class="frame">
-                <!--<table style="width: 100%;  ">
-                    <tr *ngFor="let row of rowData"
-                        (click)="onRowClick(row)"
-                        class="row">
-                        <td>{{row.direction}}</td>
-                        <td>{{row.id}}</td>
-                        <td>{{row.message}}</td>
-                    </tr>
-                </table>-->
-
-<!--       
-                    <div *ngFor="let row of rowData"
-                        (click)="onRowClick(row)"
-                        class="row">
-                        <i class="fa fa-arrow-right" style="font-size:20px; color: darkgreen;" *ngIf="row.direction=='received'"></i>
-                        <i class="fa fa-arrow-left" style="font-size:20px; color: purple;" *ngIf="row.direction=='sent'"></i>
-
-                        <div class="inline">{{row.direction}}</div>
-                        <div class="inline">{{row.id}}</div>
-                        <div class="json-format" title="{{row.pretty_message}}">{{row.message}}</div>
-                    </div>-->
-
-
-
-                <ag-grid-angular #agGrid class="ag-theme"
-                            [gridOptions]="gridOptions"                     
-                            [rowData]="rowData"
-                            enableColResize
-                            enableSorting
-                            enableFilter
-                            rowSelection="multiple"
-                            (cellClicked)="onCellClicked($event)"
-                >
-                </ag-grid-angular>
-            </div>
+        <div *ngIf="showGrid" class="grid-pane">
+            <ag-grid-angular #agGrid class="ag-theme"
+                        [gridOptions]="gridOptions"                     
+                        [rowData]="rowData"
+                        enableColResize
+                        enableSorting
+                        enableFilter
+                        rowSelection="multiple"
+                        (cellClicked)="onCellClicked($event)"
+                        (rowDoubleClicked)="toggleDetails()"
+            >
+            </ag-grid-angular>
+        </div>
             
         <detail-pane class="detail-pane"
+            [hidden]="this.detailCollapsed"
             [collapsed]="showDetails"
             [detail]="selectedMessage"
             [session]="selectedSession"
         ></detail-pane>
-
-        </div>
         
 
     </div>

@@ -58,6 +58,7 @@ import { ISession } from "../../types.d"
             height: 30px;
             border: none;
             font-size: 14px;
+            text-align:center
         }
 
         .editable-input {
@@ -108,6 +109,7 @@ import { ISession } from "../../types.d"
         }
 
         li.navbar-item { 
+            width: 100px;
             float: left;
             padding: 4px;
         }
