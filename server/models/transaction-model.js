@@ -7,16 +7,21 @@ let client = redis.createClient();
 bluebird.promisifyAll(redis.RedisClient.prototype);
 
 class TransactionModel {
-    
+
     static getAll(sessionName) {
         return client.lrangeAsync('session:' + sessionName, 0, 300).then((items) => {
-            return _.map(items, (o)=> { return JSON.parse(o) } );
+            return _.map(items, (o) => { return JSON.parse(o) });
         });
     }
 
     static create(sessionName, transaction) {
         let newSession = { name: sessionName };
-        return client.rpushAsync('session:' + sessionName, JSON.stringify(transaction) );
+        let trans = {
+            direction: "sent",
+            id: 33,
+            message: JSON.stringify(transaction)
+        }
+        return client.rpushAsync('session:' + sessionName, JSON.stringify(trans));
     }
 
     static delete(sessionName) {

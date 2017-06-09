@@ -57,7 +57,7 @@ export class SimpleGridComponent implements OnInit {
             if (propName == "session") {
                 this.selectedSession = changedProp.currentValue;
                 this.rowData = null;
-                this.createRowData(changedProp.currentValue);
+                this.fetchRowData(changedProp.currentValue);
             }
         }
     }
@@ -69,36 +69,58 @@ export class SimpleGridComponent implements OnInit {
     private createColumnDefs() {
         this.columnDefs = [
             { headerName: "Direction", field: "direction" },
-            { headerName: "Id", field: "id" },
+            { headerName: "Message Type", field: "msgType" },
+            { headerName: "Seq Num", field: "seqNum" },
+            { headerName: "CliOrdId", field: "cliOrdId" },
+            { headerName: "OrdStatus", field: "ordStatus" },
             { headerName: "Message", field: "message" }
         ];
     }
 
-    private createRowData(session: ISession) {
+    private fetchRowData(session: ISession) {
         var src = this.apiDataService.getTransactions(session.name);
         src.subscribe(o => {
             this.addRowsToDataSource(o);
-
         }, error => {
             console.error("ERROR: " + error);
         });
     }
 
-    private addRowsToDataSource(newItems: ITransaction[]) {
-        if (!this.rowData) {
-            this.rowData = newItems;
+    private createRow(item): ITransaction {
+        let row = {
+            direction: item.direction,
+            seqNum: null,
+            cliOrdId: "",
+            msgType: "",
+            ordStatus: "",
+            message: item.message
+        };
+        // enrich with specifics from fix message
+        try {
+            let fixObj = JSON.parse(item.message);
+            row.seqNum = fixObj['MsgSeqNum (34)'];
+            row.cliOrdId = fixObj['ClOrdID (11)'];
+            row.msgType = fixObj['MsgType (35)'];
+            row.ordStatus = fixObj['OrdStatus (39)'];
+            row.message = item.message;
         }
-        this.gridOptions.api.insertItemsAtIndex(0, newItems);
+        catch (ex) {
+            console.error("Unable to parse json: " + item.message);
+        }
+        return row;
+    }
 
+    private addRowsToDataSource(newItems: ITransaction[]) {
+        let rows = [];
         newItems.forEach(item => {
-            item.pretty_message = "";
-            // let obj = JSON.parse(item.message);
-            // for(let propt in obj) {
-            //     item.pretty_message += propt + ': ' + obj[propt] + "\n";
-            // }
-
-            this.rowData.splice(0, 0, item);
+            rows.push(this.createRow(item));
         });
+
+        if (!this.rowData) {
+            this.rowData = rows;
+        }
+        this.gridOptions.api.insertItemsAtIndex(0, rows);
+
 
         var allColumnIds = [];
         this.columnDefs.forEach(function (columnDef) {

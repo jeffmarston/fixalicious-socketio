@@ -14,7 +14,10 @@ export interface IFixMessage {
 }
 export interface ITransaction {
     direction: string,
-    id: number,
+    msgType: string,
+    seqNum: number,
+    cliOrdId: string,
+    ordStatus: string,
     message: string,
     pretty_message?: string
 }

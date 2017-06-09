@@ -10,7 +10,7 @@ import { ISession, IFixMessage, ITransaction } from "../../types.d"
     template: `
     <div class="container" [style.width]="collapsed ? '0' : '330px'" > 
         <div class="button-section">
-            <button class="" [disabled]="!isValid" (click)="ackFixMessage()">Send</button>
+            <button class="" [disabled]="!isValid" (click)="sendDummy()">Send</button>
             <button class="middle" [hidden]="true">Reject</button>
             <button class="middle" [hidden]="true">Fill</button>
             <button class="last" [hidden]="true">Partial Fill</button>
@@ -103,8 +103,8 @@ export class DetailPane implements OnInit {
     constructor(
         private clientsService: SessionService,
         private apiDataService: TransactionApiService) {
-                this.isValid = true;
-    }    
+        this.isValid = true;
+    }
 
     private ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
         for (let propName in changes) {
@@ -126,16 +126,44 @@ export class DetailPane implements OnInit {
         var fixMsg = JSON.parse(this.transaction.message);
         for (var property in fixMsg) {
             if (fixMsg.hasOwnProperty(property)) {
-                this.kvPairs.push({ 
-                    key: property, 
-                    value: fixMsg[property]});
+                this.kvPairs.push({
+                    key: property,
+                    value: fixMsg[property]
+                });
             }
         }
     }
 
+    private sendDummy() {
+        //var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        let cliOrdId = (Math.random().toString(36)+'00000000000000000').slice(2, 14+2).toUpperCase();
+        let symbol = cliOrdId.substring(0, 3);
+
+        let dummyMsg = {
+            "BeginString (8)": "FIX.4.2",
+            "BodyLength (9)": "138",
+            "MsgType (35)": "D",
+            "MsgSeqNum (34)": "35",
+            "SenderCompID (49)": "Jeff",
+            "TargetCompID (56)": "Marston",
+            "SendingTime (52)": new Date().toISOString(),
+            "TransactTime (60)": new Date().toISOString(),
+            "SecurityExchange (207)": "New York",
+            "HandlInst (21)": "MANUAL_ORDER_BEST_EXECUTION (3)",
+            "Symbol (55)": symbol,
+            "Side (54)": "BUY (1)",
+            "ClOrdID (11)": cliOrdId,
+            "Price (44)": "0",
+            "TimeInForce (59)": "DAY (0)",
+            "OrdType (40)": "MARKET (1)",
+            "OrderQty (38)": Math.floor((Math.random() * 1000) + 100),
+            "CheckSum (10)": "251"
+        }
+        this.apiDataService.createTransaction(this.session.name, dummyMsg);
+    }
+
     private ackFixMessage() {
         var fixObj = {};
-
         this.kvPairs.forEach(pair => {
             fixObj[pair.key] = pair.value;
         });
@@ -147,7 +175,7 @@ export class DetailPane implements OnInit {
     }
 
     ngOnInit() {
-        
+
     }
 
 }
