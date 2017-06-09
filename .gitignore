@@ -30,6 +30,6 @@ node_modules
 npm-debug.log
 
 # Angular 2 client
-client/**/*.js
+client/lib/**/*
 client/**/*.map
 client/typings
