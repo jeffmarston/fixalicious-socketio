@@ -10,10 +10,10 @@ import { ISession, IFixMessage, ITransaction } from "../../types.d"
     template: `
     <div class="container" [style.width]="collapsed ? '0' : '330px'" > 
         <div class="button-section">
-            <button class="first" [disabled]="!isValid" (click)="ackFixMessage()">Ack</button>
-            <button [disabled]="true">Reject</button>
-            <button [disabled]="true">Fill</button>
-            <button class="last" [disabled]="true">Partial Fill</button>
+            <button class="" [disabled]="!isValid" (click)="ackFixMessage()">Send</button>
+            <button class="middle" [hidden]="true">Reject</button>
+            <button class="middle" [hidden]="true">Fill</button>
+            <button class="last" [hidden]="true">Partial Fill</button>
         </div>
         <div class="keyvalue-section">
             <table class="keyvalue-table">
@@ -67,7 +67,12 @@ import { ISession, IFixMessage, ITransaction } from "../../types.d"
             width: 69px;
             font-size: 12px; 
             border: 1px gray solid; 
+            border-radius: 4px;
+        }
+
+        .middle {
             border-left: none;
+            border-radius: 0;
         }
 
         .first {
