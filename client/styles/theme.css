@@ -28,7 +28,7 @@ body {
   display: block;
 }
 
-select:focus {
+select, button:focus {
   outline:none;
 }
 
@@ -264,15 +264,15 @@ h1 {
 .ag-theme .ag-pinned-right-header {
   border-left: 1px solid #808080;
 }
-.ag-theme .ag-header-cell-menu-button:hover {
-  xborder: 1px solid #808080;
-}
+/*.ag-theme .ag-header-cell-menu-button:hover {
+  border: 1px solid #808080;
+}*/
 .ag-theme .ag-body {
   background-color: #f6f6f6;
 }
-.ag-theme .ag-row {
+/*.ag-theme .ag-row {
 
-}
+}*/
 .ag-theme .ag-row-odd {
   background-color: #f6f6f6;
 }

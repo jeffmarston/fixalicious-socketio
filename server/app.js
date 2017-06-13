@@ -9,19 +9,21 @@
  * TODO: Find out why ES6 imports do not work.
  */
 let cors = require('cors');
-let config = require('./config');
-let expressMiddleware = require('express');
 let swaggerMiddleware = require('swagger-express-mw');
+let express = require('express');
+let app = express();
+let http = require('http').Server(app);
 
+let config = require('./config');
 
-let express = expressMiddleware();
 // add cors in development mode
-if (express.get('env') === 'development') {
-  express.use(cors());
+if (app.get('env') === 'development') {
+  app.use(cors());
 }
 
-express.use('/client', expressMiddleware.static('../client'));
-express.get('/', function (req, res) {
+app.use('/client', express.static('../client'));
+//app.use('/foo', express.static('./index.html'));
+app.get('/', function (req, res) {
   res.send(`
 <style>a {color: #112; text-decoration: none;
   font-family: sans-serif;
@@ -53,34 +55,33 @@ swaggerMiddleware.create(swaggerConfig, (err, swagger) => {
   }
 
   // add the swagger middleware stack to express
-  express.use(swagger.middleware());
-  // gut check
-  console.log('Swagger middleware loaded into Express...');
+  app.use(swagger.middleware());
+
   // Set headers to no-cache for all responses
-  express.use('/', (req, res, next) => {
+  app.use('/', (req, res, next) => {
     res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
     next();
   });
   // set location for serving up swagger docs
-  express.use(swagger.runner.config.swagger.docEndpoints.ui, expressMiddleware.static(__dirname + "/docs"));
+  app.use(swagger.runner.config.swagger.docEndpoints.ui, express.static(__dirname + "/docs"));
   // set the swagger path to render the swagger.yaml to json   
-  express.use(swagger.runner.config.swagger.docEndpoints.raw, (req, res) => {
+  app.use(swagger.runner.config.swagger.docEndpoints.raw, (req, res) => {
     res.status(200).json(swagger.runner.swagger);
   })
   // general 404 error handling for requests without mapped routes
-  express.use((req, res, next) => {
+  app.use((req, res, next) => {
     let err = new Error('Resource Not Found');
     err.status = 404;
     next(err);
   });
   // general HTTP error handler for all bad requests
-  express.use((err, req, res, next) => {
+  app.use((err, req, res, next) => {
     res.status(err.status || 500).json({
       // don't leak a stack trace in production
       message: err.message,
-      error: (express.get('env') === 'development') ? err.stack : {}
+      error: (app.get('env') === 'development') ? err.stack : {}
     });
     if (err) { throw err; }
   });
 });
-module.exports = express;
+module.exports = app;

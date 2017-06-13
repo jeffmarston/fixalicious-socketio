@@ -6,6 +6,7 @@ let redis = require('redis');
 let client = redis.createClient();
 bluebird.promisifyAll(redis.RedisClient.prototype);
 
+
 class TransactionModel {
 
     static getAll(sessionName) {
@@ -17,10 +18,18 @@ class TransactionModel {
     static create(sessionName, transaction) {
         let newSession = { name: sessionName };
         let trans = {
+            session: sessionName,
             direction: "sent",
             id: 33,
             message: JSON.stringify(transaction)
         }
+
+        // ================== Socket.io ====================
+
+        global.io.emit('transaction', JSON.stringify(trans));
+
+        // =================================================
+
         return client.rpushAsync('session:' + sessionName, JSON.stringify(trans));
     }
 

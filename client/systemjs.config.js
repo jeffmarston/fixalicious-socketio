@@ -16,7 +16,8 @@
                 'angular2-in-memory-web-api': 'node_modules/angular2-in-memory-web-api',
                 // ag libraries
                 'ag-grid-angular' : 'node_modules/ag-grid-angular',
-                'ag-grid' : 'node_modules/ag-grid'
+                'ag-grid' : 'node_modules/ag-grid',
+                'socket.io-client' : 'node_modules/socket.io-client/dist'
             },
             packages: {
                 lib: {
@@ -35,6 +36,10 @@
                 },
                 'ag-grid': {
                     defaultExtension: "js"
+                },
+                'socket.io-client' : {
+                    main: './socket.io.js',
+                    defaultExtension: 'js'
                 }
             }
         }

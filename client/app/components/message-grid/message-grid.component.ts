@@ -5,6 +5,7 @@ import { GridOptions } from 'ag-grid/main';
 import { TransactionApiService } from "../../services/transaction.service"
 import { SessionService } from "../../services/session.service"
 import { ITransaction, ISession } from "../../types.d"
+import * as io from 'socket.io-client';
 
 @Component({
     selector: 'message-grid',
@@ -24,9 +25,20 @@ export class SimpleGridComponent implements OnInit {
     private showDetails: boolean;
     private debugMessage: string;
     private detailCollapsed = false;
+    private socket;
 
     ngOnInit() {
         this.showGrid = true;
+
+        this.socket = io();
+        this.socket.on('transaction', msg => {
+
+            console.log("received: " + msg);
+            let transaction: ITransaction = JSON.parse(msg);
+            if (transaction.session.toLowerCase() === this.selectedSession.name.toLowerCase()) {
+                this.addRowsToDataSource([transaction]);
+            }
+        });
     }
 
     constructor(
@@ -38,16 +50,6 @@ export class SimpleGridComponent implements OnInit {
         this.gridOptions = <GridOptions>{
             columnDefs: this.columnDefs
         };
-
-        // setInterval(o => {
-        //     this.detailCollapsed = !this.detailCollapsed;
-        //     console.log(this.detailCollapsed);
-        // }, 1000);
-
-        // setTimeout(o=> {
-        //     console.log("adding: " + this.selectedMessage.id);
-        //         this.addRowsToDataSource([this.selectedMessage]);
-        // }, 4000);
     }
 
     private ngOnChanges(changes: { [propKey: string]: SimpleChange }) {

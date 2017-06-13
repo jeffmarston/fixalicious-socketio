@@ -13,13 +13,13 @@ export interface IFixMessage {
     side?: number
 }
 export interface ITransaction {
+    session?: string,
     direction: string,
     msgType: string,
     seqNum: number,
     cliOrdId: string,
     ordStatus: string,
-    message: string,
-    pretty_message?: string
+    message: string
 }
 
 export interface ISession {

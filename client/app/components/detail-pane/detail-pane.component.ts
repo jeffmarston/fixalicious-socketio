@@ -4,6 +4,7 @@ import { Http, Response } from "@angular/http";
 import { SessionService } from "../../services/session.service"
 import { TransactionApiService } from "../../services/transaction.service"
 import { ISession, IFixMessage, ITransaction } from "../../types.d"
+import * as io from 'socket.io-client';
 
 @Component({
     selector: 'detail-pane',
@@ -70,6 +71,11 @@ import { ISession, IFixMessage, ITransaction } from "../../types.d"
             border-radius: 4px;
         }
 
+        button:hover {
+            background: #eee;
+            cursor: pointer;
+        }
+
         .middle {
             border-left: none;
             border-radius: 0;
@@ -99,11 +105,13 @@ export class DetailPane implements OnInit {
     private transaction: ITransaction;
     private isValid: boolean;
     private kvPairs: any[] = [];
+    private socket;
 
     constructor(
         private clientsService: SessionService,
         private apiDataService: TransactionApiService) {
         this.isValid = true;
+        this.socket = io();
     }
 
     private ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
@@ -136,7 +144,7 @@ export class DetailPane implements OnInit {
 
     private sendDummy() {
         //var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        let cliOrdId = (Math.random().toString(36)+'00000000000000000').slice(2, 14+2).toUpperCase();
+        let cliOrdId = (Math.random().toString(36)+'00000000000000000').slice(2, 11+2).toUpperCase();
         let symbol = cliOrdId.substring(0, 3);
 
         let dummyMsg = {

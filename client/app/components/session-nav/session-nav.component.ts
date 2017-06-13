@@ -112,16 +112,16 @@ import { ISession } from "../../types.d"
             width: 100px;
             float: left;
             padding: 4px;
+            border-radius: 6px 6px 0 0;
         }
 
         li.navbar-item:hover:not(.active) {
-            background-color: #234;
+            background-color: #25404E;
         }
 
         li.active {
             background-color: #fff;
             color: white;
-            border-radius: 6px 6px 0 0;
         }
 
     `],

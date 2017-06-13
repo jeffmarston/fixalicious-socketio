@@ -13,6 +13,7 @@
     "morgan": "~1.7.0",
     "redis": "^2.7.1",
     "sequelize": "^3.24.3",
+    "socket.io": "^2.0.2",
     "swagger-express-mw": "^0.7.0",
     "tedious": "^1.14.1",
     "uuid": "^2.0.2"
