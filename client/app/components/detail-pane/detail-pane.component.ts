@@ -2,6 +2,7 @@ import { Component, OnInit, EventEmitter, Input, Output, SimpleChange } from '@a
 import { CommonModule } from "@angular/common";
 import { Http, Response } from "@angular/http";
 import { SessionService } from "../../services/session.service"
+import { FixParserService } from "../../services/fix-parser.service"
 import { TransactionApiService } from "../../services/transaction.service"
 import { ISession, IFixMessage, ITransaction } from "../../types.d"
 import * as io from 'socket.io-client';
@@ -30,7 +31,7 @@ import * as io from 'socket.io-client';
         
         .container {
             height: 100%;
-            overflow: hidden;
+            overflow: auto;
             transition: width .25s ease;
             width: 25%;
             float: left;
@@ -105,11 +106,13 @@ export class DetailPane implements OnInit {
     private transaction: ITransaction;
     private isValid: boolean;
     private kvPairs: any[] = [];
+    private fixObj = {};
     private socket;
 
     constructor(
         private clientsService: SessionService,
-        private apiDataService: TransactionApiService) {
+        private apiDataService: TransactionApiService,
+        private fixParserService: FixParserService) {
         this.isValid = true;
         this.socket = io();
     }
@@ -130,56 +133,61 @@ export class DetailPane implements OnInit {
     }
 
     private displayFixMessage() {
+        console.log(this.transaction.message);
+
         this.kvPairs = [];
-        var fixMsg = JSON.parse(this.transaction.message);
-        for (var property in fixMsg) {
-            if (fixMsg.hasOwnProperty(property)) {
+        this.fixObj = this.fixParserService.parseFix(this.transaction.message);
+
+
+        for (var property in this.fixObj) {
+            if (this.fixObj.hasOwnProperty(property)) {
                 this.kvPairs.push({
                     key: property,
-                    value: fixMsg[property]
+                    value: this.fixObj[property]
                 });
             }
         }
     }
 
-    private sendDummy() {
+    private sendDummy2() {
         //var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        let cliOrdId = (Math.random().toString(36)+'00000000000000000').slice(2, 11+2).toUpperCase();
+        let cliOrdId = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
         let symbol = cliOrdId.substring(0, 3);
 
-        let dummyMsg = {
-            "BeginString (8)": "FIX.4.2",
-            "BodyLength (9)": "138",
-            "MsgType (35)": "D",
-            "MsgSeqNum (34)": "35",
-            "SenderCompID (49)": "Jeff",
-            "TargetCompID (56)": "Marston",
-            "SendingTime (52)": new Date().toISOString(),
-            "TransactTime (60)": new Date().toISOString(),
-            "SecurityExchange (207)": "New York",
-            "HandlInst (21)": "MANUAL_ORDER_BEST_EXECUTION (3)",
-            "Symbol (55)": symbol,
-            "Side (54)": "BUY (1)",
-            "ClOrdID (11)": cliOrdId,
-            "Price (44)": "0",
-            "TimeInForce (59)": "DAY (0)",
-            "OrdType (40)": "MARKET (1)",
-            "OrderQty (38)": Math.floor((Math.random() * 1000) + 100),
-            "CheckSum (10)": "251"
-        }
-        this.apiDataService.createTransaction(this.session.name, dummyMsg);
+        let dummyMsg =
+            this.apiDataService.createTransaction(this.session.name, {});
     }
 
-    private ackFixMessage() {
-        var fixObj = {};
-        this.kvPairs.forEach(pair => {
-            fixObj[pair.key] = pair.value;
-        });
+    private sendDummy() {
+        var fillObj = {
+            "OrderID": "orderId_m4",
+            "ClOrdID": this.fixObj["ClOrdID (11)"],
+            "ExecID": "execId_m4",
+            "ExecTransType": 0,
+            "ExecType": 0,
+            "OrdStatus": 0,
+            "Symbol": this.fixObj["Symbol (55)"],
+            "SecurityExchange": "New York",
+            "Side": 1,
+            "OrderQty": this.fixObj["OrderQty (38)"],
+            "OrdType": 1,
+            "Price": 4.6,
+            "TimeInForce": 0,
+            "LastShares": 0,
+            "LastPx": 4.4,
+            "LeavesQty": 0,
+            "CumQty": this.fixObj["OrderQty (38)"],
+            "AvgPx": 4.5,
+            "TransactTime": "now",
+            "HandlInst": 3
+        }
 
-        console.log(" ==== SENDING =====");
-        console.log(fixObj);
 
-        this.apiDataService.createTransaction(this.session.name, fixObj);
+        // this.kvPairs.forEach(pair => {
+        //     fixObj[pair.key] = pair.value;
+        // });
+
+        this.apiDataService.createTransaction(this.session.name, fillObj);
     }
 
     ngOnInit() {

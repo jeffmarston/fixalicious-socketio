@@ -5,6 +5,7 @@
  */
 
 let app = require('../app');
+let redisSubscriber = require('../redis-subscriber');
 let debug = require('debug')('swagger-gwy:server');
 //let http = require('http');
 
@@ -26,6 +27,8 @@ global.io = require('socket.io').listen(server);
 
 
 // ================== Socket.io ====================
+
+redisSubscriber.subscribeAll();
 
 global.io.on('connection', function(socket){
   console.log('a user connected: ' + socket.client.id);

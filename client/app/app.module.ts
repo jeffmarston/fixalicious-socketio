@@ -11,6 +11,8 @@ import { SessionNavComponent } from "./components/session-nav/session-nav.compon
 import { DetailPane } from "./components/detail-pane/detail-pane.component";
 import { SessionConfigComponent } from "./components/session-config/session-config.component";
 import { SessionService } from "./services/session.service";
+import { FixParserService } from "./services/fix-parser.service";
+// import { IFixParserService } from "./types";
 
 @NgModule({
     imports: [
@@ -27,7 +29,8 @@ import { SessionService } from "./services/session.service";
         SessionConfigComponent
     ],
     providers: [ 
-        SessionService
+        SessionService,
+        FixParserService
     ],
     bootstrap: [AppComponent]
 })

@@ -2,10 +2,12 @@ import { Component, OnInit, Input, OnChanges, SimpleChange } from '@angular/core
 import { CommonModule } from "@angular/common";
 import { Http, Response } from "@angular/http";
 import { GridOptions } from 'ag-grid/main';
-import { TransactionApiService } from "../../services/transaction.service"
-import { SessionService } from "../../services/session.service"
-import { ITransaction, ISession } from "../../types.d"
+import { TransactionApiService } from "../../services/transaction.service";
+import { SessionService } from "../../services/session.service";
+import { FixParserService } from "../../services/fix-parser.service"
+import { ITransaction, ISession } from "../../types.d";
 import * as io from 'socket.io-client';
+import * as _ from 'lodash';
 
 @Component({
     selector: 'message-grid',
@@ -32,8 +34,6 @@ export class SimpleGridComponent implements OnInit {
 
         this.socket = io();
         this.socket.on('transaction', msg => {
-
-            console.log("received: " + msg);
             let transaction: ITransaction = JSON.parse(msg);
             if (transaction.session.toLowerCase() === this.selectedSession.name.toLowerCase()) {
                 this.addRowsToDataSource([transaction]);
@@ -44,6 +44,7 @@ export class SimpleGridComponent implements OnInit {
     constructor(
         private apiDataService: TransactionApiService,
         private sessionService: SessionService,
+        private fixParserService: FixParserService,
         private http: Http) {
 
         this.createColumnDefs();
@@ -95,16 +96,15 @@ export class SimpleGridComponent implements OnInit {
             cliOrdId: "",
             msgType: "",
             ordStatus: "",
-            message: item.message
+            message: item.msg
         };
         // enrich with specifics from fix message
         try {
-            let fixObj = JSON.parse(item.message);
+            let fixObj = this.fixParserService.parseFix(item.msg);
             row.seqNum = fixObj['MsgSeqNum (34)'];
             row.cliOrdId = fixObj['ClOrdID (11)'];
             row.msgType = fixObj['MsgType (35)'];
             row.ordStatus = fixObj['OrdStatus (39)'];
-            row.message = item.message;
         }
         catch (ex) {
             console.error("Unable to parse json: " + item.message);
@@ -141,7 +141,6 @@ export class SimpleGridComponent implements OnInit {
     }
 
     private toggleDetails() {
-        console.log(this.detailCollapsed);
         this.detailCollapsed = !this.detailCollapsed;
     }
 }

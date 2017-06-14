@@ -26,3 +26,7 @@ export interface ISession {
     name: string;
     selected?: boolean;
 }
+
+export interface IFixParserService {
+    parseFix(fix: string): any;
+}
