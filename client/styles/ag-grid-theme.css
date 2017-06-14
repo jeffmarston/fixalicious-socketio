@@ -30,42 +30,33 @@
 .ag-theme .ag-cell-range-selected-4:not(.ag-cell-focus) {
   background-color: rgba(0,0,0,0.4);
 }
-.ag-theme .ag-column-moving .ag-cell {
-  -webkit-transition: left 0.2s;
-  -moz-transition: left 0.2s;
-  -o-transition: left 0.2s;
-  -ms-transition: left 0.2s;
-  transition: left 0.2s;
-}
-.ag-theme .ag-column-moving .ag-header-cell {
-  -webkit-transition: left 0.2s;
-  -moz-transition: left 0.2s;
-  -o-transition: left 0.2s;
-  -ms-transition: left 0.2s;
-  transition: left 0.2s;
-}
-.ag-theme .ag-column-moving .ag-header-group-cell {
-  -webkit-transition: left 0.2s;
-  -moz-transition: left 0.2s;
-  -o-transition: left 0.2s;
-  -ms-transition: left 0.2s;
-  transition: left 0.2s;
-}
-.ag-theme .ag-cell-focus {
-  border: 0 solid transparent;
+.ag-theme .ag-cell-focus {  
+  border: 1px solid transparent;
   outline: none;
 }
 .ag-theme .ag-cell-no-focus {
-  border-right: 0 solid transparent;
-  border-top: 0 solid transparent;
-  border-left: 0 solid transparent;
-  border-bottom: 0 solid transparent;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
 }
-.ag-theme .ag-cell-first-right-pinned {
-  border-left: 0 solid #808080;
+.ag-theme .ag-ltr .ag-cell-no-focus {
+  border-right: 1px solid transparent;
+  border-left: 1px solid transparent;
 }
-.ag-theme .ag-cell-last-left-pinned {
-  border-right: 0 solid #808080;
+.ag-theme .ag-rtl .ag-cell-no-focus {
+  border-right: 1px solid transparent;
+  border-left: 1px dotted #808080;
+}
+.ag-theme .ag-rtl .ag-cell-first-right-pinned {
+  border-left: 1px solid #808080;
+}
+.ag-theme .ag-ltr .ag-cell-first-right-pinned {
+  border-left: 1px solid #808080;
+}
+.ag-theme .ag-rtl .ag-cell-last-left-pinned {
+  border-right: 1px solid #808080;
+}
+.ag-theme .ag-ltr .ag-cell-last-left-pinned {
+  border-right: 1px solid #808080;
 }
 .ag-theme .ag-cell-highlight {
   border: 1px solid #006400;
@@ -106,7 +97,7 @@
   transition: background-color 0.1s;
 }
 .ag-theme .ag-rich-select {
-  font-size: 12px;
+  font-size: 14px;
   border: 1px solid #808080;
   background-color: #fff;
 }
@@ -125,6 +116,10 @@
 .ag-theme .ag-large-text {
   border: 1px solid #808080;
 }
+.ag-theme .ag-header-select-all {
+  padding: 5px 0px 0px 3px;
+  line-height: 0;
+}
 .ag-theme .ag-header {
   color: #555;
   background: #eee;
@@ -132,21 +127,19 @@
   font-weight: normal;
 }
 .ag-theme .ag-header-icon {
-  color: #555;
+  color: #000;
   stroke: none;
-  fill: #555;
+  fill: #808080;
 }
-.ag-theme .ag-no-scrolls .ag-header-container {
-  background: -webkit-linear-gradient(#fff, #d3d3d3);
-  background: -moz-linear-gradient(#fff, #d3d3d3);
-  background: -o-linear-gradient(#fff, #d3d3d3);
-  background: -ms-linear-gradient(#fff, #d3d3d3);
-  background: linear-gradient(#fff, #d3d3d3);
+.ag-theme .ag-layout-for-print .ag-header-container {
+  background: #fff;
   border-bottom: 1px solid #808080;
 }
-.ag-theme .ag-header-cell {
+.ag-theme .ag-ltr .ag-header-cell {
   border-right: 1px solid #808080;
-  text-align: left;
+}
+.ag-theme .ag-rtl .ag-header-cell {
+  border-left: 1px solid #808080;
 }
 .ag-theme .ag-header-cell-moving .ag-header-cell-label {
   opacity: 0.5;
@@ -156,8 +149,11 @@
 .ag-theme .ag-header-cell-moving {
   background-color: #bebebe;
 }
-.ag-theme .ag-header-group-cell {
+.ag-theme .ag-ltr .ag-header-group-cell {
   border-right: 1px solid #808080;
+}
+.ag-theme .ag-rtl .ag-header-group-cell {
+  border-left: 1px solid #808080;
 }
 .ag-theme .ag-header-group-cell-with-group {
   border-bottom: 1px solid #808080;
@@ -170,14 +166,24 @@
 }
 .ag-theme .ag-header-group-cell-label {
   padding: 4px;
+}
+.ag-theme .ag-ltr .ag-header-group-cell-label {
   padding-left: 10px;
 }
-.ag-theme .ag-header-group-text {
+.ag-theme .ag-rtl .ag-header-group-cell-label {
+  padding-right: 10px;
+}
+.ag-theme .ag-rtl .ag-header-group-text {
+  margin-left: 2px;
+}
+.ag-theme .ag-ltr .ag-header-group-text {
   margin-right: 2px;
 }
 .ag-theme .ag-header-cell-menu-button {
   padding: 2px;
   margin-top: 4px;
+  margin-left: 1px;
+  margin-right: 1px;
   border: 1px solid transparent;
   border-radius: 3px;
   -webkit-box-sizing: content-box /* When using bootstrap, box-sizing was set to 'border-box' */;
@@ -185,18 +191,18 @@
   box-sizing: content-box /* When using bootstrap, box-sizing was set to 'border-box' */;
   line-height: 0px /* normal line height, a space was appearing below the menu button */;
 }
-.ag-theme .ag-pinned-right-header {
+.ag-theme .ag-ltr .ag-pinned-right-header {
   border-left: 1px solid #808080;
 }
-/*.ag-theme .ag-header-cell-menu-button:hover {
-  border: 1px solid #808080;
-}*/
+.ag-theme .ag-rtl .ag-pinned-left-header {
+  border-right: 1px solid #808080;
+}
+.ag-theme .ag-header-cell-menu-button:hover {
+  border: 1px solid transparent;
+}
 .ag-theme .ag-body {
   background-color: #f6f6f6;
 }
-/*.ag-theme .ag-row {
-
-}*/
 .ag-theme .ag-row-odd {
   background-color: #f6f6f6;
 }
@@ -204,7 +210,13 @@
   background-color: #fff;
 }
 .ag-theme .ag-row-selected {
-  background-image: linear-gradient( 0deg, #a0d0d6, #b0e0e6 );
+  background-color: #b0e0e6;
+}
+.ag-theme .ag-row-stub {
+  background-color: #f0f0f0;
+}
+.ag-theme .ag-stub-cell {
+  padding: 2px 2px 2px 10px;
 }
 .ag-theme .ag-floating-top .ag-row {
   background-color: #f0f0f0;
@@ -239,17 +251,38 @@
 .ag-theme .ag-group-cell {
   font-style: italic;
 }
-.ag-theme .ag-group-expanded {
+.ag-theme .ag-ltr .ag-group-expanded {
   padding-right: 4px;
 }
-.ag-theme .ag-group-contracted {
+.ag-theme .ag-rtl .ag-group-expanded {
+  padding-left: 4px;
+}
+.ag-theme .ag-ltr .ag-group-contracted {
   padding-right: 4px;
 }
-.ag-theme .ag-group-value {
+.ag-theme .ag-rtl .ag-group-contracted {
+  padding-left: 4px;
+}
+.ag-theme .ag-ltr .ag-group-loading {
+  padding-right: 4px;
+}
+.ag-theme .ag-rtl .ag-group-loading {
+  padding-left: 4px;
+}
+.ag-theme .ag-ltr .ag-group-value {
   padding-right: 2px;
 }
-.ag-theme .ag-group-checkbox {
+.ag-theme .ag-rtl .ag-group-value {
+  padding-left: 2px;
+}
+.ag-theme .ag-ltr .ag-group-checkbox {
   padding-right: 2px;
+}
+.ag-theme .ag-rtl .ag-group-checkbox {
+  padding-left: 2px;
+}
+.ag-theme .ag-group-child-count {
+  display: inline-block;
 }
 .ag-theme .ag-footer-cell {
   font-style: italic;
@@ -259,7 +292,7 @@
   background-color: #f6f6f6;
   cursor: default;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 12px;
+  font-size: 14px;
 }
 .ag-theme .ag-menu .ag-tab-header {
   background-color: #e6e6e6;
@@ -295,7 +328,7 @@
   vertical-align: middle;
 }
 .ag-theme .ag-menu-option-shortcut {
-  padding: 2px 2px 2px 20px;
+  padding: 2px 2px 2px 2px;
   vertical-align: middle;
 }
 .ag-theme .ag-menu-option-popup-pointer {
@@ -325,8 +358,11 @@
 .ag-theme .ag-filter-value {
   margin-left: 4px;
 }
-.ag-theme .ag-selection-checkbox {
+.ag-theme .ag-ltr .ag-selection-checkbox {
   padding-right: 4px;
+}
+.ag-theme .ag-rtl .ag-selection-checkbox {
+  padding-left: 4px;
 }
 .ag-theme .ag-paging-panel {
   padding: 4px;
@@ -341,15 +377,20 @@
 }
 .ag-theme .ag-tool-panel {
   background-color: #f6f6f6;
-  border-right: 1px solid #808080;
   border-bottom: 1px solid #808080;
   border-top: 1px solid #808080;
   color: #222;
 }
+.ag-theme .ltr .ag-tool-panel {
+  border-right: 1px solid #808080;
+}
+.ag-theme .rtl .ag-tool-panel {
+  border-left: 1px solid #808080;
+}
 .ag-theme .ag-status-bar {
   color: #222;
   background-color: #f6f6f6;
-  font-size: 12px;
+  font-size: 14px;
   height: 22px;
   border-bottom: 1px solid #808080;
   border-left: 1px solid #808080;
@@ -395,19 +436,16 @@
   color: #808080;
 }
 .ag-theme .ag-column-drop-icon {
-  padding-right: 4px;
+  margin: 3px;
 }
 .ag-theme .ag-column-drop {
   background-color: #f6f6f6;
 }
 .ag-theme .ag-column-drop-horizontal {
-  padding: 4px 4px 4px 4px;
+  padding: 2px;
   border-top: 1px solid #808080;
   border-left: 1px solid #808080;
   border-right: 1px solid #808080;
-}
-.ag-theme .ag-column-drop-horizontal .ag-column-drop-cell {
-  padding: 2px;
 }
 .ag-theme .ag-column-drop-vertical {
   padding: 4px 4px 10px 4px;
@@ -431,7 +469,7 @@
 .ag-theme .ag-select-agg-func-popup {
   cursor: default;
   position: absolute;
-  font-size: 12px;
+  font-size: 14px;
   background-color: #fff;
   border: 1px solid #808080;
 }
