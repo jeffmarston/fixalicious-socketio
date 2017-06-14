@@ -21,12 +21,14 @@ export class SimpleGridComponent implements OnInit {
     private gridOptions: GridOptions;
     private showGrid: boolean;
     private rowData: ITransaction[];
+    private visibleRows: ITransaction[];
     private columnDefs: any[];
     private selectedSession: ISession;
     private selectedMessage: ITransaction;
     private showDetails: boolean;
     private debugMessage: string;
     private detailCollapsed = false;
+    private filterValue;
     private socket;
 
     ngOnInit() {
@@ -53,6 +55,21 @@ export class SimpleGridComponent implements OnInit {
         };
     }
 
+    private updateFilter($event) {
+        this.visibleRows = this.filterOut(this.rowData, $event);
+        this.gridOptions.api.setRowData(this.visibleRows);
+    }
+
+    private filterOut(rowdata: ITransaction[], filterValue: string) {
+        let result = rowdata;
+        if (filterValue) {
+            result = _.filter(rowdata, o => {
+                return (o.cliOrdId) && (o.cliOrdId.indexOf(filterValue) > -1);
+            });
+        }
+        return result;
+    }
+
     private ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
         for (let propName in changes) {
             let changedProp = changes[propName];
@@ -60,6 +77,7 @@ export class SimpleGridComponent implements OnInit {
             if (propName == "session") {
                 this.selectedSession = changedProp.currentValue;
                 this.rowData = null;
+                this.filterValue = null;
                 this.fetchRowData(changedProp.currentValue);
             }
         }
@@ -81,12 +99,14 @@ export class SimpleGridComponent implements OnInit {
     }
 
     private fetchRowData(session: ISession) {
-        var src = this.apiDataService.getTransactions(session.name);
-        src.subscribe(o => {
-            this.addRowsToDataSource(o);
-        }, error => {
-            console.error("ERROR: " + error);
-        });
+        if (session) {
+            var src = this.apiDataService.getTransactions(session.name);
+            src.subscribe(o => {
+                this.addRowsToDataSource(o);
+            }, error => {
+                console.error("ERROR: " + error);
+            });
+        }
     }
 
     private createRow(item): ITransaction {
@@ -113,17 +133,24 @@ export class SimpleGridComponent implements OnInit {
     }
 
     private addRowsToDataSource(newItems: ITransaction[]) {
-        let rows = [];
+        // First process te raw message and transform raw message into a row
+        let newRows = [];
         newItems.forEach(item => {
-            rows.push(this.createRow(item));
+            newRows.push(this.createRow(item));
         });
 
         if (!this.rowData) {
-            this.rowData = rows;
+            this.rowData = newRows;
+            this.visibleRows = this.filterOut(this.rowData, this.filterValue);
+            this.gridOptions.api.setRowData(this.visibleRows);
+        } else {
+            let newVisRows = this.filterOut(newRows, this.filterValue);
+
+            this.gridOptions.api.updateRowData({ add: newVisRows, addIndex: 0 });
         }
-        this.gridOptions.api.insertItemsAtIndex(0, rows);
 
 
+        // resize columns 
         var allColumnIds = [];
         this.columnDefs.forEach(function (columnDef) {
             allColumnIds.push(columnDef.field);

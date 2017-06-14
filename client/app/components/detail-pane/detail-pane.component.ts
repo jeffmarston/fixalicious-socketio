@@ -159,10 +159,13 @@ export class DetailPane implements OnInit {
     }
 
     private sendDummy() {
+        let orderID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
+        let execID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
+        
         var fillObj = {
-            "OrderID": "orderId_m4",
+            "OrderID": orderID,
             "ClOrdID": this.fixObj["ClOrdID (11)"],
-            "ExecID": "execId_m4",
+            "ExecID": execID,
             "ExecTransType": 0,
             "ExecType": 0,
             "OrdStatus": 0,

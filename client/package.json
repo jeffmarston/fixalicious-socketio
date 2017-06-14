@@ -18,7 +18,7 @@
   "dependencies": {
     "@angular/common": "2.4.8",
     "@angular/compiler": "2.4.8",
-    "@angular/compiler-cli": "2.4.x",
+    "@angular/compiler-cli": "^2.4.8",
     "@angular/core": "2.4.8",
     "@angular/forms": "2.4.8",
     "@angular/http": "2.4.8",
@@ -31,6 +31,7 @@
     "core-js": "2.4.x",
     "es6-shim": "^0.35.3",
     "jquery": "3.1.1",
+    "lodash": "^4.17.4",
     "rxjs": "5.0.x",
     "socket.io-client": "^2.0.2",
     "systemjs": "0.19.x",

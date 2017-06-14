@@ -7,6 +7,19 @@ td {
 
 }
 
+div.filter {
+    height: 30px;
+}
+input.filter {
+    padding: 4px;
+    border-radius: 4px;
+    border: 1px solid gray;
+    float: right;
+}
+input.active-filter {
+    background: #84B082;
+}
+
 .outer-div {
     overflow: auto;
     height: 100%;

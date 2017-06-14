@@ -63,7 +63,7 @@ import * as io from 'socket.io-client';
 })
 export class AppComponent {
     private connectionState$: Observable<string>;
-    private session: string = "BAX";
+    private session = null;
     private isNavCollapsed: boolean;
 
     ngOnInit() {

@@ -160,6 +160,7 @@
 }
 .ag-theme .ag-header-cell-label {
   padding: 4px 2px 4px 2px;
+  text-align: left;
 }
 .ag-theme .ag-header-cell-text {
   padding-left: 2px;
