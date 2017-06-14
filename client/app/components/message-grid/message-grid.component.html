@@ -6,7 +6,9 @@
             (onSave)="saveSessionConfig($event)"></session-config>-->
 
         <div *ngIf="showGrid" class="grid-pane">
-            <ag-grid-angular #agGrid class="ag-theme"
+            <ag-grid-angular #agGrid 
+                        style="height: 100%; width: 100%;"
+                        class="ag-theme"
                         [gridOptions]="gridOptions"                     
                         [rowData]="rowData"
                         enableColResize

@@ -9,7 +9,7 @@ export class FixParserService implements IFixParserService {
         let obj: any = {};
         let lines: string[] = fix.split("\n");
 
-        lines.forEach(line => {     
+        lines.forEach((line: string) => {     
             if (line.startsWith(" ")) {
                 let parts = line.split(":");
                 let key = parts[0].trim();                
