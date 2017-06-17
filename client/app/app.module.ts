@@ -12,6 +12,7 @@ import { DetailPane } from "./components/detail-pane/detail-pane.component";
 import { SessionConfigComponent } from "./components/session-config/session-config.component";
 import { SessionService } from "./services/session.service";
 import { FixParserService } from "./services/fix-parser.service";
+import { SetFocusDirective } from "./directives/set-focus";
 // import { IFixParserService } from "./types";
 
 @NgModule({
@@ -26,9 +27,10 @@ import { FixParserService } from "./services/fix-parser.service";
         SimpleGridComponent,
         SessionNavComponent,
         DetailPane,
-        SessionConfigComponent
+        SessionConfigComponent,
+        SetFocusDirective
     ],
-    providers: [ 
+    providers: [
         SessionService,
         FixParserService
     ],
