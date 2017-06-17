@@ -12,10 +12,10 @@ import * as io from 'socket.io-client';
     template: `
     <div class="container" [style.width]="collapsed ? '0' : '330px'" > 
         <div class="button-section">
-            <button class="" [disabled]="!isValid" (click)="sendDummy()">Send</button>
-            <button class="middle" [hidden]="true">Reject</button>
-            <button class="middle" [hidden]="true">Fill</button>
-            <button class="last" [hidden]="true">Partial Fill</button>
+            <button class="" [disabled]="!isValid" (click)="prepareAck()">Ack</button>
+            <button class="" [disabled]="!isValid" (click)="preparePartialFill()">Partial Fill</button>
+            <button class="" [disabled]="!isValid" (click)="prepareFill()">Fill</button>
+            <button class="" [disabled]="!isValid" (click)="prepareReject()">Reject</button>
         </div>
         <div class="keyvalue-section">
             <table class="keyvalue-table">
@@ -25,6 +25,8 @@ import * as io from 'socket.io-client';
                 </tr>
             </table>
         </div>
+        
+        <button (click)="send()">Send</button>
     </div>
     `,
     styles: [` 
@@ -106,7 +108,8 @@ export class DetailPane implements OnInit {
     private transaction: ITransaction;
     private isValid: boolean;
     private kvPairs: any[] = [];
-    private fixObj = {};
+    private sourceFixObj = {};
+    private fixToSend = {};
     private socket;
 
     constructor(
@@ -123,7 +126,7 @@ export class DetailPane implements OnInit {
 
             if (propName == "detail" && changedProp.currentValue != undefined) {
                 this.transaction = changedProp.currentValue;
-                this.displayFixMessage();
+                this.sourceFixObj = this.fixParserService.parseFix(this.transaction.message);
                 this.isValid = true;
             }
             if (propName == "collapsed" && changedProp.currentValue != undefined) {
@@ -133,64 +136,116 @@ export class DetailPane implements OnInit {
     }
 
     private displayFixMessage() {
-        console.log(this.transaction.message);
-
         this.kvPairs = [];
-        this.fixObj = this.fixParserService.parseFix(this.transaction.message);
 
-
-        for (var property in this.fixObj) {
-            if (this.fixObj.hasOwnProperty(property)) {
+        for (var property in this.fixToSend) {
+            if (this.fixToSend.hasOwnProperty(property)) {
                 this.kvPairs.push({
                     key: property,
-                    value: this.fixObj[property]
+                    value: this.fixToSend[property]
                 });
             }
         }
     }
 
-    private sendDummy2() {
-        //var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        let cliOrdId = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
-        let symbol = cliOrdId.substring(0, 3);
-
-        let dummyMsg =
-            this.apiDataService.createTransaction(this.session.name, {});
-    }
-
-    private sendDummy() {
+    private prepareAck() {
         let orderID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
         let execID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
-        
-        var fillObj = {
-            "OrderID": orderID,
-            "ClOrdID": this.fixObj["ClOrdID (11)"],
+
+        this.fixToSend = {
+            "OrderID": this.sourceFixObj["ClOrdID (11)"],,
+            "ClOrdID": this.sourceFixObj["ClOrdID (11)"],
             "ExecID": execID,
             "ExecTransType": 0,
             "ExecType": 0,
             "OrdStatus": 0,
-            "Symbol": this.fixObj["Symbol (55)"],
+            "Symbol": this.sourceFixObj["Symbol (55)"],
             "SecurityExchange": "New York",
             "Side": 1,
-            "OrderQty": this.fixObj["OrderQty (38)"],
+            "OrderQty": this.sourceFixObj["OrderQty (38)"],
             "OrdType": 1,
             "Price": 4.6,
             "TimeInForce": 0,
             "LastShares": 0,
             "LastPx": 4.4,
             "LeavesQty": 0,
-            "CumQty": this.fixObj["OrderQty (38)"],
+            "CumQty": 0,
             "AvgPx": 4.5,
             "TransactTime": "now",
             "HandlInst": 3
         }
+        this.displayFixMessage();
+    }
 
+    private prepareFill() {
+        let orderID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
+        let execID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
 
-        // this.kvPairs.forEach(pair => {
-        //     fixObj[pair.key] = pair.value;
-        // });
+        this.fixToSend = {
+            "OrderID": this.sourceFixObj["ClOrdID (11)"],
+            "ClOrdID": this.sourceFixObj["ClOrdID (11)"],
+            "ExecID": execID,
+            "ExecTransType": 0,
+            "ExecType": 2,
+            "OrdStatus": 2,
+            "Symbol": this.sourceFixObj["Symbol (55)"],
+            "SecurityExchange": "New York",
+            "Side": 1,
+            "OrderQty": this.sourceFixObj["OrderQty (38)"],
+            "OrdType": 1,
+            "Price": 4.6,
+            "TimeInForce": 0,
+            "LastShares": 0,
+            "LastPx": 4.4,
+            "LeavesQty": 0,
+            "CumQty": this.sourceFixObj["OrderQty (38)"],
+            "AvgPx": 4.5,
+            "TransactTime": "now",
+            "HandlInst": 3
+        }
+        this.displayFixMessage();
+    }
 
-        this.apiDataService.createTransaction(this.session.name, fillObj);
+    private preparePartialFill() {
+        let orderID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
+        let execID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
+
+        this.fixToSend = {
+            "OrderID": this.sourceFixObj["ClOrdID (11)"],
+            "ClOrdID": this.sourceFixObj["ClOrdID (11)"],
+            "ExecID": execID,
+            "ExecTransType": 0,
+            "ExecType": 0,
+            "OrdStatus": 0,
+            "Symbol": this.sourceFixObj["Symbol (55)"],
+            "SecurityExchange": "New York",
+            "Side": 1,
+            "OrderQty": this.sourceFixObj["OrderQty (38)"],
+            "OrdType": 1,
+            "Price": 4.6,
+            "TimeInForce": 0,
+            "LastShares": 0,
+            "LastPx": 4.4,
+            "LeavesQty": 0,
+            "CumQty": 10,
+            "AvgPx": 4.5,
+            "TransactTime": "now",
+            "HandlInst": 3
+        }
+        this.displayFixMessage();
+    }
+
+    private prepareReject() {
+
+        this.fixToSend = {
+            "MsgType": 3,
+            "RefSeqNum": this.sourceFixObj['MsgSeqNum (34)']
+        }
+        this.displayFixMessage();
+    }
+
+    private send() {
+        this.apiDataService.createTransaction(this.session.name, this.fixToSend);
     }
 
     ngOnInit() {
