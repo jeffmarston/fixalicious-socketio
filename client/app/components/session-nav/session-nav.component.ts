@@ -7,8 +7,9 @@ import { ISession } from "../../types.d"
 @Component({
     selector: 'session-nav',
     template: `
-    <div class="container" [style.height]="isCollapsed ? '0' : '40px'" >
-        <ul>     
+    <div class="container" [style.height]="isCollapsed ? '0' : '36px'" >
+        <ul>
+            <li class="navbar-item" style="width: 0;"></li>
             <li *ngFor="let session of sessions"
                     (click)="onClick(session)"
                     (dblclick)="enterEdit(session)"
