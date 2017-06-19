@@ -28,7 +28,7 @@ input.active-filter {
 }
 
 .all-content{
-    height: 90%;
+    height: 100%;
     display: flex;
 }
 
@@ -36,10 +36,13 @@ input.active-filter {
     flex: 1 1 auto;
     width: 200px;
     min-width: 200px;
+    display: flex;
+    flex-direction: column;
 }
 
 .detail-pane {
     /*min-width: 200px;*/
     overflow: auto;
+    height: 100%;
     /*border: 1px solid gray;*/
 }

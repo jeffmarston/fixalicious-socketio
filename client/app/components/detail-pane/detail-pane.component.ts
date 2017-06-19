@@ -13,11 +13,25 @@ import * as io from 'socket.io-client';
     template: `
     <div class="container" [style.width]="collapsed ? '80px' : '400px'" > 
         <div class="button-section">
-            <button class="expander" (click)="collapsed = !collapsed">>></button>
-            <button class="" [disabled]="!isValid" (click)="prepareAck()">Ack</button>
-            <button class="" [disabled]="!isValid" (click)="preparePartialFill()">Partial Fill</button>
-            <button class="" [disabled]="!isValid" (click)="prepareFill()">Fill</button>
-            <button class="" [disabled]="!isValid" (click)="prepareReject()">Reject</button>
+            <button 
+                class="expander" 
+                (click)="collapsed = !collapsed">>></button>
+            <button 
+                [ngClass]="(!collapsed && activeButton=='Ack') ? 'selected' : '' "
+                [disabled]="!isValid" 
+                (click)="prepareAck('Ack')">Ack</button>
+            <button 
+                [ngClass]="(!collapsed && activeButton=='PartialFill') ? 'selected' : '' "
+                [disabled]="!isValid" 
+                (click)="preparePartialFill('PartialFill')">Partial Fill</button>
+            <button 
+                [ngClass]="(!collapsed && activeButton=='Fill') ? 'selected' : '' "
+                [disabled]="!isValid" 
+                (click)="prepareFill('Fill')">Fill</button>
+            <button 
+                [ngClass]="(!collapsed && activeButton=='Reject') ? 'selected' : '' "
+                [disabled]="!isValid" 
+                (click)="prepareReject('Reject')">Reject</button>
 
             <button class="" 
                  *ngFor="let action of customActions"
@@ -40,8 +54,10 @@ import * as io from 'socket.io-client';
         <div class="keyvalue-section" [hidden]="collapsed">
             <table class="keyvalue-table">
                 <tr>
-                    <td></td>
-                    <td><button class="send" (click)="send()">Send</button></td>
+                    <td colspan=2>
+                        <button class="send" 
+                            [hidden]="!activeButton"
+                            (click)="send()">Send</button></td>
                 </tr>
                 <tr *ngFor="let pair of kvPairs" >
                     <td class="key"><span>{{pair.key}}</span></td>
@@ -55,6 +71,7 @@ import * as io from 'socket.io-client';
         
         .container {
             overflow: auto;
+            height: 100%;
             transition: width .25s ease;
             width: 25%;
             float: left;
@@ -68,10 +85,20 @@ import * as io from 'socket.io-client';
             padding-left: 4px;
         }
 
+        button.selected {
+            border-right: 0;
+            margin-left: 8px;
+            margin-right: -1px;
+            background: #eee;
+            z-index: 100;
+        }
+
         .keyvalue-section {
             overflow: auto;
             border-collapse: collapse;
-            margin-left: 6px;
+            background: #eee;
+            min-width: 300px;
+            border: 1px solid gray;
         }
 
         .keyvalue-table {
@@ -153,8 +180,8 @@ export class DetailPane implements OnInit {
     private fixToSend = {};
     private socket;
     private isAddingAction = false;
-
     private customActions = [];
+    private activeButton = null;
 
     constructor(
         private clientsService: SessionService,
@@ -201,7 +228,11 @@ export class DetailPane implements OnInit {
         }
     }
 
-    private prepareAck() {
+    private prepareAck(label: string) {
+        if (!this.collapsed) {
+            this.activeButton = label;
+        }
+
         let execID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
 
         this.fixToSend = {
@@ -232,7 +263,11 @@ export class DetailPane implements OnInit {
         }
     }
 
-    private prepareFill() {
+    private prepareFill(label: string) {
+        if (!this.collapsed) {
+            this.activeButton = label;
+        }
+
         let execID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
         let fillPrice = 2.21;
 
@@ -264,7 +299,11 @@ export class DetailPane implements OnInit {
         }
     }
 
-    private preparePartialFill() {
+    private preparePartialFill(label: string) {
+        if (!this.collapsed) {
+            this.activeButton = label;
+        }
+
         let execID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
         let fillAmount = 25;
         let fillPrice = 2.21;
@@ -297,7 +336,11 @@ export class DetailPane implements OnInit {
         }
     }
 
-    private prepareReject() {
+    private prepareReject(label: string) {
+        if (!this.collapsed) {
+            this.activeButton = label;
+        }
+
         let execID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
 
         this.fixToSend = {
