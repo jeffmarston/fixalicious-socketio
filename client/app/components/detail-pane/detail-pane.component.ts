@@ -92,7 +92,6 @@ import * as io from 'socket.io-client';
             padding: 2px;
             margin: 2px;  
             width: 69px;
-            font-size: 12px; 
             border: 1px gray solid; 
         }
 
@@ -183,7 +182,6 @@ export class DetailPane implements OnInit {
     private addAction() {
         let newAction = { label: "", isEditing: true };
         this.customActions.push(newAction);
-
     }
 
     private doneEditing(action) {
