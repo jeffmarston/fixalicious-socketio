@@ -201,18 +201,13 @@ export class DetailPane implements OnInit {
                 });
             }
         }
-
-        if (this.collapsed) {
-            this.send();
-        }
     }
 
     private prepareAck() {
-        let orderID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
         let execID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
 
         this.fixToSend = {
-            "OrderID": this.sourceFixObj["ClOrdID (11)"],,
+            "OrderID": "sim-" + this.sourceFixObj["ClOrdID (11)"],
             "ClOrdID": this.sourceFixObj["ClOrdID (11)"],
             "ExecID": execID,
             "ExecTransType": 0,
@@ -234,14 +229,17 @@ export class DetailPane implements OnInit {
             "HandlInst": 3
         }
         this.displayFixMessage();
+        if (this.collapsed) {
+            this.send();
+        }
     }
 
     private prepareFill() {
-        let orderID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
         let execID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
+        let fillPrice = 2.21;
 
         this.fixToSend = {
-            "OrderID": this.sourceFixObj["ClOrdID (11)"],
+            "OrderID": "sim-" + this.sourceFixObj["ClOrdID (11)"],
             "ClOrdID": this.sourceFixObj["ClOrdID (11)"],
             "ExecID": execID,
             "ExecTransType": 0,
@@ -252,59 +250,95 @@ export class DetailPane implements OnInit {
             "Side": 1,
             "OrderQty": this.sourceFixObj["OrderQty (38)"],
             "OrdType": 1,
-            "Price": 4.6,
+            "Price": fillPrice,
             "TimeInForce": 0,
             "LastShares": 0,
-            "LastPx": 4.4,
+            "LastPx": fillPrice,
             "LeavesQty": 0,
             "CumQty": this.sourceFixObj["OrderQty (38)"],
-            "AvgPx": 4.5,
+            "AvgPx": fillPrice,
             "TransactTime": "now",
             "HandlInst": 3
         }
         this.displayFixMessage();
+        if (this.collapsed) {
+            this.send();
+        }
     }
 
     private preparePartialFill() {
-        let orderID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
         let execID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
+        let fillAmount = 25;
+        let fillPrice = 2.21;
 
         this.fixToSend = {
-            "OrderID": this.sourceFixObj["ClOrdID (11)"],
+            "OrderID": "sim-" + this.sourceFixObj["ClOrdID (11)"],
             "ClOrdID": this.sourceFixObj["ClOrdID (11)"],
             "ExecID": execID,
             "ExecTransType": 0,
-            "ExecType": 0,
-            "OrdStatus": 0,
+            "ExecType": 1,
+            "OrdStatus": 1,
             "Symbol": this.sourceFixObj["Symbol (55)"],
             "SecurityExchange": "New York",
             "Side": 1,
             "OrderQty": this.sourceFixObj["OrderQty (38)"],
             "OrdType": 1,
-            "Price": 4.6,
+            "Price": 0,
             "TimeInForce": 0,
-            "LastShares": 0,
-            "LastPx": 4.4,
-            "LeavesQty": 0,
-            "CumQty": 10,
-            "AvgPx": 4.5,
+            "LastShares": fillAmount,
+            "LastPx": fillPrice,
+            "LeavesQty": this.sourceFixObj["OrderQty (38)"] - fillAmount,
+            "CumQty": fillAmount,
+            "AvgPx": fillPrice,
             "TransactTime": "now",
             "HandlInst": 3
         }
         this.displayFixMessage();
+        if (this.collapsed) {
+            this.send();
+        }
     }
 
     private prepareReject() {
+        let execID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
 
         this.fixToSend = {
-            "MsgType": 3,
-            "RefSeqNum": this.sourceFixObj['MsgSeqNum (34)']
+            "OrderID": "sim-" + this.sourceFixObj["ClOrdID (11)"],
+            "ClOrdID": this.sourceFixObj["ClOrdID (11)"],
+            "ExecID": execID,
+            "ExecTransType": 0,
+            "ExecType": 8,
+            "OrdStatus": 8,
+            "OrdRejReason": 0,
+            "Symbol": this.sourceFixObj["Symbol (55)"],
+            "SecurityExchange": "NASDAQ",
+            "Side": "1",
+            "OrderQty": this.sourceFixObj["OrderQty (38)"],
+            "OrdType": 1,
+            "Price": 0,
+            "TimeInForce": 0,
+            "LastShares": 0,
+            "LeavesQty": 0,
+            "CumQty": 0,
+            "AvgPx": 0,
+            "TransactTime": "now",
+            "HandlInst": 3
         }
         this.displayFixMessage();
+        if (this.collapsed) {
+            this.send();
+        }
     }
 
     private send() {
-        this.apiDataService.createTransaction(this.session.name, this.fixToSend);
+        let fixObj = this.fixParserService.generateFix(this.kvPairs);
+        this.apiDataService.createTransaction(this.session.name, fixObj);
+
+        if (!this.collapsed) {
+            // set a new ExecID so user can repeated hit send button
+            this.fixToSend["ExecID"] = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
+            this.displayFixMessage();
+        }
     }
 
     ngOnInit() {

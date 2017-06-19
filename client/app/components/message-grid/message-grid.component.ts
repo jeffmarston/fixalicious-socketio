@@ -165,6 +165,7 @@ export class SimpleGridComponent implements OnInit {
 
     private onCellClicked($event) {
         this.selectedMessage = $event.data;
+        console.log(this.selectedMessage);
     }
 
     private toggleDetails() {
