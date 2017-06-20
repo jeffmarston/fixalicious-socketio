@@ -7,30 +7,37 @@ import * as io from 'socket.io-client';
 @Component({
     selector: 'my-app',
     template: `
-    <div class="app-container">
+    <div style="width:100%; height:100%;">
 
-        <div class="header-bar">
-            <div class="collapse-button" (click)="toggleNavBar()">
-                <i class="fa fa-glass" aria-hidden="true"></i>
-            </div>
-            <h1>FIXalicious</h1>
-        </div>
+        <modal-placeholder
+            [hidden]="!showModal"
+        ></modal-placeholder>
 
-        <session-nav
-            [collapsed]="isNavCollapsed"
-            (onSelected)="onSelected($event)"
-        ></session-nav>
+        <div class="app-container">
 
-        <div class="app-content">
-            <div class="flex-row">
-                <message-grid 
-                    style="flex: 1 1 auto;"
-                    [session]="session">
-                </message-grid>
+            <div class="header-bar">
+                <div class="collapse-button" (click)="toggleNavBar()">
+                    <i class="fa fa-glass" aria-hidden="true"></i>
+                </div>
+                <h1>FIXalicious</h1>
             </div>
 
-            <!-- <detail-pane></detail-pane> -->
+            <session-nav
+                [collapsed]="isNavCollapsed"
+                (onSelected)="onSelected($event)"
+            ></session-nav>
 
+            <div class="app-content">
+                <div class="flex-row">
+                    <message-grid 
+                        style="flex: 1 1 auto;"
+                        [session]="session">
+                    </message-grid>
+                </div>
+
+                <!-- <detail-pane></detail-pane> -->
+
+            </div>
         </div>
     </div>
     `,
@@ -59,17 +66,27 @@ import * as io from 'socket.io-client';
             flex-direction: row;
             flex: 1 1 auto;
         }
+        
+        modal-placeholder {
+            position: fixed;
+            height: 100%;
+            width: 100%;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.4);
+        }
+
     `]
 })
 export class AppComponent {
     private connectionState$: Observable<string>;
     private session = null;
     private isNavCollapsed: boolean;
+    private showModal: boolean;
 
     ngOnInit() {
-        let socket = io();
-        console.log("should be connected now");
-        socket.emit('create-transaction', 'JEFF MESSAGE');
+        setTimeout(o=> {
+            this.showModal = true;
+        }, 3000);
     }
 
     toggleNavBar(){

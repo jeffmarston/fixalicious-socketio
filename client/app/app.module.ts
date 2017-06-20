@@ -10,6 +10,7 @@ import { SimpleGridComponent } from "./components/message-grid/message-grid.comp
 import { SessionNavComponent } from "./components/session-nav/session-nav.component";
 import { DetailPane } from "./components/detail-pane/detail-pane.component";
 import { SessionConfigComponent } from "./components/session-config/session-config.component";
+import { ModalComponent } from "./components/modal/modal.component";
 import { SessionService } from "./services/session.service";
 import { FixParserService } from "./services/fix-parser.service";
 import { SetFocusDirective } from "./directives/set-focus";
@@ -26,6 +27,7 @@ import { SetFocusDirective } from "./directives/set-focus";
         AppComponent,
         SimpleGridComponent,
         SessionNavComponent,
+        ModalComponent,
         DetailPane,
         SessionConfigComponent,
         SetFocusDirective
