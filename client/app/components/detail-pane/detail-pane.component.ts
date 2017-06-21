@@ -33,8 +33,10 @@ import * as io from 'socket.io-client';
                 [disabled]="!isValid" 
                 (click)="prepareReject('Reject')">Reject</button>
 
-            <button class="" 
-                 *ngFor="let action of customActions"
+            <button 
+                [ngClass]="(!collapsed && activeButton==action.label) ? 'selected' : '' "
+                *ngFor="let action of customActions"
+                (click)="prepareTemplate(action)"
             >
                 <input 
                     (blur)="doneEditing(action)"
@@ -44,7 +46,6 @@ import * as io from 'socket.io-client';
                     [ngClass]="action.isEditing ? 'editable-input' : 'readonly-input' "
                 />
             </button>          
-
 
             <button class="add-action"
                 (click)="addAction()"
@@ -189,6 +190,11 @@ export class DetailPane implements OnInit {
         private fixParserService: FixParserService) {
         this.isValid = true;
         this.socket = io();
+
+
+        this.clientsService.getTemplates().subscribe(o => {
+            this.customActions = o;
+        });
     }
 
     private ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
@@ -207,7 +213,9 @@ export class DetailPane implements OnInit {
     }
 
     private addAction() {
-        let newAction = { label: "", isEditing: true };
+        let newAction = { label: "", isEditing: true, pairs: [
+            { key: "MsgType", formula: "D" }
+        ] };
         this.customActions.push(newAction);
     }
 
@@ -225,6 +233,22 @@ export class DetailPane implements OnInit {
                     value: this.fixToSend[property]
                 });
             }
+        }
+    }
+
+    private prepareTemplate(action) {
+        if (!this.collapsed) {
+            this.activeButton = action.label;
+        }
+
+        this.fixToSend = {};
+        action.pairs.forEach(element => {
+            this.fixToSend[element.key] = element.formula;            
+        });
+        
+        this.displayFixMessage();
+        if (this.collapsed) {
+            this.send();
         }
     }
 

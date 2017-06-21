@@ -114,6 +114,23 @@ paths:
       responses:
         "200":
           description: Success            
+  /template:
+    x-swagger-router-controller: template
+    get:
+      summary: Get all templates
+      operationId: getAllTemplates
+      tags : [Template]
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items: 
+              $ref: "#/definitions/TemplateResource"
+        default:
+          description: Error
+          schema: 
+            $ref: "#/definitions/ErrorResponse"
 # complex objects have schema definitions
 definitions:
   ErrorResponse:
@@ -131,4 +148,13 @@ definitions:
       direction:
         type: string
       message:
+        type: string
+  TemplateResource:
+    description: Template
+    properties:
+      keyId:
+        type: number
+      keyLabel:
+        type: string
+      formula:
         type: string

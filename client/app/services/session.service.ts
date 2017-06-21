@@ -24,4 +24,9 @@ export class SessionService {
         this.http.post(url, "")
             .subscribe(o => { });
     }
+
+    public getTemplates(): Observable<any> {
+        return this.http.get("/template")
+            .map(res => res.json());
+    }
 }
