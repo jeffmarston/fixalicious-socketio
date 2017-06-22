@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IFixParserService } from "../types.d";
-
+import * as _ from "lodash";
 
 @Injectable()
 export class FixParserService implements IFixParserService {
@@ -10,7 +10,7 @@ export class FixParserService implements IFixParserService {
         let lines: string[] = fix.split("\n");
 
         lines.forEach((line: string) => {
-            if (line.startsWith(" ")) {
+            if (line.startsWith(" ") && line.trim() != "") {
                 let parts = line.split(":");
                 let key = parts[0].trim();
                 obj[key] = parts[1].trim();
@@ -26,5 +26,15 @@ export class FixParserService implements IFixParserService {
             obj[each.key] = each.value;
         }
         return obj;
+    }
+
+    public eval(formula, sourceFix) {
+        if (typeof formula == "string" && formula.startsWith("=")) {
+            let param = formula.substring(1, formula.length);
+            let returnVal = sourceFix[param];
+            return returnVal || "ERR";
+        } else {
+            return formula;
+        }
     }
 }

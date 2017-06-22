@@ -127,7 +127,7 @@ export class SimpleGridComponent implements OnInit {
             row.ordStatus = fixObj['OrdStatus (39)'];
         }
         catch (ex) {
-            console.error("Unable to parse json: " + item.message);
+            console.error("Unable to parse FIX: " + item.msg);
         }
         return row;
     }

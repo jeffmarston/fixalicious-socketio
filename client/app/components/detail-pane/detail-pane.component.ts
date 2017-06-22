@@ -7,6 +7,7 @@ import { TransactionApiService } from "../../services/transaction.service"
 import { ISession, IFixMessage, ITransaction } from "../../types.d";
 import { SetFocusDirective } from "../../directives/set-focus";
 import * as io from 'socket.io-client';
+import * as _ from "lodash";
 
 @Component({
     selector: 'detail-pane',
@@ -15,23 +16,8 @@ import * as io from 'socket.io-client';
         <div class="button-section">
             <button 
                 class="expander" 
+                title="Show the FIX messages to be sent"
                 (click)="collapsed = !collapsed">>></button>
-            <button 
-                [ngClass]="(!collapsed && activeButton=='Ack') ? 'selected' : '' "
-                [disabled]="!isValid" 
-                (click)="prepareAck('Ack')">Ack</button>
-            <button 
-                [ngClass]="(!collapsed && activeButton=='PartialFill') ? 'selected' : '' "
-                [disabled]="!isValid" 
-                (click)="preparePartialFill('PartialFill')">Partial Fill</button>
-            <button 
-                [ngClass]="(!collapsed && activeButton=='Fill') ? 'selected' : '' "
-                [disabled]="!isValid" 
-                (click)="prepareFill('Fill')">Fill</button>
-            <button 
-                [ngClass]="(!collapsed && activeButton=='Reject') ? 'selected' : '' "
-                [disabled]="!isValid" 
-                (click)="prepareReject('Reject')">Reject</button>
 
             <button 
                 [ngClass]="(!collapsed && activeButton==action.label) ? 'selected' : '' "
@@ -48,6 +34,8 @@ import * as io from 'socket.io-client';
             </button>          
 
             <button class="add-action"
+                title="Add a new quick action button"
+                [hidden]="collapsed"
                 (click)="addAction()"
             >+</button>
 
@@ -138,6 +126,18 @@ import * as io from 'socket.io-client';
             margin: 0;
         }
         
+        button.add-action {
+            background: transparent;    
+            border: none;
+            width: 26px;
+            border-radius: 50%;
+            margin-left: 20px;
+        }
+        button.add-action:hover {
+            x-background: #b0e0e6;    
+            background: #ddd;    
+        }
+        
         button>input {
             width: 100%;
             border: none;
@@ -205,6 +205,11 @@ export class DetailPane implements OnInit {
                 this.transaction = changedProp.currentValue;
                 this.sourceFixObj = this.fixParserService.parseFix(this.transaction.message);
                 this.isValid = true;
+
+                if (this.activeButton) {
+                    let action = _.find(this.customActions, o=>o.label == this.activeButton);
+                    this.prepareTemplate(action);
+                }
             }
             if (propName == "collapsed" && changedProp.currentValue != undefined) {
                 this.collapsed = changedProp.currentValue;
@@ -213,9 +218,11 @@ export class DetailPane implements OnInit {
     }
 
     private addAction() {
-        let newAction = { label: "", isEditing: true, pairs: [
-            { key: "MsgType", formula: "D" }
-        ] };
+        let newAction = {
+            label: "", isEditing: true, pairs: [
+                { key: "MsgType", formula: "D" }
+            ]
+        };
         this.customActions.push(newAction);
     }
 
@@ -243,152 +250,10 @@ export class DetailPane implements OnInit {
 
         this.fixToSend = {};
         action.pairs.forEach(element => {
-            this.fixToSend[element.key] = element.formula;            
+            let resolved = this.fixParserService.eval(element.formula, this.sourceFixObj);
+            this.fixToSend[element.key] = resolved;
         });
-        
-        this.displayFixMessage();
-        if (this.collapsed) {
-            this.send();
-        }
-    }
 
-    private prepareAck(label: string) {
-        if (!this.collapsed) {
-            this.activeButton = label;
-        }
-
-        let execID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
-
-        this.fixToSend = {
-            "OrderID": "sim-" + this.sourceFixObj["ClOrdID (11)"],
-            "ClOrdID": this.sourceFixObj["ClOrdID (11)"],
-            "ExecID": execID,
-            "ExecTransType": 0,
-            "ExecType": 0,
-            "OrdStatus": 0,
-            "Symbol": this.sourceFixObj["Symbol (55)"],
-            "SecurityExchange": "New York",
-            "Side": 1,
-            "OrderQty": this.sourceFixObj["OrderQty (38)"],
-            "OrdType": 1,
-            "Price": 4.6,
-            "TimeInForce": 0,
-            "LastShares": 0,
-            "LastPx": 4.4,
-            "LeavesQty": 0,
-            "CumQty": 0,
-            "AvgPx": 4.5,
-            "TransactTime": "now",
-            "HandlInst": 3
-        }
-        this.displayFixMessage();
-        if (this.collapsed) {
-            this.send();
-        }
-    }
-
-    private prepareFill(label: string) {
-        if (!this.collapsed) {
-            this.activeButton = label;
-        }
-
-        let execID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
-        let fillPrice = 2.21;
-
-        this.fixToSend = {
-            "OrderID": "sim-" + this.sourceFixObj["ClOrdID (11)"],
-            "ClOrdID": this.sourceFixObj["ClOrdID (11)"],
-            "ExecID": execID,
-            "ExecTransType": 0,
-            "ExecType": 2,
-            "OrdStatus": 2,
-            "Symbol": this.sourceFixObj["Symbol (55)"],
-            "SecurityExchange": "New York",
-            "Side": 1,
-            "OrderQty": this.sourceFixObj["OrderQty (38)"],
-            "OrdType": 1,
-            "Price": fillPrice,
-            "TimeInForce": 0,
-            "LastShares": 0,
-            "LastPx": fillPrice,
-            "LeavesQty": 0,
-            "CumQty": this.sourceFixObj["OrderQty (38)"],
-            "AvgPx": fillPrice,
-            "TransactTime": "now",
-            "HandlInst": 3
-        }
-        this.displayFixMessage();
-        if (this.collapsed) {
-            this.send();
-        }
-    }
-
-    private preparePartialFill(label: string) {
-        if (!this.collapsed) {
-            this.activeButton = label;
-        }
-
-        let execID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
-        let fillAmount = 25;
-        let fillPrice = 2.21;
-
-        this.fixToSend = {
-            "OrderID": "sim-" + this.sourceFixObj["ClOrdID (11)"],
-            "ClOrdID": this.sourceFixObj["ClOrdID (11)"],
-            "ExecID": execID,
-            "ExecTransType": 0,
-            "ExecType": 1,
-            "OrdStatus": 1,
-            "Symbol": this.sourceFixObj["Symbol (55)"],
-            "SecurityExchange": "New York",
-            "Side": 1,
-            "OrderQty": this.sourceFixObj["OrderQty (38)"],
-            "OrdType": 1,
-            "Price": 0,
-            "TimeInForce": 0,
-            "LastShares": fillAmount,
-            "LastPx": fillPrice,
-            "LeavesQty": this.sourceFixObj["OrderQty (38)"] - fillAmount,
-            "CumQty": fillAmount,
-            "AvgPx": fillPrice,
-            "TransactTime": "now",
-            "HandlInst": 3
-        }
-        this.displayFixMessage();
-        if (this.collapsed) {
-            this.send();
-        }
-    }
-
-    private prepareReject(label: string) {
-        if (!this.collapsed) {
-            this.activeButton = label;
-        }
-
-        let execID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
-
-        this.fixToSend = {
-            "OrderID": "sim-" + this.sourceFixObj["ClOrdID (11)"],
-            "ClOrdID": this.sourceFixObj["ClOrdID (11)"],
-            "ExecID": execID,
-            "ExecTransType": 0,
-            "ExecType": 8,
-            "OrdStatus": 8,
-            "OrdRejReason": 0,
-            "Symbol": this.sourceFixObj["Symbol (55)"],
-            "SecurityExchange": "NASDAQ",
-            "Side": "1",
-            "OrderQty": this.sourceFixObj["OrderQty (38)"],
-            "OrdType": 1,
-            "Price": 0,
-            "TimeInForce": 0,
-            "LastShares": 0,
-            "LeavesQty": 0,
-            "CumQty": 0,
-            "AvgPx": 0,
-            "TransactTime": "now",
-            "HandlInst": 3
-        }
         this.displayFixMessage();
         if (this.collapsed) {
             this.send();
