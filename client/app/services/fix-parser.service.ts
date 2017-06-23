@@ -23,7 +23,7 @@ export class FixParserService implements IFixParserService {
         let obj = {};
         for (let i in fix) {
             let each = fix[i];
-            obj[each.key] = each.value;
+            obj[each.key] = each.value.value;
         }
         return obj;
     }

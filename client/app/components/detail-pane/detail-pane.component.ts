@@ -17,13 +17,12 @@ import * as _ from "lodash";
             <button 
                 class="expander" 
                 title="Show the FIX messages to be sent"
-                (click)="collapsed = !collapsed">>></button>
+                (click)="toggleExpanded()">>></button>
 
             <button 
-                [ngClass]="(!collapsed && activeButton==action.label) ? 'selected' : '' "
+                [ngClass]="(!collapsed && selectedAction==action) ? 'selected' : '' "
                 *ngFor="let action of customActions"
-                (click)="prepareTemplate(action)"
-            >
+                (click)="prepareTemplate(action)">
                 <input 
                     (blur)="doneEditing(action)"
                     [readonly]="!action.isEditing"
@@ -45,12 +44,38 @@ import * as _ from "lodash";
                 <tr>
                     <td colspan=2>
                         <button class="send" 
-                            [hidden]="!activeButton"
-                            (click)="send()">Send</button></td>
+                            [hidden]="!selectedAction"
+                            (click)="send()">Send
+                            </button>
+                            
+                        <button class="send" 
+                            [hidden]="!selectedAction"
+                            (click)="deleteTemplate()">Delete</button>
+                            
+                        <button class="send" 
+                            [hidden]="!selectedAction"
+                            (click)="configureTemplate()"
+                            [ngClass]="isConfiguring ? 'configure-input' : '' ">Configure</button>
+                    </td>
                 </tr>
-                <tr *ngFor="let pair of kvPairs" >
+                <tr *ngFor="let pair of selectedAction.pairs" >
                     <td class="key"><span>{{pair.key}}</span></td>
-                    <td class="value"><input [(ngModel)]="pair.value"/></td>
+                    <td class="value">
+                        <input 
+                            [hidden]="isConfiguring"
+                            [(ngModel)]="pair.value"/>
+                        <input class="configure-input"
+                            [hidden]="!isConfiguring"
+                            [(ngModel)]="pair.formula"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan=2>
+                        <button 
+                            class="pull-right"
+                            [hidden]="!isConfiguring"
+                            (click)="saveTemplate()">Save</button>
+                    </td>
                 </tr>
             </table>
         </div>
@@ -82,25 +107,32 @@ import * as _ from "lodash";
             z-index: 100;
         }
 
+        td>input {
+            border: 1px solid gray;
+            padding: 3px;
+            margin-right: 2px;
+        }
+
         .keyvalue-section {
             overflow: auto;
-            border-collapse: collapse;
             background: #eee;
             min-width: 300px;
             border: 1px solid gray;
         }
 
-        .keyvalue-table {
+        table.keyvalue-table {
             font-size: 12px;
+            border-collapse: collapse;
         }
 
-        .key {
+        td {
+            padding: 2px 4px;
+            width: 50%;
+        }
+
+        td.key {
             white-space: nowrap;
-            width: 50%;
-        }
-
-        .value {
-            width: 50%;
+            text-align: right;
         }
 
         button { 
@@ -110,10 +142,22 @@ import * as _ from "lodash";
             width: 69px;
             border: 1px gray solid; 
         }
+        
+        .configure-input {
+            background: #bfb;
+            border: 1px solid gray;
+        }
+        button.configure-input:hover {
+            background: #bfb;
+        }
 
         button:hover {
             background: #eee;
             cursor: pointer;
+        }
+
+        button:active {
+            background: #b0e0e6;
         }
 
         button.expander {
@@ -122,8 +166,7 @@ import * as _ from "lodash";
         }
 
         button.send {
-            width: 100%;
-            margin: 0;
+            float: right;
         }
         
         button.add-action {
@@ -145,7 +188,6 @@ import * as _ from "lodash";
         }
 
         .editable-input {
-            transition: height .1s ease;
             background: #fff;
         }
 
@@ -156,7 +198,6 @@ import * as _ from "lodash";
         }
 
         .editable-input.visible {
-            opacity: 1;
             width: 100%;
             height: 30px;
         }
@@ -164,6 +205,10 @@ import * as _ from "lodash";
         .readonly-input {
             background: transparent;
             cursor: pointer;
+        }
+
+        .pull-right {
+            float: right;
         }
         
     `],
@@ -176,13 +221,13 @@ export class DetailPane implements OnInit {
 
     private transaction: ITransaction;
     private isValid: boolean;
-    private kvPairs: any[] = [];
     private sourceFixObj = {};
     private fixToSend = {};
     private socket;
     private isAddingAction = false;
+    private isConfiguring = false;
     private customActions = [];
-    private activeButton = null;
+    private selectedAction = null;
 
     constructor(
         private clientsService: SessionService,
@@ -191,10 +236,17 @@ export class DetailPane implements OnInit {
         this.isValid = true;
         this.socket = io();
 
-
         this.clientsService.getTemplates().subscribe(o => {
             this.customActions = o;
+            if (this.customActions.length > 0) {
+                this.selectedAction = this.customActions[0];
+            } else {
+            }
         });
+
+        this.selectedAction = {
+            label: "", isEditing: true, pairs: []
+        };
     }
 
     private ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
@@ -206,15 +258,19 @@ export class DetailPane implements OnInit {
                 this.sourceFixObj = this.fixParserService.parseFix(this.transaction.message);
                 this.isValid = true;
 
-                if (this.activeButton) {
-                    let action = _.find(this.customActions, o=>o.label == this.activeButton);
-                    this.prepareTemplate(action);
+                if (this.selectedAction) {
+                    this.prepareTemplate(this.selectedAction);
                 }
             }
             if (propName == "collapsed" && changedProp.currentValue != undefined) {
                 this.collapsed = changedProp.currentValue;
             }
         }
+    }
+
+    private toggleExpanded() {
+        this.collapsed = !this.collapsed;
+        localStorage.setItem("detail-pane-collapsed", this.collapsed.toString());
     }
 
     private addAction() {
@@ -230,28 +286,14 @@ export class DetailPane implements OnInit {
         action.isEditing = false;
     }
 
-    private displayFixMessage() {
-        this.kvPairs = [];
-
-        for (var property in this.fixToSend) {
-            if (this.fixToSend.hasOwnProperty(property)) {
-                this.kvPairs.push({
-                    key: property,
-                    value: this.fixToSend[property]
-                });
-            }
-        }
-    }
-
     private prepareTemplate(action) {
-        if (!this.collapsed) {
-            this.activeButton = action.label;
-        }
+        this.selectedAction = action;
 
         this.fixToSend = {};
         action.pairs.forEach(element => {
             let resolved = this.fixParserService.eval(element.formula, this.sourceFixObj);
-            this.fixToSend[element.key] = resolved;
+            element.value = resolved;
+            this.fixToSend[element.key] = { value: resolved, formula: element.formula };
         });
 
         this.displayFixMessage();
@@ -261,7 +303,7 @@ export class DetailPane implements OnInit {
     }
 
     private send() {
-        let fixObj = this.fixParserService.generateFix(this.kvPairs);
+        let fixObj = this.fixParserService.generateFix(this.selectedAction.pairs);
         this.apiDataService.createTransaction(this.session.name, fixObj);
 
         if (!this.collapsed) {
@@ -271,8 +313,42 @@ export class DetailPane implements OnInit {
         }
     }
 
-    ngOnInit() {
+    private deleteTemplate() {
+        let index = this.customActions.indexOf(this.selectedAction);
+        _.pull(this.customActions, this.selectedAction)
+        if (index > 0) {
+            this.selectedAction = this.customActions[index - 1];
+        } else if (index < this.customActions.length) {
+            this.selectedAction = this.customActions[index];
+        }
+        this.prepareTemplate(this.selectedAction);
+    }
 
+    private configureTemplate() {
+        this.isConfiguring = !this.isConfiguring;
+        this.displayFixMessage();
+    }
+    
+
+    private displayFixMessage() {        
+        this.selectedAction.pairs.forEach(element => {
+            let resolved = this.fixParserService.eval(element.formula, this.sourceFixObj);
+            element.value = resolved;
+        });
+    }
+
+    private saveTemplate() {
+        console.log(this.selectedAction.pairs[0]);
+        this.selectedAction.pairs.forEach(element => {
+            let resolved = this.fixParserService.eval(element.formula, this.sourceFixObj);
+            element.value = resolved;
+        });
+
+       // this.prepareTemplate(this.selectedAction);
+    }
+
+    ngOnInit() {
+        this.collapsed = localStorage.getItem("detail-pane-collapsed") === "true";
     }
 
 }
