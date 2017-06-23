@@ -113,7 +113,7 @@ paths:
           type: string
       responses:
         "200":
-          description: Success            
+          description: Success
   /template:
     x-swagger-router-controller: template
     get:
@@ -127,6 +127,23 @@ paths:
             type: array
             items: 
               $ref: "#/definitions/TemplateResource"
+        default:
+          description: Error
+          schema: 
+            $ref: "#/definitions/ErrorResponse"
+  /fixfields:
+    x-swagger-router-controller: fix-fields
+    get:
+      summary: Get all possible fix fields
+      operationId: getAllFields
+      tags : [FIX fields]
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items: 
+              $ref: "#/definitions/FixFieldResource"
         default:
           description: Error
           schema: 
@@ -157,4 +174,9 @@ definitions:
       keyLabel:
         type: string
       formula:
+        type: string
+  FixFieldResource:
+    description: Fix Field
+    properties:
+      name:
         type: string

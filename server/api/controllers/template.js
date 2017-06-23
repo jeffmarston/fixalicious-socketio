@@ -4,16 +4,16 @@ let _ = require('lodash');
 let SessionModel = require('../../models/session-model');
 let ErrorResource = require('../../resources/error-resource');
 
-class SessionController {
+class TemplateController {
 
     static getAllTemplates(req, res) {
         console.log("FIXALICIOUS: Request received to get all Templates.");
 
         res.status(200).json([
-            { id: 1, label: "Ack", pairs: SessionController.createAck() },
-            { id: 2, label: "Partial", pairs: SessionController.createPartial() },
-            { id: 3, label: "Fill", pairs: SessionController.createFill() },
-            { id: 4, label: "Reject", pairs: SessionController.createReject() }
+            { id: 1, label: "Ack", pairs: TemplateController.createAck() },
+            { id: 2, label: "Partial", pairs: TemplateController.createPartial() },
+            { id: 3, label: "Fill", pairs: TemplateController.createFill() },
+            { id: 4, label: "Reject", pairs: TemplateController.createReject() }
         ]
         );
     }
@@ -144,5 +144,5 @@ class SessionController {
 }
 
 module.exports = {
-    getAllTemplates: SessionController.getAllTemplates
+    getAllTemplates: TemplateController.getAllTemplates
 }
