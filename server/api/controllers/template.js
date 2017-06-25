@@ -1,27 +1,76 @@
 'use strict';
 
+let bluebird = require('bluebird');
+let redis = require('redis');
+let redisClient = redis.createClient();
+bluebird.promisifyAll(redis.RedisClient.prototype);
+
 let _ = require('lodash');
 let SessionModel = require('../../models/session-model');
 let ErrorResource = require('../../resources/error-resource');
 
-class SessionController {
+class TemplateController {
 
     static getAllTemplates(req, res) {
         console.log("FIXALICIOUS: Request received to get all Templates.");
 
-        res.status(200).json([
-            { id: 1, label: "Ack", pairs: SessionController.createAck() },
-            { id: 2, label: "Partial", pairs: SessionController.createPartial() },
-            { id: 3, label: "Fill", pairs: SessionController.createFill() },
-            { id: 4, label: "Reject", pairs: SessionController.createReject() }
-        ]
-        );
+        redisClient.lrangeAsync("templates", 0, 300).then((labels) => {
+            let keys = _.map(labels, o => "template:" + o);
+
+            if (keys.length == 0) {
+                TemplateController.writeToRedis("Ack", { label: "Ack", pairs: TemplateController.createAck() });
+                TemplateController.writeToRedis("Partial", { label: "Partial", pairs: TemplateController.createPartial() });
+                TemplateController.writeToRedis("Fill", { label: "Fill", pairs: TemplateController.createFill() });
+            } else {
+
+                // Get from Redis
+                redisClient.mgetAsync(keys).then(items => {
+                    res.status(200).json(_.map(items, str => JSON.parse(str)));
+                });
+            }
+        });
+    }
+
+    static writeToRedis(label, template) {
+        let templateJson = JSON.stringify(template);
+
+        redisClient.rpushAsync("templates", label).then(o => {
+            redisClient.msetAsync("template:" + label, templateJson).then(p => {
+                console.log("{ status: '" + p + "' }");
+            });
+        });
+    }
+
+    static createTemplate(req, res) {
+        let label = req.swagger.params.label.value;
+        let template = req.swagger.params.template.value;
+
+        let templateJson = JSON.stringify(template);
+
+        console.log("FIXALICIOUS: Request received to create template: " + templateJson);
+
+        redisClient.rpushAsync("templates", label).then(o => {
+            redisClient.msetAsync("template:" + label, templateJson).then(p => {
+                res.status(200).json("{ status: '" + p + "' }");
+            });
+        });
+    }
+
+    static deleteTemplate(req, res) {
+        let label = req.swagger.params.label.value;
+        console.log("FIXALICIOUS: Request received to delete template: " + label);
+
+        redisClient.delAsync("template:"+label).then(n => {
+            redisClient.lremAsync("templates", 1, label).then(o => {
+                res.status(200).json("{ status: '" + o + "' }");
+            });
+        });
     }
 
     static createAck() {
         let execID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
         return [
-            { key: "OrderID", formula: "=CliOrdId (11)"},
+            { key: "OrderID", formula: "=CliOrdId (11)" },
             { key: "ClOrdID", formula: "=CliOrdId (11)" },
             { key: "ExecID", formula: execID },
             { key: "ExecTransType", formula: "0" },
@@ -46,7 +95,7 @@ class SessionController {
     static createPartial() {
         let execID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
         return [
-            { key: "OrderID", formula: "=CliOrdId (11)"},
+            { key: "OrderID", formula: "=CliOrdId (11)" },
             { key: "ClOrdID", formula: "=CliOrdId (11)" },
             { key: "ExecID", formula: execID },
             { key: "ExecTransType", formula: "0" },
@@ -71,7 +120,7 @@ class SessionController {
     static createFill() {
         let execID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
         return [
-            { key: "OrderID", formula: "=CliOrdId (11)"},
+            { key: "OrderID", formula: "=CliOrdId (11)" },
             { key: "ClOrdID", formula: "=CliOrdId (11)" },
             { key: "ExecID", formula: execID },
             { key: "ExecTransType", formula: "0" },
@@ -96,7 +145,7 @@ class SessionController {
     static createReject() {
         let execID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
         return [
-            { key: "OrderID", formula: "=CliOrdId (11)"},
+            { key: "OrderID", formula: "=CliOrdId (11)" },
             { key: "ClOrdID", formula: "=CliOrdId (11)" },
             { key: "ExecID", formula: execID },
             { key: "ExecTransType", formula: "0" },
@@ -118,31 +167,10 @@ class SessionController {
             { key: "HandlInst", formula: "3" }
         ];
     }
-    
-        // this.fixToSend = {
-        //     "OrderID": "sim-" + this.sourceFixObj["ClOrdID (11)"],
-        //     "ClOrdID": this.sourceFixObj["ClOrdID (11)"],
-        //     "ExecID": execID,
-        //     "ExecTransType": 0,
-        //     "ExecType": 8,
-        //     "OrdStatus": 8,
-        //     "OrdRejReason": 0,
-        //     "Symbol": this.sourceFixObj["Symbol (55)"],
-        //     "SecurityExchange": "NASDAQ",
-        //     "Side": "1",
-        //     "OrderQty": this.sourceFixObj["OrderQty (38)"],
-        //     "OrdType": 1,
-        //     "Price": 0,
-        //     "TimeInForce": 0,
-        //     "LastShares": 0,
-        //     "LeavesQty": 0,
-        //     "CumQty": 0,
-        //     "AvgPx": 0,
-        //     "TransactTime": "now",
-        //     "HandlInst": 3
-        // }
 }
 
 module.exports = {
-    getAllTemplates: SessionController.getAllTemplates
+    getAllTemplates: TemplateController.getAllTemplates,
+    createTemplate: TemplateController.createTemplate,
+    deleteTemplate: TemplateController.deleteTemplate
 }

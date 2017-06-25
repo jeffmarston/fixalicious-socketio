@@ -117,7 +117,7 @@ paths:
   /template:
     x-swagger-router-controller: template
     get:
-      summary: Get all templates
+      summary: Get all FIX message templates
       operationId: getAllTemplates
       tags : [Template]
       responses:
@@ -131,6 +131,40 @@ paths:
           description: Error
           schema: 
             $ref: "#/definitions/ErrorResponse"
+  /template/{label}:
+    x-swagger-router-controller: template
+    post:
+      summary: Create a new FIX message template
+      operationId: createTemplate
+      tags : [Template]
+      parameters:
+        - name: label
+          in: path
+          description: FIX session name 
+          required: true
+          type: string
+        - name: template
+          in: body
+          description: array of keys and formulas
+          required: true
+          schema:
+            $ref: "#/definitions/TemplateResource"
+      responses:
+        "200":
+          description: Success
+    delete:
+      summary: Delete a template
+      operationId: deleteTemplate
+      tags : [Template]
+      parameters:
+        - name: label
+          in: path
+          description: Name of the template
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
 # complex objects have schema definitions
 definitions:
   ErrorResponse:
@@ -149,12 +183,19 @@ definitions:
         type: string
       message:
         type: string
-  TemplateResource:
-    description: Template
+  TemplateItemResource:
+    description: Transaction
     properties:
-      keyId:
-        type: number
-      keyLabel:
+      key:
         type: string
       formula:
         type: string
+  TemplateResource:
+    description: Template
+    properties:
+      label: 
+        type: string
+      pairs:
+        type: array
+        items: 
+          $ref: "#/definitions/TemplateItemResource"

@@ -14,13 +14,12 @@ To build:
 
 TODO
 ==============
-- `Create all actions from metadata, even Ack, Fill, Reject`
-    - `Simple variable replacement` 
+x `Create all actions from metadata, even Ack, Fill, Reject`
+    x `Simple variable replacement` 
     - `Random id() function`
 - `Persist action templates via REST API, redis`
 - `Parse Fix XML in Node and expose via REST API`
 - `Get sessions from redis, update status when they change`
-- `Support for multiple instances of FIXalicious`
 - `Angular router, url matching session`
 - `Indicate activity on Non visible pages`
-- `Modal popup to show... FIX message received?`
+- `Modal popup to show... FIX message received detail?`

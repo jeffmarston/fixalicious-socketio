@@ -29,4 +29,14 @@ export class SessionService {
         return this.http.get("/template")
             .map(res => res.json());
     }
+
+    public deleteTemplate(template) {
+        let url = `/template/${template.label}`;
+        return this.http.delete(url);
+    }
+
+    public createTemplate(template) {
+        let url = `/template/${template.label}`;
+        return this.http.post(url, template);
+    }
 }

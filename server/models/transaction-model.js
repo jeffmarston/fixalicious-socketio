@@ -15,7 +15,6 @@ class TransactionModel {
     static getAll(sessionName) {
         return client.lrangeAsync(sessionName, 0, 300).then((items) => {
             return _.map(items, (o) => {
-                console.log(o);
                 let json = JSON.parse(o);
                 return json;
             });

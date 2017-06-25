@@ -1,0 +1,145 @@
+.container {
+    overflow: auto;
+    height: 100%;
+    transition: width .25s ease;
+    width: 25%;
+    float: left;
+    display: flex;
+    flex-direction: row;
+}
+
+.button-section {
+    display: flex;
+    flex-direction: column;
+    padding-left: 4px;
+}
+
+button.selected {
+    border-right: 0;
+    margin-left: 8px;
+    margin-right: -1px;
+    background: #eee;
+    z-index: 100;
+}
+
+td>input {
+    border: 1px solid gray;
+    padding: 3px;
+    margin-right: 2px;
+}
+
+.keyvalue-section {
+    overflow: auto;
+    background: #eee;
+    min-width: 300px;
+    border: 1px solid gray;
+}
+
+table.keyvalue-table {
+    font-size: 12px;
+    border-collapse: collapse;
+}
+
+td {
+    padding: 2px 4px;
+    width: 50%;
+}
+
+td.key {
+    white-space: nowrap;
+    text-align: right;
+}
+
+button { 
+    height: 24px;
+    padding: 2px;
+    margin: 2px;  
+    width: 69px;
+    border: 1px gray solid; 
+}
+
+.configure-input {
+    background: #bfb;
+    border: 1px solid gray;
+}
+button.configure-input:hover {
+    background: #bfb;
+}
+select.configure-input {
+    outline: none;
+    background: transparent;
+    border: none;
+    direction: rtl;
+    width: 100%;
+}
+select.configure-input:hover {
+    background: #bfb;
+}
+
+td>input.configure-key {
+    border: none;
+    background: #bfb;
+    text-align: right;
+    width: 100%;
+    font-size: 12px;
+}
+
+button:hover {
+    background: #eee;
+    cursor: pointer;
+}
+
+button:active {
+    background: #b0e0e6;
+}
+
+button.expander {
+    border: none;
+    background: transparent;
+}
+
+button.send {
+    float: right;
+}
+
+button.add-action {
+    background: transparent;    
+    border: none;
+    width: 26px;
+    border-radius: 50%;
+    margin-left: 20px;
+}
+button.add-action:hover {
+    x-background: #b0e0e6;    
+    background: #ddd;    
+}
+
+button>input {
+    width: 100%;
+    border: none;
+    text-align:center
+}
+
+.editable-input {
+    background: #fff;
+}
+
+.editable-input.hidden {
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+
+.editable-input.visible {
+    width: 100%;
+    height: 30px;
+}
+
+.readonly-input {
+    background: transparent;
+    cursor: pointer;
+}
+
+.pull-right {
+    float: right;
+}

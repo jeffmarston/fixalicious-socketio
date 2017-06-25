@@ -58,160 +58,36 @@ import * as _ from "lodash";
                             [ngClass]="isConfiguring ? 'configure-input' : '' ">Configure</button>
                     </td>
                 </tr>
-                <tr *ngFor="let pair of selectedAction.pairs" >
+                <tr *ngFor="let pair of selectedAction.pairs"
+                    [hidden]="isConfiguring" >
                     <td class="key"><span>{{pair.key}}</span></td>
                     <td class="value">
                         <input 
                             [hidden]="isConfiguring"
                             [(ngModel)]="pair.value"/>
-                        <input class="configure-input"
-                            [hidden]="!isConfiguring"
-                            [(ngModel)]="pair.formula"/>
                     </td>
                 </tr>
-                <tr>
-                    <td colspan=2>
-                        <button 
-                            class="pull-right"
-                            [hidden]="!isConfiguring"
-                            (click)="saveTemplate()">Save</button>
+                <tr *ngFor="let pair of selectedAction.pairs" 
+                    [hidden]="!isConfiguring">
+                    <td class="key">
+                        <input 
+                            class="configure-key"
+                            (blur)="doneEditingPair(pair)"
+                            [(ngModel)]="pair.key"/>
+
+                    <!--  <select class="configure-input" [(ngModel)]="pair.key">
+                            <option *ngFor="let str of fixFields" [value]="str">{{str}}</option>
+                        </select> -->
+                    <td class="value">
+                        <input class="configure-input"                            
+                            [(ngModel)]="pair.formula"/>
                     </td>
                 </tr>
             </table>
         </div>
     </div>
     `,
-    styles: [` 
-        
-        .container {
-            overflow: auto;
-            height: 100%;
-            transition: width .25s ease;
-            width: 25%;
-            float: left;
-            display: flex;
-            flex-direction: row;
-        }
-
-        .button-section {
-            display: flex;
-            flex-direction: column;
-            padding-left: 4px;
-        }
-
-        button.selected {
-            border-right: 0;
-            margin-left: 8px;
-            margin-right: -1px;
-            background: #eee;
-            z-index: 100;
-        }
-
-        td>input {
-            border: 1px solid gray;
-            padding: 3px;
-            margin-right: 2px;
-        }
-
-        .keyvalue-section {
-            overflow: auto;
-            background: #eee;
-            min-width: 300px;
-            border: 1px solid gray;
-        }
-
-        table.keyvalue-table {
-            font-size: 12px;
-            border-collapse: collapse;
-        }
-
-        td {
-            padding: 2px 4px;
-            width: 50%;
-        }
-
-        td.key {
-            white-space: nowrap;
-            text-align: right;
-        }
-
-        button { 
-            height: 24px;
-            padding: 2px;
-            margin: 2px;  
-            width: 69px;
-            border: 1px gray solid; 
-        }
-        
-        .configure-input {
-            background: #bfb;
-            border: 1px solid gray;
-        }
-        button.configure-input:hover {
-            background: #bfb;
-        }
-
-        button:hover {
-            background: #eee;
-            cursor: pointer;
-        }
-
-        button:active {
-            background: #b0e0e6;
-        }
-
-        button.expander {
-            border: none;
-            background: transparent;
-        }
-
-        button.send {
-            float: right;
-        }
-        
-        button.add-action {
-            background: transparent;    
-            border: none;
-            width: 26px;
-            border-radius: 50%;
-            margin-left: 20px;
-        }
-        button.add-action:hover {
-            x-background: #b0e0e6;    
-            background: #ddd;    
-        }
-        
-        button>input {
-            width: 100%;
-            border: none;
-            text-align:center
-        }
-
-        .editable-input {
-            background: #fff;
-        }
-
-        .editable-input.hidden {
-            width: 0;
-            height: 0;
-            opacity: 0;
-        }
-
-        .editable-input.visible {
-            width: 100%;
-            height: 30px;
-        }
-
-        .readonly-input {
-            background: transparent;
-            cursor: pointer;
-        }
-
-        .pull-right {
-            float: right;
-        }
-        
-    `],
+    styleUrls: ["app/components/detail-pane/detail-pane.component.css"],
     providers: [SessionService]
 })
 export class DetailPane implements OnInit {
@@ -228,6 +104,7 @@ export class DetailPane implements OnInit {
     private isConfiguring = false;
     private customActions = [];
     private selectedAction = null;
+    private fixFields = ["OrderID", "ClOrdID", "Symbol", "ExecID", "ExecType"];
 
     constructor(
         private clientsService: SessionService,
@@ -240,7 +117,6 @@ export class DetailPane implements OnInit {
             this.customActions = o;
             if (this.customActions.length > 0) {
                 this.selectedAction = this.customActions[0];
-            } else {
             }
         });
 
@@ -283,7 +159,13 @@ export class DetailPane implements OnInit {
     }
 
     private doneEditing(action) {
-        action.isEditing = false;
+        if (action.isEditing) {
+            action.isEditing = false;
+            this.clientsService.createTemplate(action).subscribe(o => {
+                this.selectedAction = action;
+                this.isConfiguring = true;
+            });
+        }
     }
 
     private prepareTemplate(action) {
@@ -314,37 +196,55 @@ export class DetailPane implements OnInit {
     }
 
     private deleteTemplate() {
-        let index = this.customActions.indexOf(this.selectedAction);
-        _.pull(this.customActions, this.selectedAction)
-        if (index > 0) {
-            this.selectedAction = this.customActions[index - 1];
-        } else if (index < this.customActions.length) {
-            this.selectedAction = this.customActions[index];
-        }
-        this.prepareTemplate(this.selectedAction);
+        this.clientsService.deleteTemplate(this.selectedAction)
+            .subscribe(success => {
+                let index = this.customActions.indexOf(this.selectedAction);
+                _.pull(this.customActions, this.selectedAction);
+                if (index > 0) {
+                    this.selectedAction = this.customActions[index - 1];
+                } else if (index < this.customActions.length) {
+                    this.selectedAction = this.customActions[index];
+                }
+                this.prepareTemplate(this.selectedAction);
+            }, error => {
+                console.error("Failed to delete template: " + error);
+            });
     }
 
     private configureTemplate() {
         this.isConfiguring = !this.isConfiguring;
+        if (this.isConfiguring) {
+            this.selectedAction.pairs.push({
+                key: "",
+                formula: "",
+                value: "",
+                isNewItem: true
+            });
+        } else {
+            _.pullAt(this.selectedAction.pairs, this.selectedAction.pairs.length-1);
+        this.clientsService.createTemplate(this.selectedAction);
+        }
         this.displayFixMessage();
     }
-    
 
-    private displayFixMessage() {        
+    private displayFixMessage() {
         this.selectedAction.pairs.forEach(element => {
             let resolved = this.fixParserService.eval(element.formula, this.sourceFixObj);
             element.value = resolved;
         });
     }
-
-    private saveTemplate() {
-        console.log(this.selectedAction.pairs[0]);
-        this.selectedAction.pairs.forEach(element => {
-            let resolved = this.fixParserService.eval(element.formula, this.sourceFixObj);
-            element.value = resolved;
-        });
-
-       // this.prepareTemplate(this.selectedAction);
+    
+    private doneEditingPair(pair) {
+        let lastPair = this.selectedAction.pairs[this.selectedAction.pairs.length-1];
+        if (lastPair.key.trim() !== "") {
+            pair.isNewItem = false;
+             this.selectedAction.pairs.push({
+                key: "",
+                formula: "",
+                value: "",
+                isNewItem: true
+            });
+        }
     }
 
     ngOnInit() {
