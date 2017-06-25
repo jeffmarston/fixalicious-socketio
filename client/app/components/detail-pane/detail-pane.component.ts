@@ -222,7 +222,9 @@ export class DetailPane implements OnInit {
             });
         } else {
             _.pullAt(this.selectedAction.pairs, this.selectedAction.pairs.length-1);
-        this.clientsService.createTemplate(this.selectedAction);
+            this.clientsService.createTemplate(this.selectedAction).subscribe(o=>{
+                console.log("Template saved");
+            });;
         }
         this.displayFixMessage();
     }

@@ -47,7 +47,7 @@ class TemplateController {
 
         let templateJson = JSON.stringify(template);
 
-        console.log("FIXALICIOUS: Request received to create template: " + templateJson);
+        console.log("Request received to create template: " + templateJson);
 
         redisClient.rpushAsync("templates", label).then(o => {
             redisClient.msetAsync("template:" + label, templateJson).then(p => {
@@ -58,11 +58,12 @@ class TemplateController {
 
     static deleteTemplate(req, res) {
         let label = req.swagger.params.label.value;
-        console.log("FIXALICIOUS: Request received to delete template: " + label);
+        console.log("Request received to delete template: " + label);
 
         redisClient.delAsync("template:"+label).then(n => {
-            redisClient.lremAsync("templates", 1, label).then(o => {
-                res.status(200).json("{ status: '" + o + "' }");
+            redisClient.lremAsync("templates", 100, label).then(o => {
+                console.log("Deleted "+ o + " template(s)");
+                res.status(200).json("{ message: 'Deleted "+ o + " template(s)'");
             });
         });
     }
