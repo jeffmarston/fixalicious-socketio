@@ -1,9 +1,8 @@
 import { Component, OnInit, EventEmitter, Input, Output, SimpleChange } from '@angular/core';
 import { CommonModule } from "@angular/common";
 import { Http, Response } from "@angular/http";
-import { SessionService } from "../../services/session.service"
+import { ApiService } from "../../services/api.service"
 import { FixParserService } from "../../services/fix-parser.service"
-import { TransactionApiService } from "../../services/transaction.service"
 import { ISession, IFixMessage, ITransaction } from "../../types.d";
 import { SetFocusDirective } from "../../directives/set-focus";
 import * as io from 'socket.io-client';
@@ -21,13 +20,17 @@ import * as _ from "lodash";
 
             <button 
                 [ngClass]="(!collapsed && selectedAction==action) ? 'selected' : '' "
+                [style.border-color]="(action.invalid) ? 'red' : 'gray' "                
+                [title]="(action.invalid) ? action.invalid : '' "
                 *ngFor="let action of customActions"
-                (click)="prepareTemplate(action)">
+                (click)="activateTemplate(action)"
+                class="invalid">
                 <input 
-                    (blur)="doneEditing(action)"
+                    (blur)="doneEditingActionLabel($event, action)"
                     [readonly]="!action.isEditing"
                     [(ngModel)]="action.label"
                     [setFocus]="action.isEditing"
+                    (dblclick)="action.isEditing=true"
                     [ngClass]="action.isEditing ? 'editable-input' : 'readonly-input' "
                 />
             </button>          
@@ -42,18 +45,19 @@ import * as _ from "lodash";
         <div class="keyvalue-section" [hidden]="collapsed">
             <table class="keyvalue-table">
                 <tr>
-                    <td colspan=2>
+                    <td colspan=2 
+                            [hidden]="!selectedAction">
                         <button class="send" 
-                            [hidden]="!selectedAction"
                             (click)="send()">Send
                             </button>
                             
                         <button class="send" 
-                            [hidden]="!selectedAction"
                             (click)="deleteTemplate()">Delete</button>
                             
                         <button class="send" 
-                            [hidden]="!selectedAction"
+                            (click)="copyTemplate()">Copy</button>
+                            
+                        <button class="send" 
                             (click)="configureTemplate()"
                             [ngClass]="isConfiguring ? 'configure-input' : '' ">Configure</button>
                     </td>
@@ -88,7 +92,7 @@ import * as _ from "lodash";
     </div>
     `,
     styleUrls: ["app/components/detail-pane/detail-pane.component.css"],
-    providers: [SessionService]
+    providers: [ApiService]
 })
 export class DetailPane implements OnInit {
     @Input() detail: ITransaction;
@@ -107,13 +111,12 @@ export class DetailPane implements OnInit {
     private fixFields = ["OrderID", "ClOrdID", "Symbol", "ExecID", "ExecType"];
 
     constructor(
-        private clientsService: SessionService,
-        private apiDataService: TransactionApiService,
+        private apiService: ApiService,
         private fixParserService: FixParserService) {
         this.isValid = true;
         this.socket = io();
 
-        this.clientsService.getTemplates().subscribe(o => {
+        this.apiService.getTemplates().subscribe(o => {
             this.customActions = o;
             if (this.customActions.length > 0) {
                 this.selectedAction = this.customActions[0];
@@ -135,7 +138,7 @@ export class DetailPane implements OnInit {
                 this.isValid = true;
 
                 if (this.selectedAction) {
-                    this.prepareTemplate(this.selectedAction);
+                    this.activateTemplate(this.selectedAction);
                 }
             }
             if (propName == "collapsed" && changedProp.currentValue != undefined) {
@@ -150,25 +153,47 @@ export class DetailPane implements OnInit {
     }
 
     private addAction() {
+        if (this.selectedAction.invalid) {
+            return;
+        }
         let newAction = {
             label: "", isEditing: true, pairs: [
-                { key: "MsgType", formula: "D" }
+                { key: "", formula: "" }
             ]
         };
         this.customActions.push(newAction);
     }
 
-    private doneEditing(action) {
+    private doneEditingActionLabel($event, action) {
         if (action.isEditing) {
             action.isEditing = false;
-            this.clientsService.createTemplate(action).subscribe(o => {
-                this.selectedAction = action;
-                this.isConfiguring = true;
-            });
+            action.invalid = null;
+
+            if (_.countBy(this.customActions, o => o.label.toUpperCase() === action.label.toUpperCase()).true > 1) {
+                action.invalid = "Please create a unique name";
+            }
+
+            if (action.label.trim() === "") {
+                action.invalid = "Label cannot be empty";
+            }
+
+            if (action.invalid) {
+                action.isEditing = true;
+            } else {
+                // save to server
+                this.apiService.createTemplate(action).subscribe(o => {
+                    this.selectedAction = action;
+                    this.isConfiguring = true;
+                });
+            }
         }
     }
 
-    private prepareTemplate(action) {
+    private activateTemplate(action) {
+        if (this.selectedAction.invalid) {
+            return;
+        }
+        this.isConfiguring = false;
         this.selectedAction = action;
 
         this.fixToSend = {};
@@ -186,7 +211,7 @@ export class DetailPane implements OnInit {
 
     private send() {
         let fixObj = this.fixParserService.generateFix(this.selectedAction.pairs);
-        this.apiDataService.createTransaction(this.session.name, fixObj);
+        this.apiService.createTransaction(this.session.name, fixObj);
 
         if (!this.collapsed) {
             // set a new ExecID so user can repeated hit send button
@@ -196,7 +221,7 @@ export class DetailPane implements OnInit {
     }
 
     private deleteTemplate() {
-        this.clientsService.deleteTemplate(this.selectedAction)
+        this.apiService.deleteTemplate(this.selectedAction)
             .subscribe(success => {
                 let index = this.customActions.indexOf(this.selectedAction);
                 _.pull(this.customActions, this.selectedAction);
@@ -205,27 +230,27 @@ export class DetailPane implements OnInit {
                 } else if (index < this.customActions.length) {
                     this.selectedAction = this.customActions[index];
                 }
-                this.prepareTemplate(this.selectedAction);
+                this.activateTemplate(this.selectedAction);
             }, error => {
                 console.error("Failed to delete template: " + error);
             });
     }
 
     private configureTemplate() {
-        this.isConfiguring = !this.isConfiguring;
         if (this.isConfiguring) {
+            _.pullAt(this.selectedAction.pairs, this.selectedAction.pairs.length - 1);
+            this.apiService.createTemplate(this.selectedAction).subscribe(o => {
+                console.log("Template saved");
+            });
+        } else {
             this.selectedAction.pairs.push({
                 key: "",
                 formula: "",
                 value: "",
                 isNewItem: true
             });
-        } else {
-            _.pullAt(this.selectedAction.pairs, this.selectedAction.pairs.length-1);
-            this.clientsService.createTemplate(this.selectedAction).subscribe(o=>{
-                console.log("Template saved");
-            });;
         }
+        this.isConfiguring = !this.isConfiguring;
         this.displayFixMessage();
     }
 
@@ -235,18 +260,42 @@ export class DetailPane implements OnInit {
             element.value = resolved;
         });
     }
-    
+
     private doneEditingPair(pair) {
-        let lastPair = this.selectedAction.pairs[this.selectedAction.pairs.length-1];
+        let lastPair = this.selectedAction.pairs[this.selectedAction.pairs.length - 1];
         if (lastPair.key.trim() !== "") {
             pair.isNewItem = false;
-             this.selectedAction.pairs.push({
+            this.selectedAction.pairs.push({
                 key: "",
                 formula: "",
                 value: "",
                 isNewItem: true
             });
         }
+    }
+
+    private getUniqueName(): boolean {
+        return true;
+    }
+
+    private copyTemplate() {
+        let json = JSON.stringify(this.selectedAction);
+        let newAction = JSON.parse(json);
+
+        // Add (1), or the next available number
+        while (_.find(this.customActions, o => o.label === newAction.label)) {
+            let regex = /\(\d+\)$/;
+            let matches = newAction.label.match(regex);
+            if (matches) { // this already exists, incremenet the number
+                let num = matches[0].substring(1, matches[0].length - 1);
+                let incNum = parseInt(num) + 1;
+                newAction.label = newAction.label.replace(regex, "(" + incNum + ")");
+            } else {
+                newAction.label += " (1)";
+            }
+        }
+
+        this.customActions.push(newAction);
     }
 
     ngOnInit() {

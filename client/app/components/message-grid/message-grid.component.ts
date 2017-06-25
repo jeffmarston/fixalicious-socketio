@@ -2,8 +2,7 @@ import { Component, OnInit, Input, OnChanges, SimpleChange } from '@angular/core
 import { CommonModule } from "@angular/common";
 import { Http, Response } from "@angular/http";
 import { GridOptions } from 'ag-grid/main';
-import { TransactionApiService } from "../../services/transaction.service";
-import { SessionService } from "../../services/session.service";
+import { ApiService } from "../../services/api.service";
 import { FixParserService } from "../../services/fix-parser.service"
 import { ITransaction, ISession } from "../../types.d";
 import * as io from 'socket.io-client';
@@ -13,9 +12,9 @@ import * as _ from 'lodash';
     selector: 'message-grid',
     templateUrl: 'app/components/message-grid/message-grid.component.html',
     styleUrls: ['app/components/message-grid/message-grid.component.css'],
-    providers: [TransactionApiService]
+    providers: [ApiService]
 })
-export class SimpleGridComponent implements OnInit {
+export class MessageGridComponent implements OnInit {
     @Input() session: ISession;
 
     private gridOptions: GridOptions;
@@ -44,8 +43,7 @@ export class SimpleGridComponent implements OnInit {
     }
 
     constructor(
-        private apiDataService: TransactionApiService,
-        private sessionService: SessionService,
+        private apiService: ApiService,
         private fixParserService: FixParserService,
         private http: Http) {
 
@@ -100,7 +98,7 @@ export class SimpleGridComponent implements OnInit {
 
     private fetchRowData(session: ISession) {
         if (session) {
-            var src = this.apiDataService.getTransactions(session.name);
+            var src = this.apiService.getTransactions(session.name);
             src.subscribe(o => {
                 this.addRowsToDataSource(o);
             }, error => {

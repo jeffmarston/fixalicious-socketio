@@ -6,13 +6,13 @@ let redisClient = redis.createClient();
 bluebird.promisifyAll(redis.RedisClient.prototype);
 
 let _ = require('lodash');
-let SessionModel = require('../../models/session-model');
+let SessionModel = require('../../models/template-model');
 let ErrorResource = require('../../resources/error-resource');
 
 class TemplateController {
 
     static getAllTemplates(req, res) {
-        console.log("FIXALICIOUS: Request received to get all Templates.");
+        console.log("Get all Templates.");
 
         redisClient.lrangeAsync("templates", 0, 300).then((labels) => {
             let keys = _.map(labels, o => "template:" + o);
@@ -33,7 +33,6 @@ class TemplateController {
 
     static writeToRedis(label, template) {
         let templateJson = JSON.stringify(template);
-
         redisClient.rpushAsync("templates", label).then(o => {
             redisClient.msetAsync("template:" + label, templateJson).then(p => {
                 console.log("{ status: '" + p + "' }");
@@ -44,26 +43,33 @@ class TemplateController {
     static createTemplate(req, res) {
         let label = req.swagger.params.label.value;
         let template = req.swagger.params.template.value;
-
         let templateJson = JSON.stringify(template);
-
-        console.log("Request received to create template: " + templateJson);
-
-        redisClient.rpushAsync("templates", label).then(o => {
-            redisClient.msetAsync("template:" + label, templateJson).then(p => {
-                res.status(200).json("{ status: '" + p + "' }");
-            });
+        redisClient.lrangeAsync("templates", 0, 300).then((labels) => {
+            if (labels.indexOf(label) > -1) {
+                // update
+                console.log("Update existing template: " + label);
+                redisClient.msetAsync("template:" + label, templateJson).then(p => {
+                    res.status(200).json("{ status: '" + p + "' }");
+                });
+            } else {
+                // create
+                console.log("Create new template: " + label);
+                redisClient.rpushAsync("templates", label).then(o => {
+                    redisClient.msetAsync("template:" + label, templateJson).then(p => {
+                        res.status(200).json("{ status: '" + p + "' }");
+                    });
+                });
+            }
         });
     }
 
     static deleteTemplate(req, res) {
         let label = req.swagger.params.label.value;
-        console.log("Request received to delete template: " + label);
-
-        redisClient.delAsync("template:"+label).then(n => {
+        console.log("Delete template: " + label);
+        redisClient.delAsync("template:" + label).then(n => {
             redisClient.lremAsync("templates", 100, label).then(o => {
-                console.log("Deleted "+ o + " template(s)");
-                res.status(200).json("{ message: 'Deleted "+ o + " template(s)'");
+                console.log("Deleted " + o + " template(s)");
+                res.status(200).json("{ message: 'Deleted " + o + " template(s)'");
             });
         });
     }

@@ -84,6 +84,10 @@ td>input.configure-key {
     font-size: 12px;
 }
 
+.invalid {
+    border: 1px solid red;
+}
+
 button:hover {
     background: #eee;
     cursor: pointer;
@@ -109,8 +113,7 @@ button.add-action {
     border-radius: 50%;
     margin-left: 20px;
 }
-button.add-action:hover {
-    x-background: #b0e0e6;    
+button.add-action:hover {   
     background: #ddd;    
 }
 
@@ -118,6 +121,10 @@ button>input {
     width: 100%;
     border: none;
     text-align:center
+}
+
+button.invalid {
+    border-color: red;
 }
 
 .editable-input {

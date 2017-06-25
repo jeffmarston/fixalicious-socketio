@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, Input, Output, SimpleChange } from '@angular/core';
 import { CommonModule } from "@angular/common";
 import { Http, Response } from "@angular/http";
-import { SessionService } from "../../services/session.service"
+import { ApiService } from "../../services/api.service"
 import { ISession } from "../../types.d"
 
 @Component({
@@ -126,7 +126,7 @@ import { ISession } from "../../types.d"
         }
 
     `],
-    providers: [SessionService]
+    providers: [ApiService]
 })
 export class SessionNavComponent implements OnInit {
     @Output() onSelected = new EventEmitter<ISession>();
@@ -140,7 +140,7 @@ export class SessionNavComponent implements OnInit {
     private newSessionName: string;
 
     constructor(
-        private sessionService: SessionService) {
+        private apiService: ApiService) {
     }    
 
     private ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
@@ -155,8 +155,8 @@ export class SessionNavComponent implements OnInit {
 
     ngOnInit() {
         this.sessions = [];
-        this.sessionService.getSessions();
-        var src = this.sessionService.getSessions();
+        this.apiService.getSessions();
+        var src = this.apiService.getSessions();
         src.subscribe(data => {
             this.sessions = data;
             if (data.length > 0) {

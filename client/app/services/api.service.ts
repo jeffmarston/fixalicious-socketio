@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Rx';
 import { ISession } from "../types"
 
 @Injectable()
-export class SessionService {
+export class ApiService {
     private baseurl = "/session";
 
     constructor(private http: Http) {
@@ -13,6 +13,8 @@ export class SessionService {
     private pollForServices() {
         Observable;//.create();
     }
+
+    // ============== Sessions =================
 
     public getSessions(): Observable<any> {
         return this.http.get(this.baseurl)
@@ -24,6 +26,21 @@ export class SessionService {
         this.http.post(url, "")
             .subscribe(o => { });
     }
+
+    // ============== Transactions =================
+    
+    public getTransactions(channel: string): Observable<any> {
+        return this.http.get("/transaction/" + channel)
+            .map(res => res.json());
+    }
+
+    public createTransaction(sessionId: string, fixMsg: any) {
+        let url = `/transaction/${sessionId}`;
+        this.http.post(url, fixMsg )
+            .subscribe(o => { console.log(o); });
+    }
+
+    // ============== Templates =================
 
     public getTemplates(): Observable<any> {
         return this.http.get("/template")
