@@ -26,6 +26,7 @@ import * as _ from "lodash";
                 (click)="activateTemplate(action)"
                 class="invalid">
                 <input 
+                    maxlength="10"
                     (blur)="doneEditingActionLabel($event, action)"
                     [readonly]="!action.isEditing"
                     [(ngModel)]="action.label"
@@ -170,7 +171,7 @@ export class DetailPane implements OnInit {
             action.invalid = null;
 
             if (_.countBy(this.customActions, o => o.label.toUpperCase() === action.label.toUpperCase()).true > 1) {
-                action.invalid = "Please create a unique name";
+                action.label = this.uniquify(_.map(this.customActions, o => o.label), action.label);
             }
 
             if (action.label.trim() === "") {
@@ -274,28 +275,34 @@ export class DetailPane implements OnInit {
         }
     }
 
-    private getUniqueName(): boolean {
-        return true;
+    private uniquify(allNames: string[], origName: string): string {
+        let newName = origName;
+        while (_.find(this.customActions, o => o.label === newName)) {
+            let regex = /\(\d+\)$/;
+            let matches = newName.match(regex);
+            if (matches) { // this already exists, incremenet the number
+                let num = matches[0].substring(1, matches[0].length - 1);
+                let incNum = parseInt(num) + 1;
+                newName = newName.replace(regex, "(" + incNum + ")");
+            } else {
+                newName += " (1)";
+            }
+        }
+        return newName;
     }
 
     private copyTemplate() {
         let json = JSON.stringify(this.selectedAction);
         let newAction = JSON.parse(json);
 
-        // Add (1), or the next available number
-        while (_.find(this.customActions, o => o.label === newAction.label)) {
-            let regex = /\(\d+\)$/;
-            let matches = newAction.label.match(regex);
-            if (matches) { // this already exists, incremenet the number
-                let num = matches[0].substring(1, matches[0].length - 1);
-                let incNum = parseInt(num) + 1;
-                newAction.label = newAction.label.replace(regex, "(" + incNum + ")");
-            } else {
-                newAction.label += " (1)";
-            }
-        }
+        newAction.label = this.uniquify(
+            _.map(this.customActions, o => o.label),
+            newAction.label);
 
         this.customActions.push(newAction);
+        this.apiService.createTemplate(this.selectedAction).subscribe(o => {
+            console.log("Template saved");
+        });
     }
 
     ngOnInit() {
