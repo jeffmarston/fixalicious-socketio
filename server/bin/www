@@ -12,7 +12,6 @@ let debug = require('debug')('swagger-gwy:server');
 /**
  * Get port from environment and store in Express.
  */
-
 let port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
@@ -23,7 +22,6 @@ app.set('port', port);
 //let server = http.createServer(app);
 let server = app.listen(port);
 global.io = require('socket.io').listen(server);
-
 
 
 // ================== Socket.io ====================

@@ -136,7 +136,7 @@ export class DetailPane implements OnInit {
 
             if (propName == "detail" && changedProp.currentValue != undefined) {
                 this.transaction = changedProp.currentValue;
-                this.sourceFixObj = this.fixParserService.parseFix(this.transaction.message);
+                this.sourceFixObj = JSON.parse(this.transaction.message);
                 this.isValid = true;
 
                 if (this.selectedAction) {
@@ -213,7 +213,7 @@ export class DetailPane implements OnInit {
 
     private send() {
         let fixObj = this.fixParserService.generateFix(this.selectedAction.pairs);
-        this.apiService.createTransaction(this.session.name, fixObj);
+        this.apiService.createTransaction(this.session.session, fixObj);
 
         if (!this.collapsed) {
             // set a new ExecID so user can repeated hit send button

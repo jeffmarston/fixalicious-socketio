@@ -8,21 +8,23 @@ let client = redis.createClient();
 bluebird.promisifyAll(redis.RedisClient.prototype);
 
 class SessionModel {
-    
+
     static getAll() {
-        return client.lrangeAsync('sessions', 0, 300).then((items) => {
-            return _.map(items, (o)=> {return JSON.parse(o)} );
+        return client.hvalsAsync('ui-sessions').then((items) => {
+            return _.map(items, o=>{ 
+                return JSON.parse(o);
+            });
         });
     }
 
     static create(sessionName) {
         let newSession = { name: sessionName };
-        return client.rpushAsync('sessions', JSON.stringify(newSession) );
+        return client.rpushAsync('ui-sessions', JSON.stringify(newSession) );
     }
 
     static delete(sessionName) {
         let newSession = { name: sessionName };
-        return client.lremAsync('sessions', 1, JSON.stringify(newSession) );
+        return client.lremAsync('ui-sessions', 1, JSON.stringify(newSession) );
     }
 }
 

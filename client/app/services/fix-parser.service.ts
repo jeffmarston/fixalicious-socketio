@@ -19,29 +19,45 @@ export class FixParserService implements IFixParserService {
         return obj;
     }
 
+    public stringify(fix: any) {
+        // We can replace this with prettier-printing FIX in the future
+        return JSON.stringify(fix);
+    }
+
     public generateFix(fix: any[]) {
-        let obj = {};
-        for (let i in fix) {
-            let each = fix[i];
-            obj[each.key] = each.value.value;
+        let obj = _.keyBy(fix, o => o.key);
+        for (var property in obj) {
+            obj[property] = obj[property].value;
         }
         return obj;
     }
 
     // returns an array indexed by FIX tag 
     private mapIdToValue(obj): any[] {
-        let arr = [];
-        for (var property in obj) {
-            if (obj.hasOwnProperty(property)) {
-                let regex = /\(\d+\)$/; // matches (num) at end of string
-                let matches = property.match(regex);
-                if (matches) {
-                    let trimmed = matches[0].substring(1, matches[0].length - 1);
-                    arr[trimmed] = obj[property];
-                }
-            }
+        let header = _.keyBy(obj.header, o => o.Tag);
+        let body = _.keyBy(obj.body, o => o.Tag);
+        let trailer = _.keyBy(obj.trailer, o => o.Tag);
+        let everything = [];
+        _.merge(everything, header, body, trailer);
+
+        // return object with the property=Tag, and value=Value
+        for (var property in everything) {
+            everything[property] = everything[property].Value;
         }
-        return arr;
+        return everything;
+
+        // let arr = [];
+        // for (var property in obj) {
+        //     if (obj.hasOwnProperty(property)) {
+        //         let regex = /\(\d+\)$/; // matches (num) at end of string
+        //         let matches = property.match(regex);
+        //         if (matches) {
+        //             let trimmed = matches[0].substring(1, matches[0].length - 1);
+        //             arr[trimmed] = obj[property];
+        //         }
+        //     }
+        // }
+        // return arr;
     }
 
     private generateId(): string {
