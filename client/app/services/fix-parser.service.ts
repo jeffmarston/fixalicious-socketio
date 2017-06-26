@@ -28,13 +28,39 @@ export class FixParserService implements IFixParserService {
         return obj;
     }
 
-    public eval(formula, sourceFix) {
-        if (typeof formula == "string" && formula.startsWith("=")) {
-            let param = formula.substring(1, formula.length);
-            let returnVal = sourceFix[param];
-            return returnVal || "ERR";
-        } else {
-            return formula;
+    // returns an array indexed by FIX tag 
+    private mapIdToValue(obj): any[] {
+        let arr = [];
+        for (var property in obj) {
+            if (obj.hasOwnProperty(property)) {
+                let regex = /\(\d+\)$/; // matches (num) at end of string
+                let matches = property.match(regex);
+                if (matches) {
+                    let trimmed = matches[0].substring(1, matches[0].length - 1);
+                    arr[trimmed] = obj[property];
+                }
+            }
         }
+        return arr;
+    }
+
+    private generateId(): string {
+        return (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
+    }
+
+    public eval(formula, sourceFix): string {
+        if (typeof formula == "string") {
+            formula = formula.replace("{{newid}}", this.generateId());
+
+            let lookupMatches = formula.match(/\{\{\d+\}\}/g);  // matches {{num}} pattern
+            if (lookupMatches) {
+                let lookup = this.mapIdToValue(sourceFix);
+                lookupMatches.forEach(match => {
+                    let num = parseInt(match.substring(2, match.length - 2));
+                    formula = formula.replace("{{" + num + "}}", (lookup[num] || ""));
+                });
+            }
+        }
+        return formula;
     }
 }

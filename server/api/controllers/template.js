@@ -75,43 +75,41 @@ class TemplateController {
     }
 
     static createAck() {
-        let execID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
-        return [
-            { key: "OrderID", formula: "=CliOrdId (11)" },
-            { key: "ClOrdID", formula: "=CliOrdId (11)" },
-            { key: "ExecID", formula: execID },
+         return [
+            { key: "OrderID", formula: "fix-{{11}}" },
+            { key: "ClOrdID", formula: "{{11}}" },
+            { key: "ExecID", formula: "{{newid}}" },
             { key: "ExecTransType", formula: "0" },
             { key: "ExecType", formula: "0" },
             { key: "OrdStatus", formula: "0" },
-            { key: "Symbol", formula: "=Symbol (55)" },
+            { key: "Symbol", formula: "{{55}}" },
             { key: "SecurityExchange", formula: "New York" },
             { key: "Side", formula: "1" },
-            { key: "OrderQty", formula: "=OrderQty (38)" },
+            { key: "OrderQty", formula: "{{38}}" },
             { key: "OrdType", formula: "1" },
             { key: "Price", formula: "4.6" },
             { key: "TimeInForce", formula: "0" },
             { key: "LastShares", formula: "0" },
             { key: "LastPx", formula: "4.4" },
             { key: "LeavesQty", formula: "0" },
-            { key: "CumQty", formula: "=OrderQty (38)" },
+            { key: "CumQty", formula: "{{38}}" },
             { key: "AvgPx", formula: "4.5" },
             { key: "TransactTime", formula: "now" },
             { key: "HandlInst", formula: "3" }
         ];
     }
     static createPartial() {
-        let execID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
         return [
-            { key: "OrderID", formula: "=CliOrdId (11)" },
-            { key: "ClOrdID", formula: "=CliOrdId (11)" },
-            { key: "ExecID", formula: execID },
+            { key: "OrderID", formula: "fix-{{11}}" },
+            { key: "ClOrdID", formula: "{{11}}" },
+            { key: "ExecID", formula: "{{newid}}" },
             { key: "ExecTransType", formula: "0" },
             { key: "ExecType", formula: "1" },
             { key: "OrdStatus", formula: "1" },
-            { key: "Symbol", formula: "=Symbol (55)" },
+            { key: "Symbol", formula: "{{55}}" },
             { key: "SecurityExchange", formula: "New York" },
             { key: "Side", formula: "1" },
-            { key: "OrderQty", formula: "=OrderQty (38)" },
+            { key: "OrderQty", formula: "{{38}}" },
             { key: "OrdType", formula: "1" },
             { key: "Price", formula: "4.6" },
             { key: "TimeInForce", formula: "0" },
@@ -125,43 +123,41 @@ class TemplateController {
         ];
     }
     static createFill() {
-        let execID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
         return [
-            { key: "OrderID", formula: "=CliOrdId (11)" },
-            { key: "ClOrdID", formula: "=CliOrdId (11)" },
-            { key: "ExecID", formula: execID },
+            { key: "OrderID", formula: "fix-{{11}}" },
+            { key: "ClOrdID", formula: "{{11}}" },
+            { key: "ExecID", formula: "{{newid}}" },
             { key: "ExecTransType", formula: "0" },
             { key: "ExecType", formula: "2" },
             { key: "OrdStatus", formula: "2" },
-            { key: "Symbol", formula: "=Symbol (55)" },
+            { key: "Symbol", formula: "{{55}}" },
             { key: "SecurityExchange", formula: "New York" },
             { key: "Side", formula: "1" },
-            { key: "OrderQty", formula: "=OrderQty (38)" },
+            { key: "OrderQty", formula: "{{38}}" },
             { key: "OrdType", formula: "1" },
             { key: "Price", formula: "4.6" },
             { key: "TimeInForce", formula: "0" },
             { key: "LastShares", formula: "0" },
             { key: "LastPx", formula: "4.4" },
             { key: "LeavesQty", formula: "0" },
-            { key: "CumQty", formula: "=OrderQty (38)" },
+            { key: "CumQty", formula: "{{38}}" },
             { key: "AvgPx", formula: "4.5" },
             { key: "TransactTime", formula: "now" },
             { key: "HandlInst", formula: "3" }
         ];
     }
     static createReject() {
-        let execID = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
         return [
-            { key: "OrderID", formula: "=CliOrdId (11)" },
-            { key: "ClOrdID", formula: "=CliOrdId (11)" },
-            { key: "ExecID", formula: execID },
+            { key: "OrderID", formula: "fix-{{11}}" },
+            { key: "ClOrdID", formula: "{{11}}" },
+            { key: "ExecID", formula: "{{newid}}" },
             { key: "ExecTransType", formula: "0" },
             { key: "ExecType", formula: "8" },
             { key: "OrdStatus", formula: "8" },
-            { key: "Symbol", formula: "=Symbol (55)" },
+            { key: "Symbol", formula: "{{55}}" },
             { key: "SecurityExchange", formula: "New York" },
             { key: "Side", formula: "1" },
-            { key: "OrderQty", formula: "=OrderQty (38)" },
+            { key: "OrderQty", formula: "{{38}}" },
             { key: "OrdType", formula: "1" },
             { key: "Price", formula: "4.6" },
             { key: "TimeInForce", formula: "0" },

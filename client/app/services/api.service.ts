@@ -53,9 +53,7 @@ export class ApiService {
     }
 
     public createTemplate(template) {
-        console.log(template);
         let url = `/template/${template.label}`;
-        console.log(url);
         return this.http.post(url, template);
     }
 }

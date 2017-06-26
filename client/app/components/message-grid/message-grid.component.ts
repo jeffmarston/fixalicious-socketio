@@ -158,12 +158,10 @@ export class MessageGridComponent implements OnInit {
 
     private onResize() {
         this.gridOptions.api.doLayout();
-
     }
 
     private onCellClicked($event) {
         this.selectedMessage = $event.data;
-        console.log(this.selectedMessage);
     }
 
     private toggleDetails() {

@@ -104,8 +104,6 @@ export class DetailPane implements OnInit {
     private isValid: boolean;
     private sourceFixObj = {};
     private fixToSend = {};
-    private socket;
-    private isAddingAction = false;
     private isConfiguring = false;
     private customActions = [];
     private selectedAction = null;
@@ -115,18 +113,21 @@ export class DetailPane implements OnInit {
         private apiService: ApiService,
         private fixParserService: FixParserService) {
         this.isValid = true;
-        this.socket = io();
 
         this.apiService.getTemplates().subscribe(o => {
             this.customActions = o;
             if (this.customActions.length > 0) {
-                this.selectedAction = this.customActions[0];
+                this.activateTemplate(this.customActions[0]);
             }
         });
 
         this.selectedAction = {
             label: "", isEditing: true, pairs: []
         };
+    }
+
+    ngOnInit() {
+        this.collapsed = localStorage.getItem("detail-pane-collapsed") === "true";
     }
 
     private ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
@@ -300,13 +301,10 @@ export class DetailPane implements OnInit {
             newAction.label);
 
         this.customActions.push(newAction);
-        this.apiService.createTemplate(this.selectedAction).subscribe(o => {
+        this.apiService.createTemplate(newAction).subscribe(o => {
             console.log("Template saved");
+            this.activateTemplate(newAction);
+            newAction.isConfiguring = true;
         });
     }
-
-    ngOnInit() {
-        this.collapsed = localStorage.getItem("detail-pane-collapsed") === "true";
-    }
-
 }

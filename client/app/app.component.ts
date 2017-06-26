@@ -1,8 +1,5 @@
 import { Component } from '@angular/core';
 import { Observable } from "rxjs/Observable";
-import * as io from 'socket.io-client';
-
-//import { TransactionApiService } from "./services/transaction.service"
 
 @Component({
     selector: 'my-app',
@@ -67,9 +64,6 @@ export class AppComponent {
     private isNavCollapsed: boolean;
 
     ngOnInit() {
-        let socket = io();
-        console.log("should be connected now");
-        socket.emit('create-transaction', 'JEFF MESSAGE');
     }
 
     toggleNavBar(){
