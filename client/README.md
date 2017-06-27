@@ -16,10 +16,14 @@ TODO
 ==============
 x `Create all actions from metadata, even Ack, Fill, Reject`
     x `Simple variable replacement` 
-    - `Random id() function`
-- `Persist action templates via REST API, redis`
+    x `Random id() function`
+x `Persist action templates via REST API, redis`
+x `Improve seeding to not require 2 refreshes`
+- `Repeating Groups!`
 - `Parse Fix XML in Node and expose via REST API`
-- `Get sessions from redis, update status when they change`
+- `Template keys use <select>`
+- `Ability to delete template keys`
+x `Get sessions from redis, update status when they change`
 - `Angular router, url matching session`
 - `Indicate activity on Non visible pages`
 - `Modal popup to show... FIX message received detail?`

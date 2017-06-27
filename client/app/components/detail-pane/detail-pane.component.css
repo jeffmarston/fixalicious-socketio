@@ -78,10 +78,14 @@ select.configure-input:hover {
 
 td>input.configure-key {
     border: none;
-    background: #bfb;
+    background: transparent;
     text-align: right;
     width: 100%;
     font-size: 12px;
+}
+
+.template-top{
+    float: right;
 }
 
 .invalid {

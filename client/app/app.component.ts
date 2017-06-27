@@ -8,7 +8,8 @@ import { Observable } from "rxjs/Observable";
 
         <div class="header-bar">
             <div class="collapse-button" (click)="toggleNavBar()">
-                <i class="fa fa-glass" aria-hidden="true"></i>
+                <i class="fa fa-glass" style="display:none"></i>
+                <i class="fa fa-fort-awesome" style="font-size: 25px"></i>
             </div>
             <h1>FIXalicious</h1>
         </div>

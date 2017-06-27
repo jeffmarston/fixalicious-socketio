@@ -16,7 +16,11 @@ import * as _ from "lodash";
             <button 
                 class="expander" 
                 title="Show the FIX messages to be sent"
-                (click)="toggleExpanded()">>></button>
+                (click)="toggleExpanded()">
+                    <i class="fa"
+                        style="font-size:20px;"
+                        [ngClass]="collapsed ? 'fa-angle-double-left' : 'fa-angle-double-right'"></i>
+                </button>
 
             <button 
                 [ngClass]="(!collapsed && selectedAction==action) ? 'selected' : '' "
@@ -40,27 +44,43 @@ import * as _ from "lodash";
                 title="Add a new quick action button"
                 [hidden]="collapsed"
                 (click)="addAction()"
-            >+</button>
+                style="color:#777;">
+                <!--<i class="fa fa-plus"></i>-->
+                <i class="fa fa-plus-circle"></i>
+            </button>
 
         </div>
         <div class="keyvalue-section" [hidden]="collapsed">
             <table class="keyvalue-table">
                 <tr>
                     <td colspan=2 
-                            [hidden]="!selectedAction">
-                        <button class="send" 
-                            (click)="send()">Send
+                        [hidden]="!selectedAction">
+                        
+                        <button class="template-top" 
+                            (click)="send()"
+                            title="Send message back to the client">
+                            Send <i class="fa fa-send-o"></i>
                             </button>
                             
-                        <button class="send" 
-                            (click)="deleteTemplate()">Delete</button>
+                        <button class="template-top" 
+                            (click)="deleteTemplate()"
+                            title="Delete this template">
+                            Delete <i class="fa fa-trash-o"></i>
+                            </button>
                             
-                        <button class="send" 
-                            (click)="copyTemplate()">Copy</button>
+                        <button class="template-top" 
+                            (click)="copyTemplate()"
+                            title="Create a copy of this template">
+                            Copy <i class="fa fa-copy"></i>
+                            </button>
                             
-                        <button class="send" 
+                        <button class="template-top" 
                             (click)="configureTemplate()"
-                            [ngClass]="isConfiguring ? 'configure-input' : '' ">Configure</button>
+                            [class.configure-input]="isConfiguring"
+                            title="Edit the keys and default values for each field">
+                            <!--<i class="fa fa-edit"></i>-->
+                            Edit <i class="fa fa-pencil"></i>
+                            </button>                            
                     </td>
                 </tr>
                 <tr *ngFor="let pair of selectedAction.pairs"
