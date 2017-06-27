@@ -36,7 +36,7 @@ export class MessageGridComponent implements OnInit {
         this.socket = io();
         this.socket.on('transaction', msg => {
             let transaction: ITransaction = JSON.parse(msg);
-            if (transaction.session.toLowerCase() === this.selectedSession.name.toLowerCase()) {
+            if (transaction.session.toLowerCase() === this.selectedSession.session.toLowerCase()) {
                 this.addRowsToDataSource([transaction]);
             }
         });
@@ -91,6 +91,7 @@ export class MessageGridComponent implements OnInit {
             { headerName: "Message Type", field: "msgType" },
             { headerName: "Seq Num", field: "seqNum" },
             { headerName: "CliOrdId", field: "cliOrdId" },
+            { headerName: "Symbol", field: "symbol" },
             { headerName: "OrdStatus", field: "ordStatus" },
             { headerName: "Message", field: "message" }
         ];
@@ -98,7 +99,7 @@ export class MessageGridComponent implements OnInit {
 
     private fetchRowData(session: ISession) {
         if (session) {
-            var src = this.apiService.getTransactions(session.name);
+            var src = this.apiService.getTransactions(session.session);
             src.subscribe(o => {
                 this.addRowsToDataSource(o);
             }, error => {
@@ -107,25 +108,31 @@ export class MessageGridComponent implements OnInit {
         }
     }
 
+    private getValueFromTag(array, tag){
+        let item = _.find(array, o=> o.Tag===tag);
+        return (item) ? item.Value : null;
+    }
+
     private createRow(item): ITransaction {
         let row = {
-            direction: item.direction,
+            direction: item.direction ? "sent" : "received",
             seqNum: null,
-            cliOrdId: "",
-            msgType: "",
-            ordStatus: "",
-            message: item.msg
+            cliOrdId: null,
+            msgType: null,
+            ordStatus: null,
+            symbol: null,
+            message: this.fixParserService.stringify(item.message)
         };
         // enrich with specifics from fix message
         try {
-            let fixObj = this.fixParserService.parseFix(item.msg);
-            row.seqNum = fixObj['MsgSeqNum (34)'];
-            row.cliOrdId = fixObj['ClOrdID (11)'];
-            row.msgType = fixObj['MsgType (35)'];
-            row.ordStatus = fixObj['OrdStatus (39)'];
+            row.seqNum = this.getValueFromTag(item.message.header, 34);  // ['MsgSeqNum (34)'];
+            row.cliOrdId = this.getValueFromTag(item.message.body, 11);  // ['ClOrdID (11)'];
+            row.msgType = this.getValueFromTag(item.message.header, 35);  // ['MsgType (35)'];
+            row.ordStatus = this.getValueFromTag(item.message.body, 39);  // ['OrdStatus (39)'];
+            row.symbol = this.getValueFromTag(item.message.body, 55);  // ['Symbol (55)'];
         }
         catch (ex) {
-            console.error("Unable to parse FIX: " + item.msg);
+            console.error("Unable to parse FIX: " + JSON.stringify(item));
         }
         return row;
     }

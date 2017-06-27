@@ -6,8 +6,8 @@ let redis = require('redis');
 bluebird.promisifyAll(redis.RedisClient.prototype);
 
 
-var sub = redis.createClient();
-var pub = redis.createClient();
+var redisSub = redis.createClient();
+var redisClient = redis.createClient();
 var msg_count = 0;
 
 
@@ -16,14 +16,25 @@ class Subscriber {
 
     static subscribeAll() {
 
-        sub.on("message", function (channel, message) {
-            console.log("sub channel " + channel + ": " + message);
+        function pollForSessions(err, result) {
+            let session = JSON.parse(result[1]);
+            console.log("BRPOPed session: " + result[1]);
+            global.io.emit('session', session);
             
-            global.io.emit('transaction', message);
+            redisClient.hsetAsync('ui-sessions', session.session, result[1]).then(o => {
+                return redisClient.brpop('fix-svr-sessions-tr', 0, pollForSessions);
+            });
+        }
+        redisClient.brpop('fix-svr-sessions-tr', 0, pollForSessions);
 
-        });
 
-        sub.subscribe("BAXA");
+        function pollForTransactions(err, transaction) {
+            //console.log("BRPOPed transaction: " + transaction);
+            global.io.emit('transaction', transaction);
+            redisClient.brpoplpush('fix-svr-BAXA-tr', 'ui-transactions-BAXA', 0, pollForTransactions);
+        }
+        redisClient.brpoplpush('fix-svr-BAXA-tr', 'ui-transactions-BAXA', 0, pollForTransactions);
+
     }
 
 }

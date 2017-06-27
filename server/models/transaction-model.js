@@ -13,7 +13,7 @@ var rp = require('request-promise');
 class TransactionModel {
 
     static getAll(sessionName) {
-        return client.lrangeAsync(sessionName, 0, 300).then((items) => {
+        return client.lrangeAsync("ui-transactions-" + sessionName, 0, 300).then((items) => {
             return _.map(items, (o) => {
                 let json = JSON.parse(o);
                 return json;
@@ -26,7 +26,7 @@ class TransactionModel {
         console.log(transaction);
 
         return rp.post(
-            'http://localhost:9999/'+sessionName+'/ExecutionReport', 
+            'http://localhost:9999/' + sessionName + '/ExecutionReport',
             { json: transaction },
             function (error, response, body) {
                 if (error) {
@@ -39,7 +39,7 @@ class TransactionModel {
     }
 
     static delete(sessionName) {
-        return client.delAsync(sessionName);
+        return client.delAsync("ui-transactions-" + sessionName);
     }
 }
 

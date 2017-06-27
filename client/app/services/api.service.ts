@@ -22,7 +22,7 @@ export class ApiService {
     }
 
     public createSession(session: ISession) {
-        let url = `${this.baseurl}/${session.name}`;
+        let url = `${this.baseurl}/${session.session}`;
         this.http.post(url, "")
             .subscribe(o => { });
     }

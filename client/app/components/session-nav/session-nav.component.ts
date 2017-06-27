@@ -3,6 +3,8 @@ import { CommonModule } from "@angular/common";
 import { Http, Response } from "@angular/http";
 import { ApiService } from "../../services/api.service"
 import { ISession } from "../../types.d"
+import * as io from 'socket.io-client';
+import * as _ from 'lodash';
 
 @Component({
     selector: 'session-nav',
@@ -19,7 +21,8 @@ import { ISession } from "../../types.d"
                     <input 
                         (blur)="doneEditingSession(session)"
                         [readonly]="!session.isEditing"
-                        [(value)]="session.name"
+                        [(value)]="session.session"
+                        [class.disconnected]="session.disconnected"
                         [ngClass]="session.isEditing ? 'editable-input' : 'readonly-input' "/>
 
             </li>
@@ -125,6 +128,10 @@ import { ISession } from "../../types.d"
             color: white;
         }
 
+        input.disconnected {
+            font-style: italic;
+        }
+
     `],
     providers: [ApiService]
 })
@@ -141,7 +148,7 @@ export class SessionNavComponent implements OnInit {
 
     constructor(
         private apiService: ApiService) {
-    }    
+    }
 
     private ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
         for (let propName in changes) {
@@ -166,6 +173,16 @@ export class SessionNavComponent implements OnInit {
         }, error => {
             console.error("ERROR: " + error);
         });
+
+        let socket = io();
+        socket.on('session', session => {
+            let found = _.find(this.sessions, o => (o.session == session.session));
+            if (found) {
+                found.disconnected = session.status == "down";
+            } else {
+                this.sessions.push(session);
+            }
+        });
     }
 
     private enterEdit(session) {
@@ -173,14 +190,14 @@ export class SessionNavComponent implements OnInit {
     }
 
     private doneEditingSession(session) {
-        if (this.newSessionName ) {
-            let newSession = {name: this.newSessionName, path: ""};
+        if (this.newSessionName) {
+            let newSession = { session: this.newSessionName, path: "" };
             this.sessions.push(newSession);
             this.isAddingSession = false;
-            this.newSessionName="";
+            this.newSessionName = "";
             this.onClick(newSession);
         }
-        this.isAddingSession = false;        
+        this.isAddingSession = false;
         if (session) {
             session.isEditing = false;
         }
@@ -192,7 +209,7 @@ export class SessionNavComponent implements OnInit {
     }
 
     private onClick(session) {
-        this.debugMessage = session.name;
+        this.debugMessage = session.session;
         if (this.selectedSession) {
             this.selectedSession.selected = false;
         }

@@ -7,7 +7,7 @@
             "request": "launch",
             "program": "${workspaceRoot}/server/bin/www",
             "stopOnEntry": false,
-            "args": [],
+            "args": ["subscriber=tr"],
             "cwd": "${workspaceRoot}/server",
             "preLaunchTask": null,
             "runtimeExecutable": null,

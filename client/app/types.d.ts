@@ -23,7 +23,8 @@ export interface ITransaction {
 }
 
 export interface ISession {
-    name: string;
+    session: string;
+    disconnected?: boolean;
     selected?: boolean;
 }
 
