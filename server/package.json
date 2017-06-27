@@ -18,7 +18,8 @@
     "socket.io": "^2.0.2",
     "swagger-express-mw": "^0.7.0",
     "tedious": "^1.14.1",
-    "uuid": "^2.0.2"
+    "uuid": "^2.0.2",
+    "yargs": "^8.0.2"
   },
   "devDependencies": {
     "nodemon": "^1.10.2"
