@@ -18,12 +18,11 @@ x `Create all actions from metadata, even Ack, Fill, Reject`
     x `Simple variable replacement` 
     x `Random id() function`
 x `Persist action templates via REST API, redis`
-x `Improve seeding to not require 2 refreshes`
+x `Ability to delete template keys`
+x `Get sessions from redis, update status when they change`
 - `Repeating Groups!`
 - `Parse Fix XML in Node and expose via REST API`
-- `Template keys use <select>`
-- `Ability to delete template keys`
-x `Get sessions from redis, update status when they change`
+    - `Template keys use <select>`
 - `Angular router, url matching session`
-- `Indicate activity on Non visible pages`
+- `Indicate activity on non-visible pages`
 - `Modal popup to show... FIX message received detail?`

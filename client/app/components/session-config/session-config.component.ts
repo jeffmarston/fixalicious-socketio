@@ -16,7 +16,7 @@ export class SessionConfigComponent {
     private hideForm: boolean = true;
 
     constructor() {
-        this.session = {name:""};
+        this.session = {session:""};
     }
 
     private onClick() {

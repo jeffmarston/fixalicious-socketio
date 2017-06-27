@@ -27,7 +27,7 @@ import * as _ from "lodash";
                 [style.border-color]="(action.invalid) ? 'red' : 'gray' "                
                 [title]="(action.invalid) ? action.invalid : '' "
                 *ngFor="let action of customActions"
-                (click)="activateTemplate(action)"
+                (click)="activateTemplate(action, true)"
                 class="invalid">
                 <input 
                     maxlength="10"
@@ -45,7 +45,6 @@ import * as _ from "lodash";
                 [hidden]="collapsed"
                 (click)="addAction()"
                 style="color:#777;">
-                <!--<i class="fa fa-plus"></i>-->
                 <i class="fa fa-plus-circle"></i>
             </button>
 
@@ -53,7 +52,7 @@ import * as _ from "lodash";
         <div class="keyvalue-section" [hidden]="collapsed">
             <table class="keyvalue-table">
                 <tr>
-                    <td colspan=2 
+                    <td colspan=3
                         [hidden]="!selectedAction">
                         
                         <button class="template-top" 
@@ -78,7 +77,6 @@ import * as _ from "lodash";
                             (click)="configureTemplate()"
                             [class.configure-input]="isConfiguring"
                             title="Edit the keys and default values for each field">
-                            <!--<i class="fa fa-edit"></i>-->
                             Edit <i class="fa fa-pencil"></i>
                             </button>                            
                     </td>
@@ -94,7 +92,15 @@ import * as _ from "lodash";
                 </tr>
                 <tr *ngFor="let pair of selectedAction.pairs" 
                     [hidden]="!isConfiguring">
-                    <td class="key">
+                    <td class="delete-column">
+                        <button class="delete-pair"
+                            title="Delete"
+                            (click)="deletePair(pair)"
+                            style="color:#777;">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </td>
+                    <td class="key">                        
                         <input 
                             class="configure-key"
                             (blur)="doneEditingPair(pair)"
@@ -137,7 +143,7 @@ export class DetailPane implements OnInit {
         this.apiService.getTemplates().subscribe(o => {
             this.customActions = o;
             if (this.customActions.length > 0) {
-                this.activateTemplate(this.customActions[0]);
+                this.activateTemplate(this.customActions[0], false);
             }
         });
 
@@ -160,7 +166,7 @@ export class DetailPane implements OnInit {
                 this.isValid = true;
 
                 if (this.selectedAction) {
-                    this.activateTemplate(this.selectedAction);
+                    this.activateTemplate(this.selectedAction, false);
                 }
             }
             if (propName == "collapsed" && changedProp.currentValue != undefined) {
@@ -211,11 +217,15 @@ export class DetailPane implements OnInit {
         }
     }
 
-    private activateTemplate(action) {
+    private activateTemplate(action, autoSend: boolean) {
         if (this.selectedAction.invalid) {
             return;
         }
-        this.isConfiguring = false;
+        if (this.isConfiguring) {
+            //finalize and save changes
+            this.configureTemplate();
+        }
+
         this.selectedAction = action;
 
         this.fixToSend = {};
@@ -226,7 +236,7 @@ export class DetailPane implements OnInit {
         });
 
         this.displayFixMessage();
-        if (this.collapsed) {
+        if (autoSend && this.collapsed) {
             this.send();
         }
     }
@@ -236,8 +246,6 @@ export class DetailPane implements OnInit {
         this.apiService.createTransaction(this.session.session, fixObj);
 
         if (!this.collapsed) {
-            // set a new ExecID so user can repeated hit send button
-            this.fixToSend["ExecID"] = (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
             this.displayFixMessage();
         }
     }
@@ -252,7 +260,7 @@ export class DetailPane implements OnInit {
                 } else if (index < this.customActions.length) {
                     this.selectedAction = this.customActions[index];
                 }
-                this.activateTemplate(this.selectedAction);
+                this.activateTemplate(this.selectedAction, false);
             }, error => {
                 console.error("Failed to delete template: " + error);
             });
@@ -293,7 +301,13 @@ export class DetailPane implements OnInit {
                 value: "",
                 isNewItem: true
             });
+        } else {
+            _.pull(this.selectedAction.pairs, pair);
         }
+    }
+
+    private deletePair(pair){
+        _.pull(this.selectedAction.pairs, pair);
     }
 
     private uniquify(allNames: string[], origName: string): string {
@@ -323,7 +337,7 @@ export class DetailPane implements OnInit {
         this.customActions.push(newAction);
         this.apiService.createTemplate(newAction).subscribe(o => {
             console.log("Template saved");
-            this.activateTemplate(newAction);
+            this.activateTemplate(newAction, false);
             newAction.isConfiguring = true;
         });
     }
