@@ -3,7 +3,13 @@ FIXalicious UI
 ==============
 
 FIXalicious UI is a front end for Rob Baxter's excellent FIXalicious back end.
-It uses Angular2, ag-grid, and socket.io.
+It uses Angular2, ag-grid, redis, and socket.io.
+
+## Prerequisites
+- node.js
+- redis
+- fixalicious
+
 
 Building
 ==============
