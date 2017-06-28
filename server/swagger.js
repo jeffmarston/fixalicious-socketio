@@ -12,6 +12,29 @@ let express = require('express');
 let app = express();
 let http = require('http').Server(app);
 
+// add cors in development mode
+if (app.get('env') === 'development') {
+  app.use(cors());
+}
+
+app.use('/client', express.static('../client'));
+//app.use('/foo', express.static('./index.html'));
+app.get('/', function (req, res) {
+  res.send(`
+<style>a {color: #112; text-decoration: none;
+  font-family: sans-serif;
+  background: #abc;padding: 10px;
+  border-radius: 8px;margin: 4px;width: 150px;}
+a:hover {background: #cde;color: #445;}
+h4{font-family: sans-serif;}
+</style>
+  <h4>Where would you like to go?</h4>
+  <a href="/client">Fixalicious Client</a>
+  <a href="/api/v1">API Documentation</a>
+  `);
+});
+
+
 // swagger initializers
 let swaggerConfig = {
   appRoot: __dirname
