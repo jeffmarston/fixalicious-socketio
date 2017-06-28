@@ -17,35 +17,42 @@ class Subscriber {
 
         let suffix = (argv.subscriber) ? "-" + argv.subscriber : "-ui";
         let sub_sessionKey = "fix-svr-sessions" + suffix;
-        let sub_transactionKey = "fix-svr-BAXA" + suffix;
         let my_sessionKey = "ui-sessions";
-        let my_transactionKey = "ui-transactions-BAXA";
 
-        function pollForSessions(err, result) {
-            let session = JSON.parse(result[1]);
-            console.log("BRPOPed session: " + result[1]);
-            global.io.emit('session', session);
+        let pollers = [];
+        function addTransactionPoller(sessionName) {
+            let sub_transactionKey = "fix-svr-" + sessionName + suffix;
+            let ui_transactionKey = "ui-transactions-" + sessionName;
+            console.log("Watching for new transactions on: " + sub_transactionKey);
 
-            redisSessions.hsetAsync(my_sessionKey, session.session, result[1]).then(o => {
-                setTimeout(() => {
-                    return redisSessions.brpop(sub_sessionKey, 0, pollForSessions)
-                }, 40);
+            let newClient = redis.createClient();
+            pollers.push(newClient);
+            newClient.brpoplpush(sub_transactionKey, ui_transactionKey, 0, (err, message)=>{
+
+                console.log(" - received message on: " + sub_transactionKey);
+
+                global.io.emit("transaction", message);
+                redisTransactions.brpoplpush(sub_transactionKey, ui_transactionKey, 0, handleTransactions);
             });
         }
-        console.log("Watching on Redis key: " + sub_sessionKey);
-        redisSessions.brpop(sub_sessionKey, 0, pollForSessions);
 
+        function pollForSessions(err, result) {
+            console.log("Session update received: " + result[1]);
+            let session = JSON.parse(result[1]);
+            global.io.emit('session', session);
 
-        function pollForTransactions(err, transaction) {
-            //console.log("BRPOPed transaction: " + transaction);
-            global.io.emit("transaction", transaction);
-            setTimeout(() => {
-                redisTransactions.brpoplpush(sub_transactionKey, my_transactionKey, 0, pollForTransactions)
-            }, 40);
+            if (session.status == "up") {
+                addTransactionPoller(session.session);
+            } else {
+                //removeTransactionPoller(session.session);
+            }
+
+            redisSessions.hsetAsync(my_sessionKey, session.session, result[1]).then(o => {
+                return redisSessions.brpop(sub_sessionKey, 0, pollForSessions);
+            });
         }
-        console.log("Watching on Redis key: " + sub_transactionKey);
-        redisTransactions.brpoplpush(sub_transactionKey, my_transactionKey, 0, pollForTransactions);
-
+        console.log("Watching for session changes on: " + sub_sessionKey);
+        redisSessions.brpop(sub_sessionKey, 0, pollForSessions);
     }
 
 }
