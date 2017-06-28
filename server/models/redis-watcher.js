@@ -58,6 +58,7 @@ class Subscriber {
         redisSessions.hvalsAsync(my_sessionKey).then((items) => {
             let objects = _.map(items, o=> JSON.parse(o) );
             objects.forEach((session) => {
+                console.log("Watching session: session.session");
                 addTransactionPoller(session.session);
             }, this);
         });
