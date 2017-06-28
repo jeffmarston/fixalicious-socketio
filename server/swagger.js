@@ -1,20 +1,16 @@
 'use strict'
 /**
- * App.js initializes express and swagger middleware.
+ * swagger.js initializes express and swagger middleware.
  *
  * Basic routing for web server behavior appears below. However, all route mapping will happen directly through
  * configuration of the swagger.yaml
  *
- * TODO: Ask if 'morgan' is needed or used somewhere or just a dead reference.
- * TODO: Find out why ES6 imports do not work.
  */
 let cors = require('cors');
 let swaggerMiddleware = require('swagger-express-mw');
 let express = require('express');
 let app = express();
 let http = require('http').Server(app);
-
-let config = require('./config');
 
 // add cors in development mode
 if (app.get('env') === 'development') {
@@ -38,9 +34,9 @@ h4{font-family: sans-serif;}
   `);
 });
 
+
 // swagger initializers
 let swaggerConfig = {
-  apiBaseUrl: config.WebApiBaseUrl,
   appRoot: __dirname
 };
 // Initialize and bind swagger and express

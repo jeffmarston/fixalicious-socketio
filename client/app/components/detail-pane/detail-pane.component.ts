@@ -58,26 +58,26 @@ import * as _ from "lodash";
                         <button class="template-top" 
                             (click)="send()"
                             title="Send message back to the client">
-                            Send <i class="fa fa-send-o"></i>
+                            <i class="fa fa-send-o"></i> Send
                             </button>
                             
                         <button class="template-top" 
                             (click)="deleteTemplate()"
                             title="Delete this template">
-                            Delete <i class="fa fa-trash-o"></i>
+                            <i class="fa fa-trash-o"></i> Delete
                             </button>
                             
                         <button class="template-top" 
                             (click)="copyTemplate()"
                             title="Create a copy of this template">
-                            Copy <i class="fa fa-copy"></i>
+                            <i class="fa fa-copy"></i> Copy
                             </button>
                             
                         <button class="template-top" 
                             (click)="configureTemplate()"
                             [class.configure-input]="isConfiguring"
                             title="Edit the keys and default values for each field">
-                            Edit <i class="fa fa-pencil"></i>
+                            <i class="fa fa-pencil"></i> Edit
                             </button>                            
                     </td>
                 </tr>
