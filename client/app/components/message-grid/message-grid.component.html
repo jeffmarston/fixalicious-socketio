@@ -6,14 +6,14 @@
             (onSave)="saveSessionConfig($event)"></session-config>-->
 
         <div *ngIf="showGrid" class="grid-pane">
-            <div class="filter" >
+            <!--<div class="filter" >
                     <input class="filter" 
                          [(ngModel)]="filterValue"
                          (ngModelChange)="updateFilter($event)"
                         placeholder="Filter CliOrdId"
                         [class.active-filter]="filterValue"
                         />
-            </div>
+            </div>-->
             <ag-grid-angular #agGrid 
                         style="height: 100%; width: 100%;"
                         class="ag-theme"
@@ -27,6 +27,8 @@
                         (rowDoubleClicked)="toggleDetails()"
             >
             </ag-grid-angular>
+            <scenario 
+                [style.height.px]="500"></scenario>
         </div>
             
             <!--[collapsed]="showDetails"-->

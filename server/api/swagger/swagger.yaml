@@ -165,6 +165,57 @@ paths:
       responses:
         "200":
           description: Success
+  /scenario:
+    x-swagger-router-controller: scenario
+    get:
+      summary: Get all Scenario
+      operationId: getAll
+      tags : [Scenario]
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items: 
+              $ref: "#/definitions/ScenarioResource"
+        default:
+          description: Error
+          schema: 
+            $ref: "#/definitions/ErrorResponse"
+  /scenario/{session}:
+    x-swagger-router-controller: scenario
+    post:
+      summary: Create a new scenario to run on incoming FIX messages
+      operationId: create
+      tags : [Scenario]
+      parameters:
+        - name: session
+          in: path
+          description: FIX session name
+          required: true
+          type: string
+        - name: code
+          in: body
+          description: code to execute when scenarios are active
+          required: true
+          schema:
+            $ref: "#/definitions/ScenarioResource"
+      responses:
+        "200":
+          description: Success
+    delete:
+      summary: Delete a scenario
+      operationId: delete
+      tags : [Scenario]
+      parameters:
+        - name: session
+          in: path
+          description: Name of the session
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
 # complex objects have schema definitions
 definitions:
   ErrorResponse:
@@ -184,7 +235,7 @@ definitions:
       message:
         type: string
   TemplateItemResource:
-    description: Transaction
+    description: Template Item a key value pair of FIX keys and formulas
     properties:
       key:
         type: string
@@ -199,3 +250,10 @@ definitions:
         type: array
         items: 
           $ref: "#/definitions/TemplateItemResource"
+  ScenarioResource:
+    description: Scenario
+    properties:
+      session: 
+        type: string
+      code:
+        type: string

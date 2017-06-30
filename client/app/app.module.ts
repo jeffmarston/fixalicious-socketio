@@ -8,8 +8,10 @@ import { MessageGridComponent } from "./components/message-grid/message-grid.com
 import { SessionNavComponent } from "./components/session-nav/session-nav.component";
 import { DetailPane } from "./components/detail-pane/detail-pane.component";
 import { SessionConfigComponent } from "./components/session-config/session-config.component";
+import { ScenarioComponent } from "./components/scenario/scenario-component";
 import { ApiService } from "./services/api.service";
 import { FixParserService } from "./services/fix-parser.service";
+import { ScenarioService } from "./services/scenario.service";
 import { SetFocusDirective } from "./directives/set-focus";
 
 @NgModule({
@@ -25,11 +27,13 @@ import { SetFocusDirective } from "./directives/set-focus";
         SessionNavComponent,
         DetailPane,
         SessionConfigComponent,
+        ScenarioComponent,
         SetFocusDirective
     ],
     providers: [
         ApiService,
-        FixParserService
+        FixParserService,
+        ScenarioService
     ],
     bootstrap: [AppComponent]
 })

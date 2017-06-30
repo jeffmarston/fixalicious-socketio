@@ -289,6 +289,8 @@ export class DetailPane implements OnInit {
             let resolved = this.fixParserService.eval(element.formula, this.sourceFixObj);
             element.value = resolved;
         });
+
+        console.log(this.selectedAction);
     }
 
     private doneEditingPair(pair) {

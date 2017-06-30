@@ -41,8 +41,6 @@ input.active-filter {
 }
 
 .detail-pane {
-    /*min-width: 200px;*/
     overflow: auto;
     height: 100%;
-    /*border: 1px solid gray;*/
 }
