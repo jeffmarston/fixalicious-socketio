@@ -84,7 +84,7 @@ import * as _ from 'lodash';
 
         .readonly-input {
             background: transparent;
-            color: #234;
+            color: #88959E;
             cursor: pointer;
         }
 
