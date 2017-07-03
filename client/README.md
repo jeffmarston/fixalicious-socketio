@@ -26,6 +26,11 @@ x `Create all actions from metadata, even Ack, Fill, Reject`
 x `Persist action templates via REST API, redis`
 x `Ability to delete template keys`
 x `Get sessions from redis, update status when they change`
+
+- `Scenarios!`
+    - `handle deleting scenarios (foreign key)`
+    - `call quickActions (Ack, Partial) - or get resulting object back`
+
 - `Repeating Groups!`
 - `Parse Fix XML in Node and expose via REST API`
     - `Template keys use <select>`

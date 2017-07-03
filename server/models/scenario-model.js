@@ -35,14 +35,34 @@ class ScenarioModel {
         return client.hdelAsync('ui-scenarios', 1, label);
     }
 
-    static run(session, scenarioId) {
-        console.log("======== running ==========");
-        console.log(session.session + " -> " + scenarioId);
-        ScenarioModel.activeSessions = {};
+    static refreshAll() {
+        if (ScenarioModel.activeSessions) {
+            for(let session in ScenarioModel.activeSessions) {
+                let scenario = ScenarioModel.activeSessions[session];
+                ScenarioModel.getById(scenario.label).then(scenario => {
+                    ScenarioModel.activeSessions[session] = scenario;
+                });
+            }
+        }
+    }
 
+    static refreshScenario() {
+        // get from DB and set a collection
+    }
+
+    static enable(session, scenarioId) {
+        console.log(`Starting scenario: ${scenarioId} on session: ${session.session}`);
+        ScenarioModel.activeSessions = ScenarioModel.activeSessions || {};
         ScenarioModel.getById(scenarioId).then(scenario => {
             ScenarioModel.activeSessions[session.session] = scenario;
         });
+    }
+
+    static disable(session, scenarioId) {
+        console.log(`Stopping scenario: ${scenarioId} on session: ${session.session}`);
+        if (ScenarioModel.activeSessions) {
+            delete ScenarioModel.activeSessions[session.session];
+        }
     }
 
     static trigger(sessionName, transaction) {
@@ -59,40 +79,46 @@ class ScenarioModel {
         };
 
         console.log(`======== triggered on: ${sessionName} ==========`);
-        console.log(fixIn);
         let scenarioToRun = (ScenarioModel.activeSessions) ? ScenarioModel.activeSessions[sessionName] : null;
         if (scenarioToRun) {
-            ScenarioModel.executeCode(sessionName, scenarioToRun.code, fixIn);
+            ScenarioModel.executeCode(sessionName, scenarioToRun, fixIn);
         }
     }
 
 
-    static executeCode(session, code, fixIn) {
+    static executeCode(sessionName, scenario, fixIn) {
+        let channel = `scenario-output[${sessionName}]`;
         let cons = {
-            log: console.log,
-            error: console.error
+            log: (txt) => {
+                global.io.emit(channel, { scenario: scenario.label, log: txt });
+            },
+            error: (txt) => {
+                global.io.emit(channel, { scenario: scenario.label, error: txt });
+            },
         };
 
         let sandbox = {
             setInterval: setInterval,
             setTimeout: setTimeout,
+            JSON: JSON,
             console: cons,
             send: (o) => {
-                console.log("Sending from Custom Scenario: " + JSON.stringify(o));
                 try {
-                    return TransactionModel.create(session, o);
+                    return TransactionModel.create(sessionName, o);
                 } catch (err) {
                     console.error(err);
+                    global.io.emit(channel, { scenario: scenario.label, error: err.message + "\n" + err.stack });
                 }
             },
             fixIn: fixIn,
             fixOut: {}
         };
         try {
-            let script = new vm.Script(code);
+            let script = new vm.Script(scenario.code);
             script.runInNewContext(sandbox);
-        } catch (exception) {
-            console.error(exception);
+        } catch (err) {
+            console.error(err);
+            global.io.emit(channel, { scenario: scenario.label, error: err.message + "\n" + err.stack });
         }
         // console.log(util.inspect(sandbox));
     }

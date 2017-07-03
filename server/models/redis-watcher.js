@@ -4,8 +4,8 @@ let _ = require('lodash');
 let bluebird = require('bluebird');
 let redis = require('redis');
 let scenarioModel = require("./scenario-model");
+let sessionModel = require("./session-model");
 bluebird.promisifyAll(redis.RedisClient.prototype);
-
 
 var redisSessionsPoller = redis.createClient();
 var msg_count = 0;
@@ -33,7 +33,7 @@ class Subscriber {
                 //console.log(newClient.name + " - received message on: " + sub_transactionKey);
                 //notify consumers
                 global.io.emit("transaction", message);
-                
+
                 scenarioModel.trigger(sessionName, JSON.parse(message));
 
                 // go look for the next one
@@ -47,8 +47,10 @@ class Subscriber {
             let session = JSON.parse(result[1]);
             global.io.emit('session', session);
 
+
             if (session.status == "up") {
                 addTransactionPoller(session.session);
+                sessionModel.enableScenarios(session.session, session.scenarios);
             } else {
                 //removeTransactionPoller(session.session);
             }
@@ -62,10 +64,16 @@ class Subscriber {
 
         var redisSessions = redis.createClient();
         redisSessions.hvalsAsync(my_sessionKey).then((items) => {
-            let objects = _.map(items, o=> JSON.parse(o) );
-            objects.forEach((session) => {
+            let sessionArray = _.map(items, o => JSON.parse(o));
+            sessionArray.forEach((session) => {
                 console.log("Watching session: session.session");
-                addTransactionPoller(session.session);
+                if (session.status == "up") {
+                    addTransactionPoller(session.session);
+                    sessionModel.enableScenarios(session.session, session.scenarios);
+                } else {
+                    //removeTransactionPoller(session.session);
+                }
+
             }, this);
         });
     }

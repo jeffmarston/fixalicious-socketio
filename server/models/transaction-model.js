@@ -22,9 +22,6 @@ class TransactionModel {
     }
 
     static create(sessionName, transaction) {
-        console.log(" == CREATE == ");
-        console.log(transaction);
-
         return rp.post(
             'http://localhost:9999/' + sessionName + '/ExecutionReport',
             { json: transaction },
@@ -32,7 +29,7 @@ class TransactionModel {
                 if (error) {
                     console.error(error);
                 } else {
-                    console.log("Response = " + response.statusCode);
+                    console.log("POST to Fixalicious Response = " + response.statusCode);
                 }
             }
         );

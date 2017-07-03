@@ -40,7 +40,6 @@ export class MessageGridComponent implements OnInit {
             if (transaction.session.toLowerCase() === this.selectedSession.session.toLowerCase()) {
                 this.addRowsToDataSource([transaction]);
             }
-            this.scenarioService.run(transaction);
         });
     }
 

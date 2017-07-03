@@ -31,24 +31,11 @@ paths:
           description: Error
           schema: 
             $ref: "#/definitions/ErrorResponse"
-  /session/{name}:
+  /session/{name}/fake:
     x-swagger-router-controller: session
     post:
       summary: Create a session
-      operationId: postSession
-      tags : [Session]
-      parameters:
-        - name: name
-          in: path
-          description: Name of the session
-          required: true
-          type: string
-      responses:
-        "200":
-          description: Success   
-    delete:
-      summary: Delete a session
-      operationId: deleteSession
+      operationId: fakeIncoming
       tags : [Session]
       parameters:
         - name: name
