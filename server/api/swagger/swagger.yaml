@@ -182,21 +182,21 @@ paths:
           description: Error
           schema: 
             $ref: "#/definitions/ErrorResponse"
-  /scenario/{session}:
+  /scenario/{label}:
     x-swagger-router-controller: scenario
     post:
       summary: Create a new scenario to run on incoming FIX messages
       operationId: create
       tags : [Scenario]
       parameters:
-        - name: session
+        - name: label
           in: path
-          description: FIX session name
+          description: scenario label
           required: true
           type: string
-        - name: code
+        - name: scenario
           in: body
-          description: code to execute when scenarios are active
+          description: code to execute when scenario is active
           required: true
           schema:
             $ref: "#/definitions/ScenarioResource"
@@ -208,7 +208,7 @@ paths:
       operationId: delete
       tags : [Scenario]
       parameters:
-        - name: session
+        - name: label
           in: path
           description: Name of the session
           required: true
@@ -253,7 +253,7 @@ definitions:
   ScenarioResource:
     description: Scenario
     properties:
-      session: 
+      label:
         type: string
       code:
         type: string

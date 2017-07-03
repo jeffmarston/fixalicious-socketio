@@ -10,25 +10,25 @@ class ScenarioModel {
 
     static getAll() {
         return client.hvalsAsync('ui-scenarios').then((items) => {
-            return _.map(items, o=>{ 
-                return JSON.parse(o);
+            let result = _.map(items, item => {
+                return JSON.parse(item);
             });
+            return result.sort((a,b)=>{ return a.label > b.label});
         });
     }
 
-    static getById(sessionName) {
-         return client.hgetAsync('ui-scenarios', sessionName).then((item) => {
-            return JSON.parse(item).code;
+    static getById(label) {
+        return client.hgetAsync('ui-scenarios', label).then((item) => {
+            return JSON.parse(item);
         });
     }
 
-    static create(sessionName, code) {
-        let scenario = { session: sessionName, code: code};
-        return client.hsetAsync('ui-scenarios', sessionName, JSON.stringify(scenario) );
+    static create(label, scenario) {
+        return client.hsetAsync('ui-scenarios', label, JSON.stringify(scenario));
     }
 
-    static delete(sessionName) {
-        return client.hdelAsync('ui-scenarios', 1, sessionName );
+    static delete(label) {
+        return client.hdelAsync('ui-scenarios', 1, label);
     }
 }
 

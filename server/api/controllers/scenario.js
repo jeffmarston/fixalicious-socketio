@@ -12,26 +12,30 @@ class ScenarioController {
         ScenarioModel.getAll().then((result) => {
             res.status(200).json(result);
         }).catch((error) => {
-            res.status(500).json(new ErrorResource(500, req.url, "Request to get all sessions failed.", error));
+            res.status(500).json(new ErrorResource(500, req.url, "Request to get all scenarios failed.", error));
         });
     }
 
-    static create(req, res) {        
-        let session = req.swagger.params.session.value;
-        let code = req.swagger.params.code.value;
-        ScenarioModel.create(session, code).then((result) => {
+    static create(req, res) {      
+        let label = req.swagger.params.label.value;
+        let scenario = req.swagger.params.scenario.value;
+        console.log("Create scenario: "+ label);
+
+        ScenarioModel.create(label, scenario).then((result) => {
             res.status(200).json(result);
         }).catch((error) => {
-            res.status(500).json(new ErrorResource(500, req.url, "Request to get all sessions failed.", error));
+            res.status(500).json(new ErrorResource(500, req.url, "Request to create scenario failed.", error));
         });
     }
 
     static delete(req, res) {
-        let session = req.swagger.params.session.value;
-        ScenarioModel.delete(session).then((result) => {
+        let label = req.swagger.params.label.value;
+        console.log("Delete scenario: "+ label);
+
+        ScenarioModel.delete(label).then((result) => {
             res.status(200).json(result);
         }).catch((error) => {
-            res.status(500).json(new ErrorResource(500, req.url, "Request to get all sessions failed.", error));
+            res.status(500).json(new ErrorResource(500, req.url, "Request to delete scenario failed.", error));
         });
     }
 }

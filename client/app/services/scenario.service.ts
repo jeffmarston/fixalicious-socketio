@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Http, Headers, Response } from '@angular/http';
 import { ApiService } from "./api.service";
 import { ITransaction } from "../types"
 
@@ -8,19 +9,33 @@ export class ScenarioService {
     private template: any;
     private isEnabled: boolean;
 
-    constructor(private apiService: ApiService) {
-        this.template = {
-
-        };
+    constructor(
+        private apiService: ApiService,
+        private http: Http) {
+        this.template = {};
     }
 
     public enable(isEnabled) {
         this.isEnabled = isEnabled;
     }
 
-    public setScenario(code: string) {
-        this.code = code;
+    public saveScenario(scenario: any) {
+        let url = "/scenario/" + encodeURI(scenario.label);
+        return this.http.post(url, scenario);
     }
+
+    public deleteScenario(scenario: any) {
+        let url = "/scenario/" + encodeURI(scenario.label);
+        return this.http.delete(url);
+    }
+
+    public getAll(){        
+        return this.http.get("/scenario")
+            .map(res => res.json());
+    }
+
+    // shouldn't need anything below
+
     public setTemplate(template) {
         this.template = template;
     }
