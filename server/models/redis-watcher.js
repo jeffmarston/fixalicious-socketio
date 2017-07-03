@@ -3,6 +3,7 @@
 let _ = require('lodash');
 let bluebird = require('bluebird');
 let redis = require('redis');
+let scenarioModel = require("./scenario-model");
 bluebird.promisifyAll(redis.RedisClient.prototype);
 
 
@@ -29,8 +30,13 @@ class Subscriber {
             pollers.push(newClient);
 
             let handleTransactions = (err, message) => {
-                console.log(newClient.name + " - received message on: " + sub_transactionKey);
+                //console.log(newClient.name + " - received message on: " + sub_transactionKey);
+                //notify consumers
                 global.io.emit("transaction", message);
+                
+                scenarioModel.trigger(sessionName, JSON.parse(message));
+
+                // go look for the next one
                 newClient.brpoplpush(sub_transactionKey, ui_transactionKey, 0, handleTransactions);
             };
             newClient.brpoplpush(sub_transactionKey, ui_transactionKey, 0, handleTransactions);

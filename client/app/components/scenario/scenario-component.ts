@@ -87,6 +87,7 @@ import * as _ from 'lodash';
 export class ScenarioComponent implements OnInit {
     @Output() onSelected = new EventEmitter<ISession>();
     @Input() collapsed: boolean;
+    @Input() session: any;
 
     private isEnabled: boolean;
     private selectedScenario;
@@ -119,15 +120,15 @@ if (source.message.body[6].Value === "IBM") {
         for (let propName in changes) {
             let changedProp = changes[propName];
 
-            if (propName == "collapsed" && changedProp.currentValue != undefined) {
-                //this.isCollapsed = changedProp.currentValue;
+            if (propName == "session" && changedProp.currentValue != undefined) {
+                this.session = changedProp.currentValue;
             }
         }
     }
 
     public enable(model, value) {
         this.isEnabled = !this.isEnabled;
-        this.scenarioService.enable(this.isEnabled);
+        this.scenarioService.enable(this.session, this.selectedScenario, this.isEnabled);
     }
 
     public saveScenario() {
@@ -139,7 +140,7 @@ if (source.message.body[6].Value === "IBM") {
 
     public addScenario() {
         this.isAdding = true;
-        this.selectedScenario = { label: "", code: "// You code goes here!" };
+        this.selectedScenario = { label: "", code: "// Your code goes here!" };
         this.scenarios.splice(0, 0, this.selectedScenario);
     }
 

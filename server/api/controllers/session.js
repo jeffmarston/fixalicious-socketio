@@ -31,9 +31,9 @@ class SessionController {
             setInterval: setInterval,
             setTimeout: setTimeout,
             console: cons,
-            send: (o)=> { 
+            send: (o) => {
                 console.log("This is what we do: " + JSON.stringify(o));
-                return TransactionModel.create(session, o); 
+                return TransactionModel.create(session, o);
             },
             incomingFix: fix,
             outgoingFix: ""
@@ -45,7 +45,22 @@ class SessionController {
         console.log("-- run this: " + code);
         script.runInNewContext(sandbox);
 
-       // console.log(util.inspect(sandbox));
+        // console.log(util.inspect(sandbox));
+    }
+
+    static enableScenarios(req, res) {
+        let name = req.swagger.params.name.value;
+        let changes = req.swagger.params.changes.value;
+        let msg = "Edit session: " + name;
+        msg += "\n - Enable  : " + changes.enable.join();
+        msg += "\n - Disable : " + changes.disable.join();
+        console.log(msg);
+
+        SessionModel.enableScenarios(name, changes.enable, changes.disable).then((result) => {
+            res.status(200).json(result);
+        }).catch((error) => {
+            res.status(500).json(new ErrorResource(500, req.url, "Request to get all sessions failed.", error));
+        });
     }
 
     static postSession(req, res) {
@@ -56,7 +71,7 @@ class SessionController {
             global.io.emit("transaction", transaction);
             ScenarioModel.getById(sessionName).then(code => {
 
-               SessionController.executeCode1(sessionName, code, transaction);
+                SessionController.executeCode1(sessionName, code, transaction);
 
 
 
@@ -96,5 +111,6 @@ class SessionController {
 module.exports = {
     getAllSessions: SessionController.getAllSessions,
     postSession: SessionController.postSession,
-    deleteSession: SessionController.deleteSession
+    deleteSession: SessionController.deleteSession,
+    enableScenarios: SessionController.enableScenarios
 }

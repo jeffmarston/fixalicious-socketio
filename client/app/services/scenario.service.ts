@@ -15,17 +15,28 @@ export class ScenarioService {
         this.template = {};
     }
 
-    public enable(isEnabled) {
+    public enable(session, scenario, isEnabled) {
         this.isEnabled = isEnabled;
+        let url = "/session/" + encodeURIComponent(session.session) + "/scenario";
+        let postBody = { enable: [], disable: [] };
+        if (isEnabled) {
+            postBody.enable.push(scenario.label);
+        } else {
+            postBody.disable.push(scenario.label);
+        }
+
+        return this.http.post(url, postBody).subscribe(o=>{
+            console.log(o);
+        });
     }
 
     public saveScenario(scenario: any) {
-        let url = "/scenario/" + encodeURI(scenario.label);
+        let url = "/scenario/" + encodeURIComponent(scenario.label);
         return this.http.post(url, scenario);
     }
 
     public deleteScenario(scenario: any) {
-        let url = "/scenario/" + encodeURI(scenario.label);
+        let url = "/scenario/" + encodeURIComponent(scenario.label);
         return this.http.delete(url);
     }
 
