@@ -1,0 +1,132 @@
+<div class="container" [style.width]="collapsed ? '80px' : '410px'" > 
+    <div class="action">
+        <button 
+            class="expander" 
+            title="Show the FIX messages to be sent"
+            (click)="toggleExpanded()">
+                <i class="fa"
+                    style="font-size:20px;"
+                    [ngClass]="collapsed ? 'fa-angle-double-left' : 'fa-angle-double-right'"></i>
+            </button>
+
+        <button 
+            [ngClass]="(!collapsed && selectedAction==action) ? 'selected' : '' "
+            [style.border-color]="(action.invalid) ? 'red' : 'gray' "                
+            [title]="(action.invalid) ? action.invalid : '' "
+            *ngFor="let action of customActions"
+            (click)="activateTemplate(action, true)"
+            class="invalid">
+            <input 
+                maxlength="10"
+                (blur)="doneEditingActionLabel($event, action)"
+                [readonly]="!action.isEditing"
+                [(ngModel)]="action.label"
+                [setFocus]="action.isEditing"
+                (dblclick)="action.isEditing=true"
+                [ngClass]="action.isEditing ? 'editable-input' : 'readonly-input' "
+            />
+        </button>          
+
+        <button class="add-action"
+            title="Add a new quick action button"
+            [hidden]="collapsed"
+            (click)="addAction()"
+            style="color:#777;">
+            <i class="fa fa-plus-circle"></i>
+        </button>
+
+    </div>
+    <div class="keyvalue-section" [hidden]="collapsed">
+        <div [hidden]="!selectedAction">
+            <div class="button-panel">
+                <button class="" 
+                    (click)="send()"
+                    title="Send message back to the client">
+                    <i class="fa fa-send-o"></i> Send
+                    </button>
+                    
+                <button class="" 
+                    (click)="deleteTemplate()"
+                    title="Delete this template">
+                    <i class="fa fa-trash-o"></i> Delete
+                    </button>
+                    
+                <button class="" 
+                    (click)="copyTemplate()"
+                    title="Create a copy of this template">
+                    <i class="fa fa-copy"></i> Copy
+                    </button>
+                    
+                <button class="" 
+                    (click)="configureTemplate()"
+                    [class.configure-input]="isConfiguring"
+                    title="Edit the keys and default values for each field">
+                    <i class="fa fa-pencil"></i> Edit
+                    </button>                            
+            </div>
+
+            <div *ngFor="let pair of selectedAction.pairs"
+                class="row"
+                [hidden]="isConfiguring" >
+                <div class="delete-column"></div>
+                <div class="key-column"><span>{{pair.key}}</span></div>
+                <div class="value-column">
+                    <input class="pair-value"
+                        [hidden]="isConfiguring"
+                        [(ngModel)]="pair.value"/>
+                </div>
+            </div>
+            <div *ngFor="let pair of selectedAction.pairs" 
+                [hidden]="!isConfiguring"
+                class="row">
+                <div class="delete-column">
+                    <button class="delete-pair"
+                        title="Delete"
+                        (click)="deletePair(pair)"
+                        style="color:#777;">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+                <div class="key-column">                        
+                    <input 
+                        class="configure-key"
+                        [style.margin-right.px]="(selectedAction.pairs[0].formula=='i') ? -(pair.level*15) : 0" 
+                        (blur)="doneEditingPair(pair)"
+                        [(ngModel)]="pair.key"/>
+                </div>
+                <div class="value-column editing">
+                    <input class="configure-input pair-value" 
+                        [style.margin-left.px]="pair.level*15" 
+                        [style.width.px]="158-(pair.level*15)" 
+                        [hidden]="pair.isGroup"                          
+                        [(ngModel)]="pair.formula"/>
+                    <span [style.margin-left.px]="((pair.level || 0)+1)*15" 
+                        style="font-style:italic; color: #777;"
+                        [hidden]="!pair.isGroup">group</span>
+
+                    <button class="repeating-group"
+                        title="Make a repeating group"
+                        [hidden]="pair.isGroup"              
+                        (click)="makeRepeating(pair)">
+                        <i class="fa fa-level-down fa-rotate-90"></i>
+                    </button>
+                    
+                    <button class="repeating-group repeating-group-add"
+                        title="Add item to repeating group"
+                        [hidden]="!pair.isGroup"              
+                        (click)="makeRepeating(pair)">
+                        <i class="fa fa-plus-circle"></i>
+                    </button>
+                </div>
+            </div>
+                
+            <div>
+            <button class="add-action"
+                title="Add a new quick action button"
+                [hidden]="!isConfiguring"
+                (click)="addPair()">
+                <i class="fa fa-plus-circle"></i>
+            </button>
+        </div>
+    </div>
+</div>
