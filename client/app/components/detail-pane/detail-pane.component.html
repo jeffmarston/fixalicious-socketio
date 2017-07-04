@@ -71,9 +71,14 @@
                 <div class="delete-column"></div>
                 <div class="key-column"><span>{{pair.key}}</span></div>
                 <div class="value-column">
-                    <input class="pair-value"
-                        [hidden]="isConfiguring"
-                        [(ngModel)]="pair.value"/>
+                    <input class="pair-value" 
+                        [style.margin-left.px]="pair.level*15" 
+                        [style.width.px]="158-(pair.level*15)" 
+                        [hidden]="pair.isGroup"                          
+                        [(ngModel)]="pair.formula"/>
+                    <span [style.margin-left.px]="((pair.level || 0)+1)*15" 
+                        style="font-style:italic; color: #777;"
+                        [hidden]="!pair.isGroup">group</span>
                 </div>
             </div>
             <div *ngFor="let pair of selectedAction.pairs" 
@@ -108,7 +113,7 @@
                         title="Make a repeating group"
                         [hidden]="pair.isGroup"              
                         (click)="makeRepeating(pair)">
-                        <i class="fa fa-level-down fa-rotate-90"></i>
+                        <i class="fa fa-indent"></i>
                     </button>
                     
                     <button class="repeating-group repeating-group-add"

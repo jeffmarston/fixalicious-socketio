@@ -161,17 +161,9 @@ export class DetailPane implements OnInit {
 
     private configureTemplate() {
         if (this.isConfiguring) {
-            _.pullAt(this.selectedAction.pairs, this.selectedAction.pairs.length - 1);
-            this.apiService.createTemplate(this.selectedAction).subscribe(o => {
+           this.apiService.createTemplate(this.selectedAction).subscribe(o => {
                 console.log("Template saved");
             });
-        } else {
-            // this.selectedAction.pairs.push({
-            //     key: "",
-            //     formula: "",
-            //     value: "",
-            //     isNewItem: true
-            // });
         }
         this.isConfiguring = !this.isConfiguring;
         this.displayFixMessage();
@@ -185,18 +177,6 @@ export class DetailPane implements OnInit {
     }
 
     private doneEditingPair(pair) {
-        let lastPair = this.selectedAction.pairs[this.selectedAction.pairs.length - 1];
-        if (lastPair.key.trim() !== "") {
-            // pair.isNewItem = false;
-            // this.selectedAction.pairs.push({
-            //     key: "",
-            //     formula: "",
-            //     value: "",
-            //     isNewItem: true
-            // });
-        } else {
-            _.pull(this.selectedAction.pairs, pair);
-        }
     }
 
     private addPair() {
@@ -210,6 +190,7 @@ export class DetailPane implements OnInit {
 
     private deletePair(pair) {
         _.pull(this.selectedAction.pairs, pair);
+        
     }
 
     private makeRepeating(pair) {
