@@ -2,67 +2,9 @@
     overflow: auto;
     height: 100%;
     transition: width .25s ease;
-    width: 25%;
-    float: left;
     display: flex;
     flex-direction: row;
-}
-
-.button-section {
-    display: flex;
-    flex-direction: column;
-    padding-left: 4px;
-}
-
-button.selected {
-    border-right: 0;
-    margin-left: 8px;
-    margin-right: -1px;
-    background: #eee;
-    z-index: 100;
-}
-
-button.repeating-group {
-    color: #777;
-    margin-left: -28px;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: transparent;
-    border: none;
-}
-
-.keyvalue-section {
-    overflow: auto;
-    background: #eee;
-    min-width: 300px;
-    border: 1px solid gray;
-}
-
-table.keyvalue-table {
-    font-size: 12px;
-    border-collapse: collapse;
-}
-
-td {
-    padding: 2px 4px;
-    width: 50%;
-}
-td.editing {
-    display: table-row;
-}
-td.key {
-    white-space: nowrap;
-    text-align: right;
-}
-td.delete-column {
-    width: 20px;
-}
-
-td>input {
-    border: 1px solid gray;
-    padding: 3px;
-    margin-right: 2px;
+    font-size: 13px;
 }
 
 button { 
@@ -72,6 +14,99 @@ button {
     width: 69px;
     border: 1px gray solid; 
 }
+button:hover {
+    background: #eee;
+    cursor: pointer;
+}
+button:active {
+    background: #b0e0e6;
+}
+
+ /* left side quick action buttons */
+.action {
+    display: flex;
+    flex-direction: column;
+    padding-left: 4px;
+}
+
+.action>button.selected {
+    border-right: 0;
+    margin-left: 8px;
+    margin-right: -1px;
+    background: #eee;
+    z-index: 100;
+}
+
+.action>.editable-input {
+    background: #fff;
+}
+.action>.editable-input.hidden {
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+.action>.editable-input.visible {
+    width: 100%;
+    height: 30px;
+}
+.readonly-input {
+    background: transparent;
+    cursor: pointer;
+}
+
+ /*templates*/
+.keyvalue-section {
+    overflow: auto;
+    background: #eee;
+    min-width: 324px;
+    border: 1px solid gray;
+}
+
+.button-panel {
+    height: 38px;
+}
+
+.button-panel>button {
+    float: right;
+}
+
+div.key-column {
+    width: 100px;
+    white-space: nowrap;
+    text-align: right;
+}
+div.row>div.value-column{
+    width: 160px;
+    display: inline-flex;
+    padding: 1px;
+}
+div.delete-column {
+    width: 30px;
+}
+div.row>div{
+    display: inline-block;
+}
+
+button.repeating-group {
+    color: #777;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+}
+
+button.repeating-group-add {
+    position: absolute;
+    right: 20px;    
+    margin-top: -3px;
+}
+
+input.pair-value {
+    border: 1px solid gray;
+    padding: 3px;
+    margin-right: 2px;
+}
 
 .configure-input {
     background: #bfb;
@@ -80,7 +115,7 @@ button {
 button.configure-input:hover {
     background: #bfb;
 }
-select.configure-input {
+/*select.configure-input {
     outline: none;
     background: transparent;
     border: none;
@@ -89,32 +124,13 @@ select.configure-input {
 }
 select.configure-input:hover {
     background: #bfb;
-}
+}*/
 
-td>input.configure-key {
+input.configure-key {
     border: none;
     background: transparent;
     text-align: right;
-    float: right;
     width: 100%;
-    font-size: 12px;
-}
-
-.template-top{
-    float: right;
-}
-
-.invalid {
-    border: 1px solid red;
-}
-
-button:hover {
-    background: #eee;
-    cursor: pointer;
-}
-
-button:active {
-    background: #b0e0e6;
 }
 
 button.expander {
@@ -122,17 +138,13 @@ button.expander {
     background: transparent;
 }
 
-button.send {
-    float: right;
-}
 
 button.add-action {
     background: transparent;    
     border: none;
-    width: 26px;
-    border-radius: 50%;
     margin-left: auto;
     margin-right: auto;
+    width: 100%
 }
 button.add-action:hover {   
     background: #ddd;    
@@ -155,32 +167,4 @@ button>input {
     width: 100%;
     border: none;
     text-align:center
-}
-
-button.invalid {
-    border-color: red;
-}
-
-.editable-input {
-    background: #fff;
-}
-
-.editable-input.hidden {
-    width: 0;
-    height: 0;
-    opacity: 0;
-}
-
-.editable-input.visible {
-    width: 100%;
-    height: 30px;
-}
-
-.readonly-input {
-    background: transparent;
-    cursor: pointer;
-}
-
-.pull-right {
-    float: right;
 }

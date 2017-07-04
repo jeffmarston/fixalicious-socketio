@@ -166,12 +166,12 @@ export class DetailPane implements OnInit {
                 console.log("Template saved");
             });
         } else {
-            this.selectedAction.pairs.push({
-                key: "",
-                formula: "",
-                value: "",
-                isNewItem: true
-            });
+            // this.selectedAction.pairs.push({
+            //     key: "",
+            //     formula: "",
+            //     value: "",
+            //     isNewItem: true
+            // });
         }
         this.isConfiguring = !this.isConfiguring;
         this.displayFixMessage();
@@ -187,16 +187,25 @@ export class DetailPane implements OnInit {
     private doneEditingPair(pair) {
         let lastPair = this.selectedAction.pairs[this.selectedAction.pairs.length - 1];
         if (lastPair.key.trim() !== "") {
-            pair.isNewItem = false;
-            this.selectedAction.pairs.push({
-                key: "",
-                formula: "",
-                value: "",
-                isNewItem: true
-            });
+            // pair.isNewItem = false;
+            // this.selectedAction.pairs.push({
+            //     key: "",
+            //     formula: "",
+            //     value: "",
+            //     isNewItem: true
+            // });
         } else {
             _.pull(this.selectedAction.pairs, pair);
         }
+    }
+
+    private addPair() {
+        this.selectedAction.pairs.push({
+            key: "",
+            formula: "",
+            value: "",
+            isNewItem: true
+        });
     }
 
     private deletePair(pair) {
@@ -206,7 +215,7 @@ export class DetailPane implements OnInit {
     private makeRepeating(pair) {
         let idx = this.selectedAction.pairs.indexOf(pair);
         pair.isGroup = true;
-        this.selectedAction.pairs.splice(idx+1, 0, {
+        this.selectedAction.pairs.splice(idx + 1, 0, {
             key: "",
             formula: "",
             level: (pair.level || 0) + 1
