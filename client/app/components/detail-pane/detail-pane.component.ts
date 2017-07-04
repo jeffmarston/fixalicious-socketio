@@ -10,114 +10,7 @@ import * as _ from "lodash";
 
 @Component({
     selector: 'detail-pane',
-    template: `
-    <div class="container" [style.width]="collapsed ? '80px' : '400px'" > 
-        <div class="button-section">
-            <button 
-                class="expander" 
-                title="Show the FIX messages to be sent"
-                (click)="toggleExpanded()">
-                    <i class="fa"
-                        style="font-size:20px;"
-                        [ngClass]="collapsed ? 'fa-angle-double-left' : 'fa-angle-double-right'"></i>
-                </button>
-
-            <button 
-                [ngClass]="(!collapsed && selectedAction==action) ? 'selected' : '' "
-                [style.border-color]="(action.invalid) ? 'red' : 'gray' "                
-                [title]="(action.invalid) ? action.invalid : '' "
-                *ngFor="let action of customActions"
-                (click)="activateTemplate(action, true)"
-                class="invalid">
-                <input 
-                    maxlength="10"
-                    (blur)="doneEditingActionLabel($event, action)"
-                    [readonly]="!action.isEditing"
-                    [(ngModel)]="action.label"
-                    [setFocus]="action.isEditing"
-                    (dblclick)="action.isEditing=true"
-                    [ngClass]="action.isEditing ? 'editable-input' : 'readonly-input' "
-                />
-            </button>          
-
-            <button class="add-action"
-                title="Add a new quick action button"
-                [hidden]="collapsed"
-                (click)="addAction()"
-                style="color:#777;">
-                <i class="fa fa-plus-circle"></i>
-            </button>
-
-        </div>
-        <div class="keyvalue-section" [hidden]="collapsed">
-            <table class="keyvalue-table">
-                <tr>
-                    <td colspan=3
-                        [hidden]="!selectedAction">
-                        
-                        <button class="template-top" 
-                            (click)="send()"
-                            title="Send message back to the client">
-                            <i class="fa fa-send-o"></i> Send
-                            </button>
-                            
-                        <button class="template-top" 
-                            (click)="deleteTemplate()"
-                            title="Delete this template">
-                            <i class="fa fa-trash-o"></i> Delete
-                            </button>
-                            
-                        <button class="template-top" 
-                            (click)="copyTemplate()"
-                            title="Create a copy of this template">
-                            <i class="fa fa-copy"></i> Copy
-                            </button>
-                            
-                        <button class="template-top" 
-                            (click)="configureTemplate()"
-                            [class.configure-input]="isConfiguring"
-                            title="Edit the keys and default values for each field">
-                            <i class="fa fa-pencil"></i> Edit
-                            </button>                            
-                    </td>
-                </tr>
-                <tr *ngFor="let pair of selectedAction.pairs"
-                    [hidden]="isConfiguring" >
-                    <td class="key"><span>{{pair.key}}</span></td>
-                    <td class="value">
-                        <input 
-                            [hidden]="isConfiguring"
-                            [(ngModel)]="pair.value"/>
-                    </td>
-                </tr>
-                <tr *ngFor="let pair of selectedAction.pairs" 
-                    [hidden]="!isConfiguring">
-                    <td class="delete-column">
-                        <button class="delete-pair"
-                            title="Delete"
-                            (click)="deletePair(pair)"
-                            style="color:#777;">
-                            <i class="fa fa-times"></i>
-                        </button>
-                    </td>
-                    <td class="key">                        
-                        <input 
-                            class="configure-key"
-                            (blur)="doneEditingPair(pair)"
-                            [(ngModel)]="pair.key"/>
-
-                    <!--  <select class="configure-input" [(ngModel)]="pair.key">
-                            <option *ngFor="let str of fixFields" [value]="str">{{str}}</option>
-                        </select> -->
-                    <td class="value">
-                        <input class="configure-input"                            
-                            [(ngModel)]="pair.formula"/>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
-    `,
+    templateUrl: "app/components/detail-pane/detail-pane.component.html",
     styleUrls: ["app/components/detail-pane/detail-pane.component.css"],
     providers: [ApiService]
 })
@@ -306,8 +199,18 @@ export class DetailPane implements OnInit {
         }
     }
 
-    private deletePair(pair){
+    private deletePair(pair) {
         _.pull(this.selectedAction.pairs, pair);
+    }
+
+    private makeRepeating(pair) {
+        let idx = this.selectedAction.pairs.indexOf(pair);
+        pair.isGroup = true;
+        this.selectedAction.pairs.splice(idx+1, 0, {
+            key: "",
+            formula: "",
+            level: (pair.level || 0) + 1
+        });
     }
 
     private uniquify(allNames: string[], origName: string): string {

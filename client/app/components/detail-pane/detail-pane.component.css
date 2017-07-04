@@ -22,10 +22,14 @@ button.selected {
     z-index: 100;
 }
 
-td>input {
-    border: 1px solid gray;
-    padding: 3px;
-    margin-right: 2px;
+button.repeating-group {
+    color: #777;
+    margin-left: -28px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
 }
 
 .keyvalue-section {
@@ -44,10 +48,21 @@ td {
     padding: 2px 4px;
     width: 50%;
 }
-
+td.editing {
+    display: table-row;
+}
 td.key {
     white-space: nowrap;
     text-align: right;
+}
+td.delete-column {
+    width: 20px;
+}
+
+td>input {
+    border: 1px solid gray;
+    padding: 3px;
+    margin-right: 2px;
 }
 
 button { 
@@ -80,12 +95,9 @@ td>input.configure-key {
     border: none;
     background: transparent;
     text-align: right;
+    float: right;
     width: 100%;
     font-size: 12px;
-}
-
-.delete-column{
-    width: 0;
 }
 
 .template-top{
