@@ -179,7 +179,7 @@ export class DetailPaneComponent implements OnInit {
     private doneEditingPair(pair) {
     }
 
-    private addPair(pair, where) {
+    private insertPair(pair, where) {
         let children = [{
             key: "jeff",
             formula: "winslow",
@@ -227,7 +227,7 @@ export class DetailPaneComponent implements OnInit {
 
     }
 
-    private makeRepeating(pair) {
+    private insertGroup(pair) {
         let idx = this.selectedAction.pairs.indexOf(pair);
         pair.isGroup = true;
         this.selectedAction.pairs.splice(idx + 1, 0, {

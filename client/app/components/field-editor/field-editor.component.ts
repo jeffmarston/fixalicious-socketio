@@ -3,7 +3,7 @@ import { CommonModule } from "@angular/common";
 import { Http, Response } from "@angular/http";
 import { ApiService } from "../../services/api.service"
 import { FixParserService } from "../../services/fix-parser.service"
-import { ISession, IFixMessage, ITransaction } from "../../types.d";
+import { ISession, IFixMessage, ITransaction, IPair } from "../../types.d";
 import { SetFocusDirective } from "../../directives/set-focus";
 import * as io from 'socket.io-client';
 import * as _ from "lodash";
@@ -16,7 +16,9 @@ import * as _ from "lodash";
 })
 export class FieldEditorComponent implements OnInit {
     @Input() pair: any;
-    @Input() level: number;
+    @Output() onInsert = new EventEmitter<any>();
+    @Output() onInsertGroup = new EventEmitter<any>();
+    @Output() onDelete = new EventEmitter<any>();
 
     constructor(
         private apiService: ApiService,
@@ -39,4 +41,13 @@ export class FieldEditorComponent implements OnInit {
         }
     }
 
+    private insert(pair) {
+        this.onInsert.emit(pair);
+    }
+    private insertGroup(pair) {
+        this.onInsertGroup.emit(pair);
+    }
+    private delete(pair) {
+        this.onDelete.emit(pair);
+    }
 }

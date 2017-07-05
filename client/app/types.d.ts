@@ -28,6 +28,12 @@ export interface ISession {
     selected?: boolean;
 }
 
+export interface IPair{
+    key: string;
+    value: string | IPair[];
+    formula: string;
+}
+
 export interface IFixParserService {
     parseFix(fix: string): any;
 }
