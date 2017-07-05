@@ -68,7 +68,10 @@
             <div *ngFor="let pair of selectedAction.pairs"
                 class="row"
                 [hidden]="isConfiguring" >
-                <div class="key-column"><span>{{pair.key}}</span></div>
+                <div class="key-column"
+                    [style.margin-right.px]="(selectedAction.pairs[0].formula=='i') ? -(pair.level*15) : 0" >
+                    <span>{{pair.key}}</span>
+                </div>
                 <div class="value-column">
                     <input class="pair-value" 
                         [style.margin-left.px]="pair.level*15" 

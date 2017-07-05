@@ -85,9 +85,6 @@ div.menu-column {
 div.row>div{
     display: inline-block;
 }
-div.row {
-    min-height: 30px;
-}
 
 button.repeating-group {
     color: #777;
