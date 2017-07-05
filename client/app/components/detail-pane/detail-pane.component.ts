@@ -161,7 +161,7 @@ export class DetailPane implements OnInit {
 
     private configureTemplate() {
         if (this.isConfiguring) {
-           this.apiService.createTemplate(this.selectedAction).subscribe(o => {
+            this.apiService.createTemplate(this.selectedAction).subscribe(o => {
                 console.log("Template saved");
             });
         }
@@ -179,18 +179,25 @@ export class DetailPane implements OnInit {
     private doneEditingPair(pair) {
     }
 
-    private addPair() {
-        this.selectedAction.pairs.push({
+    private addPair(pair, where) {
+        let newPair = {
             key: "",
             formula: "",
             value: "",
             isNewItem: true
-        });
+        };
+
+        if (where === "above") {
+            let idx = this.selectedAction.pairs.indexOf(pair);
+            this.selectedAction.pairs.splice(idx, 0, newPair);
+        } else {
+            this.selectedAction.pairs.push(newPair);
+        }
     }
 
     private deletePair(pair) {
         _.pull(this.selectedAction.pairs, pair);
-        
+
     }
 
     private makeRepeating(pair) {

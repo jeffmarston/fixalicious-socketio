@@ -68,7 +68,6 @@
             <div *ngFor="let pair of selectedAction.pairs"
                 class="row"
                 [hidden]="isConfiguring" >
-                <div class="delete-column"></div>
                 <div class="key-column"><span>{{pair.key}}</span></div>
                 <div class="value-column">
                     <input class="pair-value" 
@@ -84,14 +83,6 @@
             <div *ngFor="let pair of selectedAction.pairs" 
                 [hidden]="!isConfiguring"
                 class="row">
-                <div class="delete-column">
-                    <button class="delete-pair"
-                        title="Delete"
-                        (click)="deletePair(pair)"
-                        style="color:#777;">
-                        <i class="fa fa-times"></i>
-                    </button>
-                </div>
                 <div class="key-column">                        
                     <input 
                         class="configure-key"
@@ -107,32 +98,17 @@
                         [(ngModel)]="pair.formula"/>
                     <span [style.margin-left.px]="((pair.level || 0)+1)*15" 
                         style="font-style:italic; color: #777;"
-                        [hidden]="!pair.isGroup">group</span>
-
-                    <!--<button class="repeating-group"
-                        title="Make a repeating group"
-                        [hidden]="pair.isGroup"              
-                        (click)="makeRepeating(pair)">
-                        <i class="fa fa-ellipsis-h fa-rotate-90"></i>
-                    </button>-->
-                    
-                    <button class="repeating-group repeating-group-add"
-                        title="Add item to repeating group"
-                        [hidden]="!pair.isGroup"              
-                        (click)="makeRepeating(pair)">
-                        <i class="fa fa-plus-circle"></i>
-                    </button>
-                    
+                        [hidden]="!pair.isGroup">group</span>                    
                 </div>
                 <div class="menu-column">
+                    <!--<i class="fa fa-ellipsis-h"></i>-->
 
                     <nav>
                         <li><i class="fa fa-ellipsis-h"></i>
                             <nav>
-                                <li><a>Delete</a></li>
-                                <li><a>Repeating Group</a></li>
-                                <li>Move Up</li>
-                                <li>Move Down</li>
+                                <li><a (click)="deletePair(pair)">Delete</a></li>
+                                <li><a (click)="makeRepeating(pair)">Repeating Group</a></li>
+                                <li><a (click)="addPair(pair, 'above')">Insert Above</a></li>
                             </nav>
                         </li>
                     </nav>

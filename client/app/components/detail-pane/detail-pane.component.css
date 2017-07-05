@@ -71,20 +71,16 @@ button:active {
 }
 
 div.key-column {
-    width: 30%;
+    width: 40%;
     white-space: nowrap;
     text-align: right;
 }
 div.row>div.value-column{
     width: 50%;
-    display: inline-flex;
     padding: 1px;
 }
-div.delete-column {
-    width: 10%;
-}
 div.menu-column {
-    width: 10%;
+    x-width: 10%;
 }
 div.row>div{
     display: inline-block;
@@ -184,28 +180,21 @@ button>input {
 nav {
     display: block;
     list-style-type: none;
-    height: 40px;
-    font: 400 14px/40px sans-serif;
-}
-
-nav li {
-    display: block;
-    float: right;
-    position: relative;
 }
 
 nav li a {
     display: block;
-    color: white;
+    color: black;
     text-decoration: none;
-    padding: 13px 10px;
+    padding: 6px 10px;
     line-height: 14px;
-    background-color: black;
+    background-color: white;
     transition: background-color 0.2s linear;
+    cursor: pointer;
 }
 
 nav li a:hover {
-    background-color: green;
+    background-color: #b0e0e6;
     transition: none;
 }
 
@@ -215,13 +204,22 @@ nav nav {
     opacity: 0;
     transition: all 0.25s linear;
     height: 0;
-    margin-top: -10px;
-    right: 90px;
+    right: 10px;
 }
 
 nav nav li {
     float: none;
-    right: 90px;
+    margin-right: 10px;
+
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+}
+
+nav nav li:first-child {
+    border-top: 1px solid gray;
+}
+nav nav li:last-child {
+    border-bottom: 1px solid gray;
 }
 
 nav li:hover nav {
