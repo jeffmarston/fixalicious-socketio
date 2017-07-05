@@ -109,12 +109,12 @@
                         style="font-style:italic; color: #777;"
                         [hidden]="!pair.isGroup">group</span>
 
-                    <button class="repeating-group"
+                    <!--<button class="repeating-group"
                         title="Make a repeating group"
                         [hidden]="pair.isGroup"              
                         (click)="makeRepeating(pair)">
-                        <i class="fa fa-indent"></i>
-                    </button>
+                        <i class="fa fa-ellipsis-h fa-rotate-90"></i>
+                    </button>-->
                     
                     <button class="repeating-group repeating-group-add"
                         title="Add item to repeating group"
@@ -122,6 +122,20 @@
                         (click)="makeRepeating(pair)">
                         <i class="fa fa-plus-circle"></i>
                     </button>
+                    
+                </div>
+                <div class="menu-column">
+
+                    <nav>
+                        <li><i class="fa fa-ellipsis-h"></i>
+                            <nav>
+                                <li><a>Delete</a></li>
+                                <li><a>Repeating Group</a></li>
+                                <li>Move Up</li>
+                                <li>Move Down</li>
+                            </nav>
+                        </li>
+                    </nav>
                 </div>
             </div>
                 
