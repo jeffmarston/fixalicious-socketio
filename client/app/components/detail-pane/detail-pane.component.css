@@ -70,73 +70,14 @@ button:active {
     float: right;
 }
 
-div.key-column {
-    width: 40%;
-    white-space: nowrap;
-    text-align: right;
-}
-div.row>div.value-column{
-    width: 50%;
-    padding: 1px;
-}
-div.menu-column {
-    x-width: 10%;
-}
-div.row>div{
-    display: inline-block;
-}
-
-button.repeating-group {
-    color: #777;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: transparent;
-    border: none;
-}
-
-button.repeating-group-add {
-    position: absolute;
-    right: 20px;    
-    margin-top: -3px;
-}
-
-input.pair-value {
-    border: 1px solid gray;
-    padding: 3px;
-    margin-right: 2px;
-}
-
-.configure-input {
-    background: #bfb;
-    border: 1px solid gray;
-}
-button.configure-input:hover {
-    background: #bfb;
-}
-/*select.configure-input {
-    outline: none;
-    background: transparent;
-    border: none;
-    direction: rtl;
-    width: 100%;
-}
-select.configure-input:hover {
-    background: #bfb;
-}*/
-
-input.configure-key {
-    border: none;
-    background: transparent;
-    text-align: right;
-    width: 100%;
+div.row {
+    display: flex;
 }
 
 button.expander {
     border: none;
     background: transparent;
 }
-
 
 button.add-action {
     background: transparent;    
@@ -169,10 +110,6 @@ button>input {
 }
 
  /*popup menu */
-
- body {
-    margin: 0;
-}
 
 nav {
     display: block;

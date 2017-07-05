@@ -68,44 +68,10 @@
             <div *ngFor="let pair of selectedAction.pairs"
                 class="row"
                 [hidden]="isConfiguring" >
-                <div class="key-column"
-                    [style.margin-right.px]="(selectedAction.pairs[0].formula=='i') ? -(pair.level*15) : 0" >
-                    <span>{{pair.key}}</span>
-                </div>
-                <div class="value-column">
-                    <input class="pair-value" 
-                        [style.margin-left.px]="pair.level*15" 
-                        [style.width.px]="158-(pair.level*15)" 
-                        [hidden]="pair.isGroup"                          
-                        [(ngModel)]="pair.formula"/>
-                    <span [style.margin-left.px]="((pair.level || 0)+1)*15" 
-                        style="font-style:italic; color: #777;"
-                        [hidden]="!pair.isGroup">group</span>
-                </div>
-            </div>
-            <div *ngFor="let pair of selectedAction.pairs" 
-                [hidden]="!isConfiguring"
-                class="row">
-                <div class="key-column">                        
-                    <input 
-                        class="configure-key"
-                        [style.margin-right.px]="(selectedAction.pairs[0].formula=='i') ? -(pair.level*15) : 0" 
-                        (blur)="doneEditingPair(pair)"
-                        [(ngModel)]="pair.key"/>
-                </div>
-                <div class="value-column editing">
-                    <input class="configure-input pair-value" 
-                        [style.margin-left.px]="pair.level*15" 
-                        [style.width.px]="158-(pair.level*15)" 
-                        [hidden]="pair.isGroup"                          
-                        [(ngModel)]="pair.formula"/>
-                    <span [style.margin-left.px]="((pair.level || 0)+1)*15" 
-                        style="font-style:italic; color: #777;"
-                        [hidden]="!pair.isGroup">group</span>                    
-                </div>
-                <div class="menu-column">
-                    <!--<i class="fa fa-ellipsis-h"></i>-->
+                <field-editor [pair]="pair"></field-editor>
 
+                <div class="menu-column" style="display:block;">
+                    <!--<i class="fa fa-ellipsis-h"></i>-->
                     <nav>
                         <li><i class="fa fa-ellipsis-h"></i>
                             <nav>

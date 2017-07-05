@@ -14,7 +14,7 @@ import * as _ from "lodash";
     styleUrls: ["app/components/detail-pane/detail-pane.component.css"],
     providers: [ApiService]
 })
-export class DetailPane implements OnInit {
+export class DetailPaneComponent implements OnInit {
     @Input() detail: ITransaction;
     @Input() collapsed: boolean = true;
     @Input() session: ISession;
@@ -180,11 +180,38 @@ export class DetailPane implements OnInit {
     }
 
     private addPair(pair, where) {
+        let children = [{
+            key: "jeff",
+            formula: "winslow",
+            level: "1",
+            value: "1",
+            children: [{
+                key: "grant",
+                formula: "winslow",
+                level: "2",
+                value: "1"
+            },
+            {
+                key: "troy",
+                formula: "rolando",
+                level: "2",
+                value: "2"
+            }]
+        },
+        {
+            key: "derek",
+            formula: "james",
+            level: "1",
+            value: "2"
+        }];
+
+
         let newPair = {
             key: "",
             formula: "",
             value: "",
-            isNewItem: true
+            isNewItem: true,
+            children: children
         };
 
         if (where === "above") {
