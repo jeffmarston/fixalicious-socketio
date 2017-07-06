@@ -2,52 +2,9 @@
     overflow: auto;
     height: 100%;
     transition: width .25s ease;
-    width: 25%;
-    float: left;
     display: flex;
     flex-direction: row;
-}
-
-.button-section {
-    display: flex;
-    flex-direction: column;
-    padding-left: 4px;
-}
-
-button.selected {
-    border-right: 0;
-    margin-left: 8px;
-    margin-right: -1px;
-    background: #eee;
-    z-index: 100;
-}
-
-td>input {
-    border: 1px solid gray;
-    padding: 3px;
-    margin-right: 2px;
-}
-
-.keyvalue-section {
-    overflow: auto;
-    background: #eee;
-    min-width: 300px;
-    border: 1px solid gray;
-}
-
-table.keyvalue-table {
-    font-size: 12px;
-    border-collapse: collapse;
-}
-
-td {
-    padding: 2px 4px;
-    width: 50%;
-}
-
-td.key {
-    white-space: nowrap;
-    text-align: right;
+    font-size: 13px;
 }
 
 button { 
@@ -57,52 +14,64 @@ button {
     width: 69px;
     border: 1px gray solid; 
 }
-
-.configure-input {
-    background: #bfb;
-    border: 1px solid gray;
-}
-button.configure-input:hover {
-    background: #bfb;
-}
-select.configure-input {
-    outline: none;
-    background: transparent;
-    border: none;
-    direction: rtl;
-    width: 100%;
-}
-select.configure-input:hover {
-    background: #bfb;
-}
-
-td>input.configure-key {
-    border: none;
-    background: transparent;
-    text-align: right;
-    width: 100%;
-    font-size: 12px;
-}
-
-.delete-column{
-    width: 0;
-}
-
-.template-top{
-    float: right;
-}
-
-.invalid {
-    border: 1px solid red;
-}
-
 button:hover {
     background: #eee;
     cursor: pointer;
 }
-
 button:active {
     background: #b0e0e6;
+}
+
+ /* left side quick action buttons */
+.action {
+    display: flex;
+    flex-direction: column;
+    padding-left: 4px;
+}
+
+.action>button.selected {
+    border-right: 0;
+    margin-left: 8px;
+    margin-right: -1px;
+    background: #eee;
+    z-index: 100;
+}
+
+.action>.editable-input {
+    background: #fff;
+}
+.action>.editable-input.hidden {
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+.action>.editable-input.visible {
+    width: 100%;
+    height: 30px;
+}
+.readonly-input {
+    background: transparent;
+    cursor: pointer;
+}
+
+ /*templates*/
+.keyvalue-section {
+    overflow: auto;
+    background: #eee;
+    min-width: 324px;
+    border: 1px solid gray;
+}
+
+.button-panel {
+    height: 38px;
+}
+
+.button-panel>button {
+    float: right;
+}
+
+div.row {
+    display: flex;
 }
 
 button.expander {
@@ -110,17 +79,12 @@ button.expander {
     background: transparent;
 }
 
-button.send {
-    float: right;
-}
-
 button.add-action {
     background: transparent;    
     border: none;
-    width: 26px;
-    border-radius: 50%;
     margin-left: auto;
     margin-right: auto;
+    width: 100%
 }
 button.add-action:hover {   
     background: #ddd;    
@@ -145,30 +109,55 @@ button>input {
     text-align:center
 }
 
-button.invalid {
-    border-color: red;
+ /*popup menu */
+
+nav {
+    display: block;
+    list-style-type: none;
 }
 
-.editable-input {
-    background: #fff;
-}
-
-.editable-input.hidden {
-    width: 0;
-    height: 0;
-    opacity: 0;
-}
-
-.editable-input.visible {
-    width: 100%;
-    height: 30px;
-}
-
-.readonly-input {
-    background: transparent;
+nav li a {
+    display: block;
+    color: black;
+    text-decoration: none;
+    padding: 6px 10px;
+    line-height: 14px;
+    background-color: white;
+    transition: background-color 0.2s linear;
     cursor: pointer;
 }
 
-.pull-right {
-    float: right;
+nav li a:hover {
+    background-color: #b0e0e6;
+    transition: none;
+}
+
+nav nav {
+    visibility: hidden;
+    position: absolute;
+    opacity: 0;
+    transition: all 0.25s linear;
+    height: 0;
+    right: 10px;
+}
+
+nav nav li {
+    float: none;
+    margin-right: 10px;
+
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+}
+
+nav nav li:first-child {
+    border-top: 1px solid gray;
+}
+nav nav li:last-child {
+    border-bottom: 1px solid gray;
+}
+
+nav li:hover nav {
+    margin-top: 0;
+    visibility: visible;
+    opacity: 1;
 }

@@ -1,0 +1,122 @@
+.container {
+    border-left: 3px solid transparent;
+}
+.first-level {
+    display: flex;
+}
+
+div.key-column {
+    width: 40%;
+    white-space: nowrap;
+    text-align: right;
+    padding: 4px;
+}
+div.value-column{
+    width: 50%;
+    padding: 1px;
+}
+div.row>div{
+    display: inline-block;
+}
+
+button.repeating-group {
+    color: #777;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+}
+
+button.repeating-group-add {
+    position: absolute;
+    right: 20px;    
+    margin-top: -3px;
+}
+
+input.pair-value {
+    border: 1px solid gray;
+    padding: 3px;
+    margin-right: 2px;
+}
+
+.configure-input {
+    background: #bfb;
+    border: 1px solid gray;
+}
+button.configure-input:hover {
+    background: #bfb;
+}
+
+input.configure-key {
+    border: none;
+    background: transparent;
+    text-align: right;
+    width: 100%;
+}
+
+button.delete-pair {
+    background: transparent;    
+    border: none;
+    border-radius: 50%;
+    margin: 0;
+    width: 24px;
+    margin-left: auto;
+    margin-right: auto;
+}
+button.delete-pair:hover {   
+    background: #ddd;    
+}
+
+/* ==================  popup menu ======================== */
+
+nav {
+    display: block;
+    list-style-type: none;
+}
+
+nav li a {
+    display: block;
+    color: black;
+    text-decoration: none;
+    padding: 6px 10px;
+    line-height: 14px;
+    background-color: white;
+    transition: background-color 0.2s linear;
+    cursor: pointer;
+}
+
+nav li a:hover {
+    background-color: #b0e0e6;
+    transition: none;
+}
+
+nav nav {
+    visibility: hidden;
+    position: absolute;
+    opacity: 0;
+    transition: all 0.25s linear;
+    height: 0;
+    right: 10px;
+}
+
+nav nav li {
+    float: none;
+    margin-right: 10px;
+
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+}
+
+nav nav li:first-child {
+    border-top: 1px solid gray;
+}
+nav nav li:last-child {
+    border-bottom: 1px solid gray;
+}
+
+nav li:hover nav {
+    margin-top: 0;
+    visibility: visible;
+    opacity: 1;
+}

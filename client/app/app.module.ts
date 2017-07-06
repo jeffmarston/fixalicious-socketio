@@ -6,7 +6,8 @@ import { AgGridModule } from 'ag-grid-angular/main';
 import { AppComponent } from "./app.component";
 import { MessageGridComponent } from "./components/message-grid/message-grid.component";
 import { SessionNavComponent } from "./components/session-nav/session-nav.component";
-import { DetailPane } from "./components/detail-pane/detail-pane.component";
+import { DetailPaneComponent } from "./components/detail-pane/detail-pane.component";
+import { FieldEditorComponent } from "./components/field-editor/field-editor.component";
 import { SessionConfigComponent } from "./components/session-config/session-config.component";
 import { ScenarioComponent } from "./components/scenario/scenario-component";
 import { ApiService } from "./services/api.service";
@@ -25,7 +26,8 @@ import { SetFocusDirective } from "./directives/set-focus";
         AppComponent,
         MessageGridComponent,
         SessionNavComponent,
-        DetailPane,
+        DetailPaneComponent,
+        FieldEditorComponent,
         SessionConfigComponent,
         ScenarioComponent,
         SetFocusDirective
