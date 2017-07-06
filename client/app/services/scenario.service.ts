@@ -28,6 +28,11 @@ export class ScenarioService {
         });
     }
 
+    public runScenario(scenarioName: string, fixIn: any) {
+        let url = "/scenario/run/" + encodeURIComponent(scenarioName);
+        return this.http.post(url, fixIn);
+    }
+
     public saveScenario(scenario: any) {
         let url = "/scenario/" + encodeURIComponent(scenario.label);
         return this.http.post(url, scenario);

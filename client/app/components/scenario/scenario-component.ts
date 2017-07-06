@@ -36,6 +36,13 @@ import * as _ from 'lodash';
             </button>
 
             <button 
+                title="Run scenario"
+                [disabled]="(!fixIn || !selectedScenario)"
+                (click)="runScenario()">
+                <i class="fa fa-send"></i> Run
+            </button>
+
+            <button 
                 title="Save changes"
                 (click)="saveScenario()">
                 <i class="fa fa-save"></i> Save
@@ -120,6 +127,7 @@ export class ScenarioComponent implements OnInit {
     @Output() onSelected = new EventEmitter<ISession>();
     @Input() collapsed: boolean;
     @Input() session: any;
+    @Input() fixIn: any;
 
     private selectedScenario;
     private code: string = `
@@ -183,11 +191,15 @@ TypeError: Cannot read property 'Value' of undefined
         for (let propName in changes) {
             let changedProp = changes[propName];
 
-            let oldSession = changedProp.previousValue;
-            this.socket.removeAllListeners(`scenario-output[${oldSession}]`);
+            if (propName == "fixIn" && changedProp.currentValue != undefined) {
+                this.fixIn = changedProp.currentValue;
+            }
 
             if (propName == "session" && changedProp.currentValue != undefined) {
                 this.session = changedProp.currentValue;
+
+                let oldSession = changedProp.previousValue;
+                this.socket.removeAllListeners(`scenario-output[${oldSession}]`);
                 this.outputLines = [];
 
                 this.scenarioService.getAll().subscribe(allScenarios => {
@@ -230,7 +242,13 @@ TypeError: Cannot read property 'Value' of undefined
         this.isAdding = false;
         this.scenarioService.saveScenario(this.selectedScenario).subscribe(o => {
             console.log(o);
-        });;
+        });
+    }
+
+    public runScenario() {
+        this.scenarioService.runScenario(this.selectedScenario.label, this.fixIn).subscribe(o => {
+            console.log(o);
+        });
     }
 
     public addScenario() {

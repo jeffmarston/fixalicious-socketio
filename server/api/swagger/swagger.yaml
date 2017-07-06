@@ -224,6 +224,27 @@ paths:
       responses:
         "200":
           description: Success
+  /scenario/run/{label}:
+    x-swagger-router-controller: scenario
+    post:
+      summary: Run a scenario against a provided FIX messages
+      operationId: run
+      tags : [Scenario]
+      parameters:
+        - name: label
+          in: path
+          description: scenario label
+          required: true
+          type: string
+        - name: fixIn
+          in: body
+          description: Fix Message
+          required: true
+          schema: 
+            "$ref": "#/definitions/AnyObject"
+      responses:
+        "200":
+          description: Success
 # complex objects have schema definitions
 definitions:
   ErrorResponse:
@@ -276,3 +297,5 @@ definitions:
         type: array
         items:
           type: string
+  AnyObject:
+    type: object

@@ -37,7 +37,7 @@ class ScenarioModel {
 
     static refreshAll() {
         if (ScenarioModel.activeSessions) {
-            for(let session in ScenarioModel.activeSessions) {
+            for (let session in ScenarioModel.activeSessions) {
                 let scenario = ScenarioModel.activeSessions[session];
                 ScenarioModel.getById(scenario.label).then(scenario => {
                     ScenarioModel.activeSessions[session] = scenario;
@@ -63,6 +63,25 @@ class ScenarioModel {
         if (ScenarioModel.activeSessions) {
             delete ScenarioModel.activeSessions[session.session];
         }
+    }
+
+    static run(scenarioName, transaction) {
+        let sessionName = transaction.session;
+        let channel = `scenario-output[${sessionName}]`;
+        global.io.emit(channel, { scenario: sessionName, log: " ! Running scenario: " + scenarioName });
+
+        let fixIn = {
+            header: _.keyBy(transaction.message.header, "Name"),
+            body: _.keyBy(transaction.message.body, "Name"),
+            trailer: _.keyBy(transaction.message.trailer, "Name")
+        };
+
+        console.log(`======== run : ${scenarioName} ==========`);
+        return ScenarioModel.getById(scenarioName).then(scenario => {
+            if (scenario) {
+                ScenarioModel.executeCode(sessionName, scenario, fixIn);
+            }
+        });
     }
 
     static trigger(sessionName, transaction) {

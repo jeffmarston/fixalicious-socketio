@@ -29,6 +29,18 @@ class ScenarioController {
         });
     }
 
+    static run(req, res) {
+        let label = req.swagger.params.label.value;
+        let fixIn = req.swagger.params.fixIn.value;
+
+        ScenarioModel.run(label, fixIn).then((res) => {
+            //ScenarioModel.refreshAll();
+            res.status(200).json(result);
+        }).catch((error) => {
+            res.status(500).json(new ErrorResource(500, req.url, "Run scenario failed.", error));
+        });
+    }
+
     static delete(req, res) {
         let label = req.swagger.params.label.value;
         console.log("Delete scenario: " + label);
@@ -44,5 +56,6 @@ class ScenarioController {
 module.exports = {
     getAll: ScenarioController.getAll,
     create: ScenarioController.create,
-    delete: ScenarioController.delete
+    delete: ScenarioController.delete,
+    run: ScenarioController.run
 }

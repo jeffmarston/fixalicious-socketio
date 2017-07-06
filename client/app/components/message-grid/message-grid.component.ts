@@ -123,7 +123,8 @@ export class MessageGridComponent implements OnInit {
             msgType: null,
             ordStatus: null,
             symbol: null,
-            message: this.fixParserService.stringify(item.message)
+            message: this.fixParserService.stringify(item.message),
+            original: item
         };
         // enrich with specifics from fix message
         try {
