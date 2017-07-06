@@ -112,8 +112,7 @@ export class DetailPaneComponent implements OnInit {
         this.selectedAction = action;
         action.processedFix = {};
         action.template.forEach(element => {
-            let resolved = this.fixParserService.eval(element.formula, this.sourceFixObj);
-            element.value = resolved;
+            let resolved = this.fixParserService.eval(element, this.sourceFixObj);
             action.processedFix[element.key] = { value: resolved, formula: element.formula };
         });
             
@@ -163,8 +162,7 @@ export class DetailPaneComponent implements OnInit {
 
     private displayFixMessage() {
         this.selectedAction.template.forEach(element => {
-            let resolved = this.fixParserService.eval(element.formula, this.sourceFixObj);
-            element.value = resolved;
+            this.fixParserService.eval(element, this.sourceFixObj);
         });
 
         console.log(this.selectedAction);

@@ -21,20 +21,20 @@
 
             <div class="key-column">
                 <input class="configure-key"
-                    placeholder="key"
+                    [placeholder]="(editMode) ? 'key' : ''"
                     (setFocus)="true"
                     [(ngModel)]="pair.key" />
             </div>
-            <div class="value-column editing">
-                <input class="configure-input pair-value"
+            <div class="value-column">
+                <input class="configure-input"
+                    [class.editing]="editMode"
                     [style.width.px]="158-(level*17)"
                     [hidden]="isRepeatingGroup(pair)"
-                    [(ngModel)]="pair.formula" />
+                    [(ngModel)]="(editMode) ? pair.formula : pair.value" />
 
-                <span [style.margin-left.px]="((level || 0)+1)*15"
-                    style="font-style:italic; color: #777;"
-                    [hidden]="!isRepeatingGroup(pair)">group</span>
-
+                <div class="group-placeholder"
+                    [style.margin-left.px]="((level || 0)+1)*15"
+                    [hidden]="!isRepeatingGroup(pair)">group</div>
             </div>
 
             <div class="menu-column">
@@ -50,7 +50,9 @@
             </div>
         </div>
         <div *ngIf="isRepeatingGroup(pair)">
-            <field-editor [template]="pair.value"
+            <field-editor 
+                [template]="pair.formula"
+                [editMode]="editMode"
                 [level]="level+1"></field-editor>
         </div>
     </div>

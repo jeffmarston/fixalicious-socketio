@@ -12,10 +12,16 @@ div.key-column {
 }
 div.value-column{
     width: 50%;
-    padding: 1px;
+    margin: 0 5px;
 }
 div.row>div{
     display: inline-block;
+}
+
+.group-placeholder {
+    font-style:italic; 
+    color: #777;
+    margin-top: 4px;
 }
 
 .group-row {
@@ -37,17 +43,12 @@ button.repeating-group-add {
     margin-top: -3px;
 }
 
-input.pair-value {
+.configure-input {
     border: 1px solid gray;
     padding: 3px;
     float: right;
 }
-
-.configure-input {
-    background: #bfb;
-    border: 1px solid gray;
-}
-button.configure-input:hover {
+.editing{
     background: #bfb;
 }
 
@@ -56,19 +57,6 @@ input.configure-key {
     background: transparent;
     text-align: right;
     width: 100%;
-}
-
-button.delete-pair {
-    background: transparent;    
-    border: none;
-    border-radius: 50%;
-    margin: 0;
-    width: 24px;
-    margin-left: auto;
-    margin-right: auto;
-}
-button.delete-pair:hover {   
-    background: #ddd;    
 }
 
 /* ==================  popup menu ======================== */
