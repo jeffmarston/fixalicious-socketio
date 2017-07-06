@@ -42,7 +42,7 @@ export class ApiService {
 
     // ============== Templates =================
 
-    public getTemplates(): Observable<any> {
+    public getActions(): Observable<any> {
         return this.http.get("/template")
             .map(res => res.json());
     }

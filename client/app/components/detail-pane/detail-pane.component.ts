@@ -16,32 +16,27 @@ import * as _ from "lodash";
 })
 export class DetailPaneComponent implements OnInit {
     @Input() detail: ITransaction;
-    @Input() collapsed: boolean = true;
     @Input() session: ISession;
 
-    private transaction: ITransaction;
-    private isValid: boolean;
+    private collapsed: boolean;
     private sourceFixObj = {};
-    private fixToSend = {};
     private isConfiguring = false;
     private customActions = [];
     private selectedAction = null;
-    private fixFields = ["OrderID", "ClOrdID", "Symbol", "ExecID", "ExecType"];
 
     constructor(
         private apiService: ApiService,
         private fixParserService: FixParserService) {
-        this.isValid = true;
 
-        this.apiService.getTemplates().subscribe(o => {
+        this.apiService.getActions().subscribe(o => {
             this.customActions = o;
             if (this.customActions.length > 0) {
-                this.activateTemplate(this.customActions[0], false);
+                this.prepareTemplate(this.customActions[0], false);
             }
         });
 
         this.selectedAction = {
-            label: "", isEditing: true, pairs: []
+            label: "", isEditing: true, template: []
         };
     }
 
@@ -54,16 +49,11 @@ export class DetailPaneComponent implements OnInit {
             let changedProp = changes[propName];
 
             if (propName == "detail" && changedProp.currentValue != undefined) {
-                this.transaction = changedProp.currentValue;
-                this.sourceFixObj = JSON.parse(this.transaction.message);
-                this.isValid = true;
-
+                let transaction = changedProp.currentValue;
+                this.sourceFixObj = JSON.parse(transaction.message);
                 if (this.selectedAction) {
-                    this.activateTemplate(this.selectedAction, false);
+                    this.prepareTemplate(this.selectedAction, false);
                 }
-            }
-            if (propName == "collapsed" && changedProp.currentValue != undefined) {
-                this.collapsed = changedProp.currentValue;
             }
         }
     }
@@ -75,10 +65,10 @@ export class DetailPaneComponent implements OnInit {
 
     private addAction() {
         if (this.selectedAction.invalid) {
-            return;
+            this.pullAction(this.selectedAction);
         }
         let newAction = {
-            label: "", isEditing: true, pairs: [
+            label: "Action", isEditing: true, pairs: [
                 { key: "", formula: "" }
             ]
         };
@@ -110,7 +100,7 @@ export class DetailPaneComponent implements OnInit {
         }
     }
 
-    private activateTemplate(action, autoSend: boolean) {
+    private prepareTemplate(action, autoSend: boolean) {
         if (this.selectedAction.invalid) {
             return;
         }
@@ -120,14 +110,13 @@ export class DetailPaneComponent implements OnInit {
         }
 
         this.selectedAction = action;
-
-        this.fixToSend = {};
-        action.pairs.forEach(element => {
+        action.processedFix = {};
+        action.template.forEach(element => {
             let resolved = this.fixParserService.eval(element.formula, this.sourceFixObj);
             element.value = resolved;
-            this.fixToSend[element.key] = { value: resolved, formula: element.formula };
+            action.processedFix[element.key] = { value: resolved, formula: element.formula };
         });
-
+            
         this.displayFixMessage();
         if (autoSend && this.collapsed) {
             this.send();
@@ -135,25 +124,28 @@ export class DetailPaneComponent implements OnInit {
     }
 
     private send() {
-        let fixObj = this.fixParserService.generateFix(this.selectedAction.pairs);
-        this.apiService.createTransaction(this.session.session, fixObj);
+        this.apiService.createTransaction(this.session.session, this.selectedAction.processedFix);
 
         if (!this.collapsed) {
             this.displayFixMessage();
         }
     }
 
+    private pullAction(action) {
+        let index = this.customActions.indexOf(action);
+        _.pull(this.customActions, action);
+        if (index > 0) {
+            this.selectedAction = this.customActions[index - 1];
+        } else if (index < this.customActions.length) {
+            this.selectedAction = this.customActions[index];
+        }
+        this.prepareTemplate(action, false);
+    }
+
     private deleteTemplate() {
         this.apiService.deleteTemplate(this.selectedAction)
             .subscribe(success => {
-                let index = this.customActions.indexOf(this.selectedAction);
-                _.pull(this.customActions, this.selectedAction);
-                if (index > 0) {
-                    this.selectedAction = this.customActions[index - 1];
-                } else if (index < this.customActions.length) {
-                    this.selectedAction = this.customActions[index];
-                }
-                this.activateTemplate(this.selectedAction, false);
+                this.pullAction(this.selectedAction);
             }, error => {
                 console.error("Failed to delete template: " + error);
             });
@@ -170,7 +162,7 @@ export class DetailPaneComponent implements OnInit {
     }
 
     private displayFixMessage() {
-        this.selectedAction.pairs.forEach(element => {
+        this.selectedAction.template.forEach(element => {
             let resolved = this.fixParserService.eval(element.formula, this.sourceFixObj);
             element.value = resolved;
         });
@@ -180,60 +172,33 @@ export class DetailPaneComponent implements OnInit {
     }
 
     private insertPair(pair, where) {
-        let children = [{
-            key: "jeff",
-            formula: "winslow",
-            level: "1",
-            value: "1",
-            children: [{
-                key: "grant",
-                formula: "winslow",
-                level: "2",
-                value: "1"
-            },
-            {
-                key: "troy",
-                formula: "rolando",
-                level: "2",
-                value: "2"
-            }]
-        },
-        {
-            key: "derek",
-            formula: "james",
-            level: "1",
-            value: "2"
-        }];
-
-
         let newPair = {
             key: "",
             formula: "",
-            value: "",
-            isNewItem: true,
-            children: children
+            value: ""
         };
-
         if (where === "above") {
-            let idx = this.selectedAction.pairs.indexOf(pair);
-            this.selectedAction.pairs.splice(idx, 0, newPair);
+            let idx = this.selectedAction.template.indexOf(pair);
+            this.selectedAction.template.splice(idx, 0, newPair);
         } else {
-            this.selectedAction.pairs.push(newPair);
+            this.selectedAction.template.push(newPair);
         }
     }
 
     private deletePair(pair) {
-        _.pull(this.selectedAction.pairs, pair);
-
+        _.pull(this.selectedAction.template, pair);
     }
 
     private insertGroup(pair) {
-        let idx = this.selectedAction.pairs.indexOf(pair);
+        let idx = this.selectedAction.template.indexOf(pair);
         pair.isGroup = true;
-        this.selectedAction.pairs.splice(idx + 1, 0, {
+        this.selectedAction.template.splice(idx + 1, 0, {
             key: "",
             formula: "",
-            level: (pair.level || 0) + 1
+            children: [{
+                key: "",
+                formula: ""
+            }]
         });
     }
 
@@ -264,7 +229,7 @@ export class DetailPaneComponent implements OnInit {
         this.customActions.push(newAction);
         this.apiService.createTemplate(newAction).subscribe(o => {
             console.log("Template saved");
-            this.activateTemplate(newAction, false);
+            this.prepareTemplate(newAction, false);
             newAction.isConfiguring = true;
         });
     }

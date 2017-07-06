@@ -1,5 +1,4 @@
 .container {
-    border-left: 3px solid transparent;
 }
 .first-level {
     display: flex;
@@ -17,6 +16,10 @@ div.value-column{
 }
 div.row>div{
     display: inline-block;
+}
+
+.group-row {
+    background: rgba(187, 204, 221, 0.5);
 }
 
 button.repeating-group {
@@ -37,7 +40,7 @@ button.repeating-group-add {
 input.pair-value {
     border: 1px solid gray;
     padding: 3px;
-    margin-right: 2px;
+    float: right;
 }
 
 .configure-input {

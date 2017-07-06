@@ -13,7 +13,7 @@
             [style.border-color]="(action.invalid) ? 'red' : 'gray' "
             [title]="(action.invalid) ? action.invalid : '' "
             *ngFor="let action of customActions"
-            (click)="activateTemplate(action, true)"
+            (click)="prepareTemplate(action, true)"
             class="invalid">
             <input 
                 maxlength="10"
@@ -65,16 +65,9 @@
                     </button>
             </div>
 
-            <div *ngFor="let pair of selectedAction.pairs"
-                class="row"
-                [hidden]="isConfiguring">
-                <field-editor 
-                    [pair]="pair"
-                    (onInsert)="insertPair(pair)"
-                    (onDelete)="deletePair(pair)"
-                    (onInsertGroup)="insertGroup(pair)">
-                </field-editor>
-            </div>
+            <field-editor 
+                [template]="selectedAction.template">
+            </field-editor>
 
             <div>
                 <button class="add-action"
