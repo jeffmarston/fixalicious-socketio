@@ -1,7 +1,7 @@
-<div class="container" [style.width]="collapsed ? '80px' : '410px'" > 
+<div class="container"
+    [style.width]="collapsed ? '80px' : '410px'">
     <div class="action">
-        <button 
-            class="expander" 
+        <button class="expander"
             title="Show the FIX messages to be sent"
             (click)="toggleExpanded()">
                 <i class="fa"
@@ -9,12 +9,11 @@
                     [ngClass]="collapsed ? 'fa-angle-double-left' : 'fa-angle-double-right'"></i>
             </button>
 
-        <button 
-            [ngClass]="(!collapsed && selectedAction==action) ? 'selected' : '' "
-            [style.border-color]="(action.invalid) ? 'red' : 'gray' "                
+        <button [ngClass]="(!collapsed && selectedAction==action) ? 'selected' : '' "
+            [style.border-color]="(action.invalid) ? 'red' : 'gray' "
             [title]="(action.invalid) ? action.invalid : '' "
             *ngFor="let action of customActions"
-            (click)="activateTemplate(action, true)"
+            (click)="prepareTemplate(action, true)"
             class="invalid">
             <input 
                 maxlength="10"
@@ -25,7 +24,7 @@
                 (dblclick)="action.isEditing=true"
                 [ngClass]="action.isEditing ? 'editable-input' : 'readonly-input' "
             />
-        </button>          
+        </button>
 
         <button class="add-action"
             title="Add a new quick action button"
@@ -36,61 +35,47 @@
         </button>
 
     </div>
-    <div class="keyvalue-section" [hidden]="collapsed">
+    <div class="keyvalue-section"
+        [hidden]="collapsed">
         <div [hidden]="!selectedAction">
             <div class="button-panel">
-                <button class="" 
+                <button class=""
                     (click)="send()"
                     title="Send message back to the client">
                     <i class="fa fa-send-o"></i> Send
                     </button>
-                    
-                <button class="" 
+
+                <button class=""
                     (click)="deleteTemplate()"
                     title="Delete this template">
                     <i class="fa fa-trash-o"></i> Delete
                     </button>
-                    
-                <button class="" 
+
+                <button class=""
                     (click)="copyTemplate()"
                     title="Create a copy of this template">
                     <i class="fa fa-copy"></i> Copy
                     </button>
-                    
-                <button class="" 
+
+                <button class=""
                     (click)="configureTemplate()"
                     [class.configure-input]="isConfiguring"
                     title="Edit the keys and default values for each field">
                     <i class="fa fa-pencil"></i> Edit
-                    </button>                            
+                    </button>
             </div>
 
-            <div *ngFor="let pair of selectedAction.pairs"
-                class="row"
-                [hidden]="isConfiguring" >
-                <field-editor [pair]="pair"></field-editor>
+            <field-editor 
+                [template]="selectedAction.template">
+            </field-editor>
 
-                <div class="menu-column" style="display:block;">
-                    <!--<i class="fa fa-ellipsis-h"></i>-->
-                    <nav>
-                        <li><i class="fa fa-ellipsis-h"></i>
-                            <nav>
-                                <li><a (click)="deletePair(pair)">Delete</a></li>
-                                <li><a (click)="makeRepeating(pair)">Repeating Group</a></li>
-                                <li><a (click)="addPair(pair, 'above')">Insert Above</a></li>
-                            </nav>
-                        </li>
-                    </nav>
-                </div>
-            </div>
-                
             <div>
-            <button class="add-action"
-                title="Add a new quick action button"
-                [hidden]="!isConfiguring"
-                (click)="addPair()">
+                <button class="add-action"
+                    title="Add a new quick action button"
+                    [hidden]="!isConfiguring"
+                    (click)="addPair()">
                 <i class="fa fa-plus-circle"></i>
             </button>
+            </div>
         </div>
     </div>
-</div>

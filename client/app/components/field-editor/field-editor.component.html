@@ -1,7 +1,11 @@
-<div class="container"
-    [style.border-left-color]="(pair.level > 0) ? 'blue' : ((pair.level > 1) ? 'red' : 'transparent')">
-    <div class="first-level">
-        <!--<div class="key-column">
+<div class="container">
+
+    <div *ngFor="let pair of template"
+        [class.group-row]="isRepeatingGroup(pair)">
+
+        <div class="first-level">
+
+            <!--<div class="key-column">
         <span>{{pair.key}}</span>
     </div>
     <div class="value-column">
@@ -15,39 +19,39 @@
             [hidden]="!pair.isGroup">group</span>
     </div>-->
 
-        <div class="key-column">
-            <input class="configure-key"
-                (setFocus)="true"
-                (blur)="doneEditingPair(pair)"
-                [(ngModel)]="pair.key" />
-        </div>
-        <div class="value-column editing">
-            <input class="configure-input pair-value"
-                [style.margin-left.px]="pair.level*15"
-                [style.width.px]="158-(pair.level*17)"
-                [hidden]="pair.children"
-                [(ngModel)]="pair.formula" />
-            <!--<span [style.margin-left.px]="((pair.level || 0)+1)*15"
-                style="font-style:italic; color: #777;"
-                [hidden]="!pair.isGroup">group</span>-->
-        </div>
+            <div class="key-column">
+                <input class="configure-key"
+                    placeholder="key"
+                    (setFocus)="true"
+                    [(ngModel)]="pair.key" />
+            </div>
+            <div class="value-column editing">
+                <input class="configure-input pair-value"
+                    [style.width.px]="158-(level*17)"
+                    [hidden]="isRepeatingGroup(pair)"
+                    [(ngModel)]="pair.formula" />
 
-        <div class="menu-column"
-            style="display:none;">
-            <nav>
-                <li><i class="fa fa-ellipsis-h"></i>
-                    <nav>
-                        <li><a (click)="deletePair(pair)">Delete</a></li>
-                        <li><a (click)="makeRepeating(pair)">Repeating Group</a></li>
-                        <li><a (click)="addPair(pair, 'above')">Insert Above</a></li>
-                    </nav>
-                </li>
-            </nav>
-        </div>
-    </div>
+                <span [style.margin-left.px]="((level || 0)+1)*15"
+                    style="font-style:italic; color: #777;"
+                    [hidden]="!isRepeatingGroup(pair)">group</span>
 
-    <div *ngFor="let item of pair.children">
-        <field-editor [pair]="item"
-            [level]="1"></field-editor>
+            </div>
+
+            <div class="menu-column">
+                <nav>
+                    <li><i class="fa fa-ellipsis-h"></i>
+                        <nav>
+                            <li><a (click)="delete(pair)">Delete</a></li>
+                            <li><a (click)="insertGroup(pair)">Insert Group</a></li>
+                            <li><a (click)="insert(pair)">Insert Above</a></li>
+                        </nav>
+                    </li>
+                </nav>
+            </div>
+        </div>
+        <div *ngIf="isRepeatingGroup(pair)">
+            <field-editor [template]="pair.value"
+                [level]="level+1"></field-editor>
+        </div>
     </div>
 </div>

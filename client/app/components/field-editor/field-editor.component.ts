@@ -3,7 +3,7 @@ import { CommonModule } from "@angular/common";
 import { Http, Response } from "@angular/http";
 import { ApiService } from "../../services/api.service"
 import { FixParserService } from "../../services/fix-parser.service"
-import { ISession, IFixMessage, ITransaction } from "../../types.d";
+import { ISession, IFixMessage, ITransaction, IPair } from "../../types.d";
 import { SetFocusDirective } from "../../directives/set-focus";
 import * as io from 'socket.io-client';
 import * as _ from "lodash";
@@ -15,8 +15,11 @@ import * as _ from "lodash";
     providers: [ApiService]
 })
 export class FieldEditorComponent implements OnInit {
-    @Input() pair: any;
-    @Input() level: number;
+    @Input() template: any;
+    @Input() level: number = 0;
+    @Output() onInsert = new EventEmitter<any>();
+    @Output() onInsertGroup = new EventEmitter<any>();
+    @Output() onDelete = new EventEmitter<any>();
 
     constructor(
         private apiService: ApiService,
@@ -30,8 +33,8 @@ export class FieldEditorComponent implements OnInit {
         for (let propName in changes) {
             let changedProp = changes[propName];
 
-            if (propName == "pair" && changedProp.currentValue != undefined) {
-                this.pair = changedProp.currentValue;
+            if (propName == "template" && changedProp.currentValue != undefined) {
+                this.template = changedProp.currentValue;
             }
             if (propName == "collapsed" && changedProp.currentValue != undefined) {
                 //this.collapsed = changedProp.currentValue;
@@ -39,4 +42,31 @@ export class FieldEditorComponent implements OnInit {
         }
     }
 
+    private insert(pair) {
+        let index = this.template.indexOf(pair);
+        let item = {
+            key: "",
+            formula: "",
+            value: ""
+        };
+        this.template.splice(index, 0, item);
+    }
+    private insertGroup(pair) {
+        let index = this.template.indexOf(pair);
+        let groupItem = {
+            key: "",
+            formula: "",
+            value: [{
+                key: "grant",
+                formula: "sleep"
+            }]
+        };
+        this.template.splice(index, 0, groupItem);
+    }
+    private delete(pair) {
+        this.onDelete.emit(pair);
+    }
+    private isRepeatingGroup(pair) {
+        return Array.isArray(pair.value);
+    }
 }

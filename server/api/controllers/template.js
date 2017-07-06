@@ -12,10 +12,10 @@ let ErrorResource = require('../../resources/error-resource');
 class TemplateController {
     static getSeedActions() {
         return [
-            { label: "Ack", pairs: TemplateController.createAck() },
-            { label: "Partial", pairs: TemplateController.createPartial() },
-            { label: "Fill", pairs: TemplateController.createFill() },
-            { label: "Reject", pairs: TemplateController.createReject() }
+            { label: "Ack", template: TemplateController.createAck() },
+            { label: "Partial", template: TemplateController.createPartial() },
+            { label: "Fill", template: TemplateController.createFill() },
+            { label: "Reject", template: TemplateController.createReject() }
         ];
     }
 
