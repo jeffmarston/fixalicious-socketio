@@ -65,7 +65,12 @@ export class FixParserService implements IFixParserService {
     }
 
     public eval(formula, sourceFix): string {
-        if (typeof formula == "string") {
+        if (Array.isArray(formula)) {
+            formula.forEach(element => {
+                let resolved = this.eval(element.formula, sourceFix);
+                element.value = resolved;
+            });
+        } else if (typeof formula == "string") {
             formula = formula.replace("{{newid}}", this.generateId());
 
             let lookupMatches = formula.match(/\{\{\d+\}\}/g);  // matches {{num}} pattern

@@ -66,16 +66,8 @@
             </div>
 
             <field-editor 
-                [template]="selectedAction.template">
+                [template]="selectedAction.template"
+                [editMode]="isConfiguring">
             </field-editor>
-
-            <div>
-                <button class="add-action"
-                    title="Add a new quick action button"
-                    [hidden]="!isConfiguring"
-                    (click)="addPair()">
-                <i class="fa fa-plus-circle"></i>
-            </button>
-            </div>
         </div>
     </div>
