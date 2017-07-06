@@ -53,7 +53,7 @@ export class FieldEditorComponent implements OnInit {
             formula: [{
                 key: "",
                 formula: "",
-                value:""
+                value: ""
             }]
         };
         this.template.splice(index, 0, groupItem);

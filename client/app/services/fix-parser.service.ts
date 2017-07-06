@@ -45,43 +45,30 @@ export class FixParserService implements IFixParserService {
             everything[property] = everything[property].Value;
         }
         return everything;
-
-        // let arr = [];
-        // for (var property in obj) {
-        //     if (obj.hasOwnProperty(property)) {
-        //         let regex = /\(\d+\)$/; // matches (num) at end of string
-        //         let matches = property.match(regex);
-        //         if (matches) {
-        //             let trimmed = matches[0].substring(1, matches[0].length - 1);
-        //             arr[trimmed] = obj[property];
-        //         }
-        //     }
-        // }
-        // return arr;
     }
 
     private generateId(): string {
         return (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
     }
 
-    public eval(formula, sourceFix): string {
-        if (Array.isArray(formula)) {
-            formula.forEach(element => {
-                let resolved = this.eval(element.formula, sourceFix);
+    public eval(field, sourceFix) {
+        field.value = field.formula;
+        if (Array.isArray(field.formula)) {
+            field.formula.forEach(element => {
+                let resolved = this.eval(element, sourceFix);
                 element.value = resolved;
             });
-        } else if (typeof formula == "string") {
-            formula = formula.replace("{{newid}}", this.generateId());
+        } else if (typeof field.formula == "string") {
+            field.value = field.formula.replace("{{newid}}", this.generateId());
 
-            let lookupMatches = formula.match(/\{\{\d+\}\}/g);  // matches {{num}} pattern
+            let lookupMatches = field.formula.match(/\{\{\d+\}\}/g);  // matches {{num}} pattern
             if (lookupMatches) {
                 let lookup = this.mapIdToValue(sourceFix);
                 lookupMatches.forEach(match => {
                     let num = parseInt(match.substring(2, match.length - 2));
-                    formula = formula.replace("{{" + num + "}}", (lookup[num] || ""));
+                    field.value = field.formula.replace("{{" + num + "}}", (lookup[num] || ""));
                 });
             }
         }
-        return formula;
     }
 }
