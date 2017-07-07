@@ -5,8 +5,14 @@
             [session]="selectedSession"
             (onSave)="saveSessionConfig($event)"></session-config>-->
 
-        <div *ngIf="showGrid" class="grid-pane">
-            <!--<div class="filter" >
+        <split direction="horizontal">
+            <split-area [size]="30"
+                style="display:flex">
+
+
+                <div *ngIf="showGrid"
+                    class="grid-pane">
+                    <!--<div class="filter" >
                     <input class="filter" 
                          [(ngModel)]="filterValue"
                          (ngModelChange)="updateFilter($event)"
@@ -14,28 +20,32 @@
                         [class.active-filter]="filterValue"
                         />
             </div>-->
-            <ag-grid-angular #agGrid 
+                    <ag-grid-angular #agGrid
                         style="height: 100%; width: 100%;"
                         class="ag-theme"
-                        [gridOptions]="gridOptions"                     
+                        [gridOptions]="gridOptions"
                         [rowData]="rowData"
                         enableColResize
                         enableSorting
                         enableFilter
                         rowSelection="multiple"
                         (cellClicked)="onCellClicked($event)"
-                        (rowDoubleClicked)="toggleDetails()"
-            >
-            </ag-grid-angular>
-        </div>
-            
-            <!--[collapsed]="showDetails"-->
-        <detail-pane class="detail-pane"
-            [hidden]="this.detailCollapsed"
-            [detail]="selectedMessage"
-            [session]="selectedSession"
-        ></detail-pane>
-        
+                        (rowDoubleClicked)="toggleDetails()">
+                    </ag-grid-angular>
+                </div>
+
+            </split-area>
+            <split-area [size]="70"
+                style="display: flex">
+                <detail-pane class="detail-pane"
+                    [hidden]="this.detailCollapsed"
+                    [detail]="selectedMessage"
+                    [session]="selectedSession">
+                </detail-pane>
+
+            </split-area>
+        </split>
+
 
     </div>
 </div>

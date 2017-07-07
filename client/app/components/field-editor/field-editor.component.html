@@ -33,7 +33,7 @@
                     [(ngModel)]="(editMode) ? pair.formula : pair.value" />
 
                 <div class="group-placeholder"
-                    [style.margin-left.px]="((level || 0)+1)*15"
+                    [style.margin-right.px]="130-((level || 0)+1)*15"
                     [hidden]="!isRepeatingGroup(pair)">group</div>
             </div>
 

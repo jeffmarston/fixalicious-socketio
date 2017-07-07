@@ -22,6 +22,7 @@ div.row>div{
     font-style:italic; 
     color: #777;
     margin-top: 4px;
+    float: right;
 }
 
 .group-row {

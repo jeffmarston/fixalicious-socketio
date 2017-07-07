@@ -3,6 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { AgGridModule } from 'ag-grid-angular/main';
+import { AngularSplitModule } from 'angular-split';
+
 import { AppComponent } from "./app.component";
 import { MessageGridComponent } from "./components/message-grid/message-grid.component";
 import { SessionNavComponent } from "./components/session-nav/session-nav.component";
@@ -20,6 +22,7 @@ import { SetFocusDirective } from "./directives/set-focus";
         BrowserModule,
         HttpModule,
         FormsModule,
+        AngularSplitModule,
         AgGridModule.withComponents([])
     ],
     declarations: [

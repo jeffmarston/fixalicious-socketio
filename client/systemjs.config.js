@@ -18,7 +18,9 @@
             'ag-grid-angular': 'node_modules/ag-grid-angular',
             'ag-grid': 'node_modules/ag-grid',
             'socket.io-client': 'node_modules/socket.io-client/dist',
-            'lodash': 'node_modules/lodash'
+            'lodash': 'node_modules/lodash',
+            'angular-split': 'node_modules/angular-split/dist',
+            'traceur': 'node_modules/traceur/bin'
         },
         packages: {
             'lib': { main: './boot.js', defaultExtension: 'js' },
@@ -27,7 +29,9 @@
             'ag-grid-angular': { defaultExtension: "js" },
             'ag-grid': { defaultExtension: "js" },
             'socket.io-client': { main: './socket.io.js', defaultExtension: 'js' },
-            'lodash': { main: 'index.js', defaultExtension: 'js' }
+            'lodash': { main: 'index.js', defaultExtension: 'js' },
+            'angular-split': { main: 'index.js', defaultExtension: 'js' },
+            'traceur': { main: 'traceur.js', defaultExtension: 'js' }
         }
     }
     );
