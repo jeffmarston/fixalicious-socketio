@@ -25,6 +25,7 @@ export class DetailPaneComponent implements OnInit {
     private selectedAction = null;
     private width = 400;
     private editor = "field";
+    private hideScenario = true;
 
     constructor(
         private apiService: ApiService,
@@ -178,40 +179,6 @@ export class DetailPaneComponent implements OnInit {
         });
 
         console.log(this.selectedAction);
-    }
-
-    private doneEditingPair(pair) {
-    }
-
-    private insertPair(pair, where) {
-        let newPair = {
-            key: "",
-            formula: "",
-            value: ""
-        };
-        if (where === "above") {
-            let idx = this.selectedAction.template.indexOf(pair);
-            this.selectedAction.template.splice(idx, 0, newPair);
-        } else {
-            this.selectedAction.template.push(newPair);
-        }
-    }
-
-    private deletePair(pair) {
-        _.pull(this.selectedAction.template, pair);
-    }
-
-    private insertGroup(pair) {
-        let idx = this.selectedAction.template.indexOf(pair);
-        pair.isGroup = true;
-        this.selectedAction.template.splice(idx + 1, 0, {
-            key: "",
-            formula: "",
-            children: [{
-                key: "",
-                formula: ""
-            }]
-        });
     }
 
     private uniquify(allNames: string[], origName: string): string {

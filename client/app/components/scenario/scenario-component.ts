@@ -16,24 +16,6 @@ import * as _ from 'lodash';
                 [checked]="selectedScenario.enabled"
                 (change)="toggleEnabled()" />
             Enable
-            <input class="label-input"
-                [(ngModel)]="selectedScenario.label"
-                [hidden]="!isAdding" 
-                [setFocus]="isAdding"
-                (blur)="isAdding=false" />
-            <select class="label-input"
-                [(ngModel)]="selectedScenario"
-                [hidden]="isAdding">
-                <option *ngFor="let scenario of scenarios" [ngValue]="scenario">
-                {{scenario.label}}</option>
-            </select>
-        
-            <button class="add-button"
-                title="Add a new scenario"
-                (click)="addScenario()"
-                style="color:#777;">
-                <i class="fa fa-plus-circle"></i>
-            </button>
 
             <button 
                 title="Run scenario"
@@ -41,26 +23,11 @@ import * as _ from 'lodash';
                 (click)="runScenario()">
                 <i class="fa fa-send"></i> Run
             </button>
-
-            <button 
-                title="Save changes"
-                (click)="saveScenario()">
-                <i class="fa fa-save"></i> Save
-            </button>
-            
-            <button class="" 
-                (click)="deleteScenario()"
-                title="Delete this scenario">
-                <i class="fa fa-trash-o"></i> Delete
-            </button>
         </div>
 
         <div class="editor-area">
             <textarea class="code"
                 [(ngModel)]="selectedScenario.code"></textarea>
-            <!--<textarea class="output"
-                readonly="true"
-                [value]="output"></textarea>-->
                 
             <code class="output" #output [scrollTop]="9999999">
                 <span class="output" *ngFor="let line of outputLines" [style.color]="line.err ? 'red' : 'white'">{{line.text}}</span>
@@ -70,17 +37,17 @@ import * as _ from 'lodash';
     `,
     styles: [` 
         textarea {
-            height: 400px;
-            width: 200%;
+            height: 50px;
+            width: 96%;
             font-family: 'Ubuntu', sans-serif;
+            font-size: 14px; 
             background: whitesmoke;
         }
         textarea.code{
             color: blue;        
         }
         code.output{
-            height: 100%;
-            height: 400px;
+            height: 45%;
             background: #222;
             margin-left: 4px; 
             display: block;
@@ -163,7 +130,7 @@ export class ScenarioComponent implements OnInit {
             if (propName == "session" && changedProp.currentValue != undefined) {
                 this.session = changedProp.currentValue;
                 let oldSession = changedProp.previousValue;
-                
+
                 this.socket.removeAllListeners(`scenario-output[${oldSession}]`);
                 this.outputLines = [];
 

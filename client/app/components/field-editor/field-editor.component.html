@@ -26,14 +26,13 @@
                     [(ngModel)]="pair.key" />
             </div>
             <div class="value-column">
+                <div [style.width.px]="isRepeatingGroup(pair) ? ((level+1)*15) : (level*15)"></div>
                 <input class="configure-input"
                     [class.editing]="editMode"
-                    [style.width.px]="158-(level*17)"
                     [hidden]="isRepeatingGroup(pair)"
                     [(ngModel)]="(editMode) ? pair.formula : pair.value" />
 
                 <div class="group-placeholder"
-                    [style.margin-right.px]="130-((level || 0)+1)*15"
                     [hidden]="!isRepeatingGroup(pair)">group</div>
             </div>
 
@@ -50,8 +49,7 @@
             </div>
         </div>
         <div *ngIf="isRepeatingGroup(pair)">
-            <field-editor 
-                [template]="pair.formula"
+            <field-editor [template]="pair.formula"
                 [editMode]="editMode"
                 [level]="level+1"></field-editor>
         </div>

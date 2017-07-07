@@ -28,12 +28,14 @@ x `Ability to delete template keys`
 x `Get sessions from redis, update status when they change`
 
 - `Scenarios!`
+    - `save sessions in scenarios (not vice versa)`
     - `handle deleting scenarios (foreign key)`
     - `call quickActions (Ack, Partial) - or get resulting object back`
 
 - `Repeating Groups!`
+    - `two-way bindings`
 - `Parse Fix XML in Node and expose via REST API`
     - `Template keys use <select>`
 - `Angular router, url matching session`
 - `Indicate activity on non-visible pages`
-- `Modal popup to show... FIX message received detail?`
+- `Modal popup to show FIX message received detail`

@@ -13,6 +13,7 @@ div.key-column {
 div.value-column{
     width: 50%;
     margin: 0 5px;
+    display: flex;
 }
 div.row>div{
     display: inline-block;
@@ -48,6 +49,8 @@ button.repeating-group-add {
     border: 1px solid gray;
     padding: 3px;
     float: right;
+    flex: 1 1 auto;
+    min-width: 50px;
 }
 .editing{
     background: #bfb;
@@ -65,6 +68,10 @@ input.configure-key {
 nav {
     display: block;
     list-style-type: none;
+}
+
+nav:hover {
+    background: gray;
 }
 
 nav li a {

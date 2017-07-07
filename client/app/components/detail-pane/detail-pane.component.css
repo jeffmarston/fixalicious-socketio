@@ -59,7 +59,7 @@ button:active {
 }
 
  /*templates*/
-.keyvalue-section {
+.editor-section {
     overflow: auto;
     background: #eee;
     width: 100%;

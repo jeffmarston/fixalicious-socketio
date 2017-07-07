@@ -25,23 +25,40 @@
             />
         </button>
 
-        <button class="add-action"
-            title="Add a new quick action button"
-            [hidden]="collapsed"
-            (click)="addAction()"
-            style="color:#777;">
-            <i class="fa fa-plus-circle"></i>
-        </button>
+        <span style="display: inline-flex;">
+            <button class="add-action"
+                title="Add a new quick action button"
+                [hidden]="collapsed"
+                (click)="addAction()"
+                style="color:#777;">
+                <i class="fa fa-plus-circle"></i>
+            </button>
 
+            <button class="add-action"
+                title="Add a new scenario"
+                [hidden]="collapsed || hideScenario"
+                (click)="addScenario()"
+                style="color:#484;">
+                <i class="fa fa-plus-circle"></i>
+            </button>
+        </span>
     </div>
-    <div class="keyvalue-section"
+    <div class="editor-section"
         [hidden]="collapsed">
         <div [hidden]="!selectedAction">
             <div class="button-panel">
                 <button class=""
                     (click)="send()"
+                    [hidden]="editor=='scenario'"
                     title="Send message back to the client">
                     <i class="fa fa-send-o"></i> Send
+                    </button>
+
+                <button class=""
+                    (click)="runScenario()"
+                    [hidden]="editor!='scenario'"
+                    title="Run this scenario">
+                    <i class="fa fa-send"></i> Run
                     </button>
 
                 <button class=""
@@ -64,15 +81,13 @@
                     </button>
             </div>
 
-            <field-editor 
-                [hidden]="editor!='field'"
+            <field-editor [hidden]="editor!='field'"
                 [template]="selectedAction.template"
                 [editMode]="isConfiguring">
             </field-editor>
-            
 
-            <scenario 
-                [hidden]="editor!='scenario'"
+
+            <scenario [hidden]="editor!='scenario'"
                 [session]="session"
                 [fixIn]="detail?.original">
             </scenario>
