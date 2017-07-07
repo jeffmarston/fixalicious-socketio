@@ -11,29 +11,26 @@
     width: 100%;
 }
 
-button { 
+ /* left side quick action buttons */
+.action-panel {
+    display: flex;
+    flex-direction: column;
+    padding-left: 4px;
+}
+
+.action-panel>button { 
     height: 24px;
     padding: 2px;
     margin: 2px;  
     width: 69px;
     border: 1px gray solid; 
 }
-button:hover {
+.action-panel>button:hover {
     background: #eee;
     cursor: pointer;
 }
-button:active {
-    background: #b0e0e6;
-}
 
- /* left side quick action buttons */
-.action {
-    display: flex;
-    flex-direction: column;
-    padding-left: 4px;
-}
-
-.action>button.selected {
+.action-panel>button.selected {
     border-right: 0;
     margin-left: 8px;
     margin-right: -1px;
@@ -41,15 +38,15 @@ button:active {
     z-index: 100;
 }
 
-.action>.editable-input {
+.action-panel>.editable-input {
     background: #fff;
 }
-.action>.editable-input.hidden {
+.action-panel>.editable-input.hidden {
     width: 0;
     height: 0;
     opacity: 0;
 }
-.action>.editable-input.visible {
+.action-panel>.editable-input.visible {
     width: 100%;
     height: 30px;
 }
@@ -67,11 +64,12 @@ button:active {
 }
 
 .button-panel {
-    height: 38px;
+    height: 30px;
 }
 
 .button-panel>button {
     float: right;
+    margin: 2px;
 }
 
 div.row {

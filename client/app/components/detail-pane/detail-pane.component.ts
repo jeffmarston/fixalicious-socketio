@@ -23,7 +23,6 @@ export class DetailPaneComponent implements OnInit {
     private isConfiguring = false;
     private customActions = [];
     private selectedAction = null;
-    private width = 400;
     private editor = "field";
     private hideScenario = true;
 
@@ -109,39 +108,39 @@ export class DetailPaneComponent implements OnInit {
         }
         this.selectedAction = action;
 
-        if (action.label == "Fill") {
+        if (action.type == "scenario") {
             this.editor = "scenario";
-            this.width = 700;
         } else {
             this.editor = "field";
-            this.width = 400;
         }
 
-        if (this.isConfiguring) {
-            //finalize and save changes
-            this.configureTemplate();
-        }
+        // [JWM] - Implement onLeave?
 
-        this.selectedAction = action;
-        action.processedFix = {};
-        action.template.forEach(element => {
-            let resolved = this.fixParserService.eval(element, this.sourceFixObj);
-            action.processedFix[element.key] = { value: resolved, formula: element.formula };
-        });
+        // if (this.isConfiguring) {
+        //     //finalize and save changes
+        //     this.configureTemplate();
+        // }
 
-        this.displayFixMessage();
-        if (autoSend && this.collapsed) {
-            this.send();
-        }
+        // this.selectedAction = action;
+        // action.processedFix = {};
+        // action.template.forEach(element => {
+        //     let resolved = this.fixParserService.eval(element, this.sourceFixObj);
+        //     action.processedFix[element.key] = { value: resolved, formula: element.formula };
+        // });
+
+        // this.displayFixMessage();
+        // if (autoSend && this.collapsed) {
+        //     this.send();
+        // }
     }
 
-    private send() {
-        this.apiService.createTransaction(this.session.session, this.selectedAction.processedFix);
+    // private send() {
+    //     this.apiService.createTransaction(this.session.session, this.selectedAction.processedFix);
 
-        if (!this.collapsed) {
-            this.displayFixMessage();
-        }
-    }
+    //     if (!this.collapsed) {
+    //         this.displayFixMessage();
+    //     }
+    // }
 
     private pullAction(action) {
         let index = this.customActions.indexOf(action);
@@ -163,23 +162,23 @@ export class DetailPaneComponent implements OnInit {
             });
     }
 
-    private configureTemplate() {
-        if (this.isConfiguring) {
-            this.apiService.createTemplate(this.selectedAction).subscribe(o => {
-                console.log("Template saved");
-            });
-        }
-        this.isConfiguring = !this.isConfiguring;
-        this.displayFixMessage();
-    }
+    // private configureTemplate() {
+    //     if (this.isConfiguring) {
+    //         this.apiService.createTemplate(this.selectedAction).subscribe(o => {
+    //             console.log("Template saved");
+    //         });
+    //     }
+    //     this.isConfiguring = !this.isConfiguring;
+    //     this.displayFixMessage();
+    // }
 
-    private displayFixMessage() {
-        this.selectedAction.template.forEach(element => {
-            this.fixParserService.eval(element, this.sourceFixObj);
-        });
+    // private displayFixMessage() {
+    //     this.selectedAction.template.forEach(element => {
+    //         this.fixParserService.eval(element, this.sourceFixObj);
+    //     });
 
-        console.log(this.selectedAction);
-    }
+    //     console.log(this.selectedAction);
+    // }
 
     private uniquify(allNames: string[], origName: string): string {
         let newName = origName;

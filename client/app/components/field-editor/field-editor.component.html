@@ -1,5 +1,21 @@
 <div class="container">
 
+    <div class="button-panel">
+        <button class=""
+            (click)="send()"
+            [hidden]="editor=='scenario'"
+            title="Send message back to the client">
+            <i class="fa fa-send-o"></i> Send
+        </button>
+
+        <button class=""
+            (click)="configureTemplate()"
+            [class.configure-input]="isConfiguring"
+            title="Edit the keys and default values for each field">
+            <i class="fa fa-pencil"></i> Edit
+        </button>
+    </div>
+
     <div *ngFor="let pair of template"
         [class.group-row]="isRepeatingGroup(pair)">
 

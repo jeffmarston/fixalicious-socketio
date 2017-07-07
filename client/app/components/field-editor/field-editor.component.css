@@ -4,6 +4,18 @@
     display: flex;
 }
 
+.button-panel {
+    height: 30px;
+}
+
+.button-panel>button {
+    float: right;
+    margin: 2px;
+}
+.button-panel>button:active {
+    background: #b0e0e6;
+}
+
 div.key-column {
     width: 40%;
     white-space: nowrap;

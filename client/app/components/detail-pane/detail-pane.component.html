@@ -1,5 +1,5 @@
 <div class="container">
-    <div class="action">
+    <div class="action-panel">
         <button class="expander"
             title="Show the FIX messages to be sent"
             (click)="toggleExpanded()">
@@ -48,20 +48,6 @@
         <div [hidden]="!selectedAction">
             <div class="button-panel">
                 <button class=""
-                    (click)="send()"
-                    [hidden]="editor=='scenario'"
-                    title="Send message back to the client">
-                    <i class="fa fa-send-o"></i> Send
-                    </button>
-
-                <button class=""
-                    (click)="runScenario()"
-                    [hidden]="editor!='scenario'"
-                    title="Run this scenario">
-                    <i class="fa fa-send"></i> Run
-                    </button>
-
-                <button class=""
                     (click)="deleteTemplate()"
                     title="Delete this template">
                     <i class="fa fa-trash-o"></i> Delete
@@ -71,13 +57,6 @@
                     (click)="copyTemplate()"
                     title="Create a copy of this template">
                     <i class="fa fa-copy"></i> Copy
-                    </button>
-
-                <button class=""
-                    (click)="configureTemplate()"
-                    [class.configure-input]="isConfiguring"
-                    title="Edit the keys and default values for each field">
-                    <i class="fa fa-pencil"></i> Edit
                     </button>
             </div>
 
