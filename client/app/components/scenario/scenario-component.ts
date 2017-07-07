@@ -73,10 +73,10 @@ import * as _ from 'lodash';
             height: 400px;
             width: 200%;
             font-family: 'Ubuntu', sans-serif;
-            background: #222;
+            background: whitesmoke;
         }
         textarea.code{
-            color: #bef;        
+            color: blue;        
         }
         code.output{
             height: 100%;
@@ -119,6 +119,7 @@ import * as _ from 'lodash';
         }
         .editor-area {
             display: flex;
+            flex-direction: column;
         }
     `],
     providers: [ApiService]
@@ -130,46 +131,10 @@ export class ScenarioComponent implements OnInit {
     @Input() fixIn: any;
 
     private selectedScenario;
-    private code: string = `
-let fixOut = JSON.parse(fixIn);
-
-if (source.message.body.Value === "IBM") {
-  fixOut.LastShares = 111;
-  send(fixOut);
-}`;
     private scenarios = [];
     private isAdding = false;
     private socket;
-    private outputLines = [
-        { err: false, text: `"{"ClOrdID":{"Tag":11,"Name":"ClOrdID","Value":"20170703007D"},"HandlInst":{"Tag":21,"Name":"HandlInst","Value":"3"},"OrderQty":{"Tag":38,"Name":"OrderQty","Value":"600"},"OrdType":{"Tag":40,"Name":"OrdType","Value":"1"},"Price":{"Tag":44,"Name":"Price","Value":"0"},"Side":{"Tag":54,"Name":"Side","Value":"1"},"Symbol":{"Tag":55,"Name":"Symbol","Value":"IBM"},"TimeInForce":{"Tag":59,"Name":"TimeInForce","Value":"0"},"TransactTime":{"Tag":60,"Name":"TransactTime","Value":"20170703-18:08:58.000"},"SecurityExchange":{"Tag":207,"Name":"SecurityExchange","Value":"New York"}}"` },
-        {
-            err: true, text: `"Cannot read property 'Value' of undefined
-TypeError: Cannot read property 'Value' of undefined
-    at evalmachine.<anonymous>:5:35
-    at ContextifyScript.Script.runInContext (vm.js:35:29)
-    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
-    at Function.executeCode (d:\\Repo\\tools\\fixalicious-ui\\server\\models\\scenario-model.js:103:20)
-    at Function.trigger (d:\\Repo\\tools\\fixalicious-ui\\server\\models\\scenario-model.js:69:27)
-    at Command.handleTransactions [as callback] (d:\\Repo\\tools\\fixalicious-ui\\server\\models\\redis-watcher.js:37:31)
-    at normal_reply (d:\\Repo\\tools\\fixalicious-ui\\server\\node_modules\\redis\\index.js:721:21)
-    at RedisClient.return_reply (d:\\Repo\\tools\\fixalicious-ui\\server\\node_modules\\redis\\index.js:819:9)
-    at JavascriptRedisParser.returnReply (d:\\Repo\\tools\\fixalicious-ui\\server\\node_modules\\redis\\index.js:192:18)
-    at JavascriptRedisParser.execute (d:\\Repo\\tools\\fixalicious-ui\\server\\node_modules\\redis-parser\\lib\\parser.js:574:12)"`},
-        { err: false, text: `"{"ClOrdID":{"Tag":11,"Name":"ClOrdID","Value":"20170703007D"},"HandlInst":{"Tag":21,"Name":"HandlInst","Value":"3"},"OrderQty":{"Tag":38,"Name":"OrderQty","Value":"600"},"OrdType":{"Tag":40,"Name":"OrdType","Value":"1"},"Price":{"Tag":44,"Name":"Price","Value":"0"},"Side":{"Tag":54,"Name":"Side","Value":"1"},"Symbol":{"Tag":55,"Name":"Symbol","Value":"IBM"},"TimeInForce":{"Tag":59,"Name":"TimeInForce","Value":"0"},"TransactTime":{"Tag":60,"Name":"TransactTime","Value":"20170703-18:08:58.000"},"SecurityExchange":{"Tag":207,"Name":"SecurityExchange","Value":"New York"}}"` },
-        {
-            err: true, text: `"Cannot read property 'Value' of undefined
-TypeError: Cannot read property 'Value' of undefined
-    at evalmachine.<anonymous>:5:35
-    at ContextifyScript.Script.runInContext (vm.js:35:29)
-    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
-    at Function.executeCode (d:\\Repo\\tools\\fixalicious-ui\\server\\models\\scenario-model.js:103:20)
-    at Function.trigger (d:\\Repo\\tools\\fixalicious-ui\\server\\models\\scenario-model.js:69:27)
-    at Command.handleTransactions [as callback] (d:\\Repo\\tools\\fixalicious-ui\\server\\models\\redis-watcher.js:37:31)
-    at normal_reply (d:\\Repo\\tools\\fixalicious-ui\\server\\node_modules\\redis\\index.js:721:21)
-    at RedisClient.return_reply (d:\\Repo\\tools\\fixalicious-ui\\server\\node_modules\\redis\\index.js:819:9)
-    at JavascriptRedisParser.returnReply (d:\\Repo\\tools\\fixalicious-ui\\server\\node_modules\\redis\\index.js:192:18)
-    at JavascriptRedisParser.execute (d:\\Repo\\tools\\fixalicious-ui\\server\\node_modules\\redis-parser\\lib\\parser.js:574:12)"`}
-    ];
+    private outputLines = [];
 
     constructor(
         private scenarioService: ScenarioService) {
@@ -197,8 +162,8 @@ TypeError: Cannot read property 'Value' of undefined
 
             if (propName == "session" && changedProp.currentValue != undefined) {
                 this.session = changedProp.currentValue;
-
                 let oldSession = changedProp.previousValue;
+                
                 this.socket.removeAllListeners(`scenario-output[${oldSession}]`);
                 this.outputLines = [];
 

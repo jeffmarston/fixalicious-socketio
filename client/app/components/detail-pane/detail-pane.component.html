@@ -1,5 +1,5 @@
 <div class="container"
-    [style.width]="collapsed ? '80px' : '410px'">
+    [style.width.px]="collapsed ? '700' : width">
     <div class="action">
         <button class="expander"
             title="Show the FIX messages to be sent"
@@ -66,8 +66,16 @@
             </div>
 
             <field-editor 
+                [hidden]="editor!='field'"
                 [template]="selectedAction.template"
                 [editMode]="isConfiguring">
             </field-editor>
+            
+
+            <scenario 
+                [hidden]="editor!='scenario'"
+                [session]="session"
+                [fixIn]="detail?.original">
+            </scenario>
         </div>
     </div>

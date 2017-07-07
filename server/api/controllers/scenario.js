@@ -33,7 +33,7 @@ class ScenarioController {
         let label = req.swagger.params.label.value;
         let fixIn = req.swagger.params.fixIn.value;
 
-        ScenarioModel.run(label, fixIn).then((res) => {
+        ScenarioModel.run(label, fixIn).then((result) => {
             //ScenarioModel.refreshAll();
             res.status(200).json(result);
         }).catch((error) => {

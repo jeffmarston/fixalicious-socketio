@@ -23,6 +23,8 @@ export class DetailPaneComponent implements OnInit {
     private isConfiguring = false;
     private customActions = [];
     private selectedAction = null;
+    private width = 400;
+    private editor = "field";
 
     constructor(
         private apiService: ApiService,
@@ -104,6 +106,16 @@ export class DetailPaneComponent implements OnInit {
         if (this.selectedAction.invalid) {
             return;
         }
+        this.selectedAction = action;
+
+        if (action.label == "Fill") {
+            this.editor = "scenario";
+            this.width = 700;
+        } else {
+            this.editor = "field";
+            this.width = 400;
+        }
+
         if (this.isConfiguring) {
             //finalize and save changes
             this.configureTemplate();
@@ -115,7 +127,7 @@ export class DetailPaneComponent implements OnInit {
             let resolved = this.fixParserService.eval(element, this.sourceFixObj);
             action.processedFix[element.key] = { value: resolved, formula: element.formula };
         });
-            
+
         this.displayFixMessage();
         if (autoSend && this.collapsed) {
             this.send();
