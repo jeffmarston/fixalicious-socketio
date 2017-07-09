@@ -24,7 +24,7 @@ div.key-column {
 }
 div.value-column{
     width: 50%;
-    margin: 0 5px;
+    margin: 0 0 0 5px;
     display: flex;
 }
 div.row>div{
@@ -39,7 +39,7 @@ div.row>div{
 }
 
 .group-row {
-    background: rgba(187, 204, 221, 0.5);
+    background: rgba(187, 204, 221, 0.25);
 }
 
 button.repeating-group {
@@ -60,6 +60,7 @@ button.repeating-group-add {
 .configure-input {
     border: 1px solid gray;
     padding: 3px;
+    margin: 1px;
     float: right;
     flex: 1 1 auto;
     min-width: 50px;
@@ -106,15 +107,13 @@ nav nav {
     visibility: hidden;
     position: absolute;
     opacity: 0;
-    transition: all 0.25s linear;
+    transition: opacity 0.25s linear;
     height: 0;
-    right: 10px;
+    right: 28px;
 }
 
 nav nav li {
     float: none;
-    margin-right: 10px;
-
     border-left: 1px solid gray;
     border-right: 1px solid gray;
 }
@@ -126,8 +125,16 @@ nav nav li:last-child {
     border-bottom: 1px solid gray;
 }
 
-nav li:hover nav {
-    margin-top: 0;
+nav button:hover nav {
+    margin-top: -17px;
     visibility: visible;
     opacity: 1;
+}
+
+nav button {
+    border:none;
+    background: transparent;
+}
+nav button:hover {
+    background: #ccc;
 }

@@ -14,7 +14,7 @@ class TransactionController {
 
     static getAllTransactions(req, res) {
         let sessionName = req.swagger.params.session.value;
-        console.log("Request received to get all transactions for session: " + sessionName);
+        console.log("Get all transactions for session: " + sessionName);
 
          res.status(200).json(JSON.parse(dummy));
 
@@ -29,27 +29,27 @@ class TransactionController {
     static createTransaction(req, res) {
         let sessionName = req.swagger.params.session.value;
         let transaction = req.swagger.params.transaction.value;
-        console.log("Request received to create transaction: " + sessionName);
+        console.log("Create transaction: " + sessionName);
 
         TransactionModel.create(sessionName, transaction).then((result) => {
             res.status(200).json(result);
         }).catch((error) => {
-            res.status(500).json(new ErrorResource(500, req.url, "Request to create transaction failed.", error));
+            res.status(500).json(new ErrorResource(500, req.url, "Create transaction failed.", error));
         });
     }
 
     static deleteTransaction(req, res) {
         let sessionName = req.swagger.params.session.value;
-        console.log("Request received to delete transaction: " + sessionName);
+        console.log("Delete transaction: " + sessionName);
 
         TransactionModel.delete(sessionName).then((result) => {
             if (result > 0) {
                 res.status(200).json(result);
             } else {
-                res.status(404).json(new ErrorResource(404, req.url, "Request to delete transaction failed.", ""));
+                res.status(404).json(new ErrorResource(404, req.url, "Delete transaction failed.", ""));
             }
         }).catch((error) => {
-            res.status(500).json(new ErrorResource(500, req.url, "Request to delete transaction failed.", error));
+            res.status(500).json(new ErrorResource(500, req.url, "Delete transaction failed.", error));
         });
     }
 }

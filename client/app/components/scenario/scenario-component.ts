@@ -94,8 +94,10 @@ import * as _ from 'lodash';
 export class ScenarioComponent implements OnInit {
     @Output() onSelected = new EventEmitter<ISession>();
     @Input() collapsed: boolean;
+    @Input() name: string;
+    @Input() template: any;
     @Input() session: any;
-    @Input() fixIn: any;
+    @Input() sourceFix: any;
 
     private selectedScenario;
     private scenarios = [];
@@ -124,7 +126,7 @@ export class ScenarioComponent implements OnInit {
             let changedProp = changes[propName];
 
             if (propName == "fixIn" && changedProp.currentValue != undefined) {
-                this.fixIn = changedProp.currentValue;
+                this.sourceFix = changedProp.currentValue;
             }
 
             if (propName == "session" && changedProp.currentValue != undefined) {
@@ -178,7 +180,7 @@ export class ScenarioComponent implements OnInit {
     }
 
     public runScenario() {
-        this.scenarioService.runScenario(this.selectedScenario.label, this.fixIn).subscribe(o => {
+        this.scenarioService.runScenario(this.selectedScenario.label, this.sourceFix).subscribe(o => {
             console.log(o);
         });
     }

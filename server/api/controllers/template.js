@@ -31,7 +31,7 @@ class TemplateController {
                 res.status(200).json(result);
             }
         }).catch((error) => {
-            res.status(500).json(new ErrorResource(500, req.url, "Request to get all templates failed.", error));
+            res.status(500).json(new ErrorResource(500, req.url, "Get all templates failed.", error));
         });
     }
 
@@ -42,7 +42,7 @@ class TemplateController {
         TemplateModel.create(label, template).then((result) => {
             res.status(200).json(result);
         }).catch((error) => {
-            res.status(500).json(new ErrorResource(500, req.url, "Request to create template failed.", error));
+            res.status(500).json(new ErrorResource(500, req.url, "Create template failed.", error));
         });
     }
 
@@ -53,7 +53,7 @@ class TemplateController {
         TemplateModel.delete(label).then((result) => {
             res.status(200).json("{ message: 'Deleted " + result + " template(s)'");
         }).catch((error) => {
-            res.status(500).json(new ErrorResource(500, req.url, "Request to create template failed.", error));
+            res.status(500).json(new ErrorResource(500, req.url, "Delete template failed.", error));
         });
     }
 

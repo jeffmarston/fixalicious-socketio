@@ -14,12 +14,12 @@ let redisClient = redis.createClient();
 class SessionController {
 
     static getAllSessions(req, res) {
-        console.log("Request received to get all Sessions.");
+        console.log("Get all Sessions.");
 
         SessionModel.getAll().then((result) => {
             res.status(200).json(result);
         }).catch((error) => {
-            res.status(500).json(new ErrorResource(500, req.url, "Request to get all sessions failed.", error));
+            res.status(500).json(new ErrorResource(500, req.url, "Get all sessions failed.", error));
         });
     }
 
@@ -30,7 +30,7 @@ class SessionController {
         SessionModel.enableScenarios(name, changes.enable, changes.disable).then((result) => {
             res.status(200).json(result);
         }).catch((error) => {
-            res.status(500).json(new ErrorResource(500, req.url, "Request to get all sessions failed.", error));
+            res.status(500).json(new ErrorResource(500, req.url, "Enable sessions failed.", error));
         });
     }
 
@@ -43,7 +43,7 @@ class SessionController {
             redisClient.rpush(`fix-svr-sessions-${sessionName}`, transaction);
         }, 3000);
 
-        console.log("Request received to create Session: " + sessionName);
+        console.log("Create Session: " + sessionName);
         res.status(200).json("Fake messages started");
     }
 }

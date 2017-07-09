@@ -1,16 +1,17 @@
 <div class="container">
 
-    <div class="button-panel">
+    <div class="button-panel"
+        [hidden]="level > 0">
         <button class=""
             (click)="send()"
-            [hidden]="editor=='scenario'"
+            [disabled]="editMode"
             title="Send message back to the client">
             <i class="fa fa-send-o"></i> Send
         </button>
 
         <button class=""
-            (click)="configureTemplate()"
-            [class.configure-input]="isConfiguring"
+            (click)="edit()"
+            [class.configure-input]="editMode"
             title="Edit the keys and default values for each field">
             <i class="fa fa-pencil"></i> Edit
         </button>
@@ -20,21 +21,6 @@
         [class.group-row]="isRepeatingGroup(pair)">
 
         <div class="first-level">
-
-            <!--<div class="key-column">
-        <span>{{pair.key}}</span>
-    </div>
-    <div class="value-column">
-        <input class="pair-value"
-            [style.margin-left.px]="pair.level*15"
-            [style.width.px]="158-(pair.level*15)"
-            [hidden]="pair.isGroup"
-            [(ngModel)]="pair.formula" />
-        <span [style.margin-left.px]="((pair.level || 0)+1)*15"
-            style="font-style:italic; color: #777;"
-            [hidden]="!pair.isGroup">group</span>
-    </div>-->
-
             <div class="key-column">
                 <input class="configure-key"
                     [placeholder]="(editMode) ? 'key' : ''"
@@ -45,29 +31,39 @@
                 <div [style.width.px]="isRepeatingGroup(pair) ? ((level+1)*15) : (level*15)"></div>
                 <input class="configure-input"
                     [class.editing]="editMode"
-                    [hidden]="isRepeatingGroup(pair)"
-                    [(ngModel)]="(editMode) ? pair.formula : pair.value" />
+                    [hidden]="editMode || isRepeatingGroup(pair)"
+                    [(ngModel)]="pair.value" />
+
+                <input class="configure-input"
+                    [class.editing]="editMode"
+                    [hidden]="!editMode || isRepeatingGroup(pair)"
+                    (blur)="leaveValue(pair)"
+                    [(ngModel)]="pair.formula" />
 
                 <div class="group-placeholder"
                     [hidden]="!isRepeatingGroup(pair)">group</div>
             </div>
 
-            <div class="menu-column">
+            <div class="menu-column"
+                [hidden]="!editMode">
                 <nav>
-                    <li><i class="fa fa-ellipsis-h"></i>
+                    <button><i class="fa fa-ellipsis-h"></i>
                         <nav>
                             <li><a (click)="delete(pair)">Delete</a></li>
-                            <li><a (click)="insertGroup(pair)">Insert Group</a></li>
-                            <li><a (click)="insert(pair)">Insert Above</a></li>
+                            <li><a (click)="insertGroup(pair)">Insert Above (Group)</a></li>
+                            <li><a (click)="insertAbove(pair)">Insert Above</a></li>
+                            <li><a (click)="insertBelow(pair)">Insert Below</a></li>
                         </nav>
-                    </li>
+                    </button>
                 </nav>
             </div>
         </div>
         <div *ngIf="isRepeatingGroup(pair)">
             <field-editor [template]="pair.formula"
                 [editMode]="editMode"
-                [level]="level+1"></field-editor>
+                [level]="level+1"
+                [sourceFix]="sourceFix">
+            </field-editor>
         </div>
     </div>
 </div>

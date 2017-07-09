@@ -50,17 +50,33 @@
     width: 100%;
     height: 30px;
 }
+.action-panel>button.expander {
+    border: none;
+    background: transparent;
+}
+
 .readonly-input {
     background: transparent;
     cursor: pointer;
 }
 
  /*templates*/
-.editor-section {
+.inner-editor {
     overflow: auto;
     background: #eee;
     width: 100%;
     border: 1px solid gray;
+    flex: 1 1 auto;
+    box-sizing: border-box;
+}
+
+.outer-editor {
+    display: flex;
+    flex-direction: column;
+    width:100%
+}
+.outer-editor .hidden {
+    display: none;
 }
 
 .button-panel {
@@ -74,11 +90,6 @@
 
 div.row {
     display: flex;
-}
-
-button.expander {
-    border: none;
-    background: transparent;
 }
 
 button.add-action {

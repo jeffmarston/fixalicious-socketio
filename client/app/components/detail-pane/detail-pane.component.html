@@ -10,7 +10,7 @@
 
         <button [ngClass]="(!collapsed && selectedAction==action) ? 'selected' : '' "
             [style.border-color]="(action.invalid) ? 'red' : 'gray' "
-            [title]="(action.invalid) ? action.invalid : '' "
+            [title]="(action.invalid) ? action.invalid : action.label "
             *ngFor="let action of customActions"
             (click)="prepareTemplate(action, true)"
             class="invalid">
@@ -20,7 +20,7 @@
                 [readonly]="!action.isEditing"
                 [(ngModel)]="action.label"
                 [setFocus]="action.isEditing"
-                (dblclick)="action.isEditing=true"
+                (dblclick)="false && action.isEditing=true"
                 [ngClass]="action.isEditing ? 'editable-input' : 'readonly-input' "
             />
         </button>
@@ -43,32 +43,36 @@
             </button>
         </span>
     </div>
-    <div class="editor-section"
-        [hidden]="collapsed">
-        <div [hidden]="!selectedAction">
-            <div class="button-panel">
-                <button class=""
-                    (click)="deleteTemplate()"
-                    title="Delete this template">
+    <div class="outer-editor"
+        [style.display]="(!selectedAction || collapsed) ? 'none' : 'flex'">
+        <div class="button-panel">
+            <button class=""
+                (click)="deleteAction()"
+                title="Delete this action">
                     <i class="fa fa-trash-o"></i> Delete
                     </button>
 
-                <button class=""
-                    (click)="copyTemplate()"
-                    title="Create a copy of this template">
-                    <i class="fa fa-copy"></i> Copy
+            <button class=""
+                (click)="copyAction()"
+                title="Create a copy of this action">
+                    <i class="fa fa-copy"></i> Clone
                     </button>
-            </div>
+        </div>
 
+        <div class="inner-editor">
             <field-editor [hidden]="editor!='field'"
+                [action]="selectedAction"
                 [template]="selectedAction.template"
-                [editMode]="isConfiguring">
+                [session]="session"
+                [sourceFix]="detail?.original">
             </field-editor>
 
 
-            <scenario [hidden]="editor!='scenario'"
+            <!--<scenario [hidden]="editor!='scenario'"
+                [name]="selectedAction.label"
+                [template]="selectedAction.template"
                 [session]="session"
-                [fixIn]="detail?.original">
-            </scenario>
+                [sourceFix]="detail?.original">
+            </scenario>-->
         </div>
     </div>

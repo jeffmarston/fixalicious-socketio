@@ -6,7 +6,7 @@
             (onSave)="saveSessionConfig($event)"></session-config>-->
 
         <split direction="horizontal">
-            <split-area [size]="70"
+            <split-area [size]="splitSize"
                 style="display:flex">
 
 
@@ -35,7 +35,7 @@
                 </div>
 
             </split-area>
-            <split-area [size]="30"
+            <split-area [size]="100-splitSize"
                 style="display: flex">
                 <detail-pane class="detail-pane"
                     [hidden]="this.detailCollapsed"

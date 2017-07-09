@@ -28,11 +28,13 @@ export class MessageGridComponent implements OnInit {
     private showDetails: boolean;
     private debugMessage: string;
     private detailCollapsed = false;
+    private splitSize = 70;
     private filterValue;
     private socket;
 
     ngOnInit() {
         this.showGrid = true;
+        this.splitSize = parseInt(localStorage.getItem("split-size") || "70");
 
         this.socket = io();
         this.socket.on('transaction', msg => {

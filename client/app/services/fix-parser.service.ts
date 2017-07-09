@@ -55,8 +55,8 @@ export class FixParserService implements IFixParserService {
         field.value = field.formula;
         if (Array.isArray(field.formula)) {
             field.formula.forEach(element => {
-                let resolved = this.eval(element, sourceFix);
-                element.value = resolved;
+                this.eval(element, sourceFix);
+                //element.value = resolved;
             });
         } else if (typeof field.formula == "string") {
             field.value = field.formula.replace("{{newid}}", this.generateId());

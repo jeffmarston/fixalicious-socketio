@@ -70,11 +70,12 @@ export class DetailPaneComponent implements OnInit {
             this.pullAction(this.selectedAction);
         }
         let newAction = {
-            label: "Action", isEditing: true, pairs: [
+            label: "Action", isEditing: true, template: [
                 { key: "", formula: "" }
             ]
         };
         this.customActions.push(newAction);
+        this.selectedAction = newAction;
     }
 
     private doneEditingActionLabel($event, action) {
@@ -82,9 +83,9 @@ export class DetailPaneComponent implements OnInit {
             action.isEditing = false;
             action.invalid = null;
 
-            if (_.countBy(this.customActions, o => o.label.toUpperCase() === action.label.toUpperCase()).true > 1) {
-                action.label = this.uniquify(_.map(this.customActions, o => o.label), action.label);
-            }
+            //if (_.countBy(this.customActions, o => o.label.toUpperCase() === action.label.toUpperCase()).true > 1) {
+            action.label = this.uniquify(_.map(this.customActions, o => o.label), action.label);
+            //}
 
             if (action.label.trim() === "") {
                 action.invalid = "Label cannot be empty";
@@ -94,7 +95,7 @@ export class DetailPaneComponent implements OnInit {
                 action.isEditing = true;
             } else {
                 // save to server
-                this.apiService.createTemplate(action).subscribe(o => {
+                this.apiService.saveAction(action).subscribe(o => {
                     this.selectedAction = action;
                     this.isConfiguring = true;
                 });
@@ -134,14 +135,6 @@ export class DetailPaneComponent implements OnInit {
         // }
     }
 
-    // private send() {
-    //     this.apiService.createTransaction(this.session.session, this.selectedAction.processedFix);
-
-    //     if (!this.collapsed) {
-    //         this.displayFixMessage();
-    //     }
-    // }
-
     private pullAction(action) {
         let index = this.customActions.indexOf(action);
         _.pull(this.customActions, action);
@@ -150,11 +143,11 @@ export class DetailPaneComponent implements OnInit {
         } else if (index < this.customActions.length) {
             this.selectedAction = this.customActions[index];
         }
-        this.prepareTemplate(action, false);
+        this.prepareTemplate(this.selectedAction, false);
     }
 
-    private deleteTemplate() {
-        this.apiService.deleteTemplate(this.selectedAction)
+    private deleteAction() {
+        this.apiService.deleteAction(this.selectedAction)
             .subscribe(success => {
                 this.pullAction(this.selectedAction);
             }, error => {
@@ -181,6 +174,11 @@ export class DetailPaneComponent implements OnInit {
     // }
 
     private uniquify(allNames: string[], origName: string): string {
+        // if it's already unique, return it
+        if (_.countBy(allNames, o => o === origName).true === 1) {
+            return origName;
+        }
+
         let newName = origName;
         while (_.find(this.customActions, o => o.label === newName)) {
             let regex = /\(\d+\)$/;
@@ -196,7 +194,7 @@ export class DetailPaneComponent implements OnInit {
         return newName;
     }
 
-    private copyTemplate() {
+    private copyAction() {
         let json = JSON.stringify(this.selectedAction);
         let newAction = JSON.parse(json);
 
@@ -205,7 +203,7 @@ export class DetailPaneComponent implements OnInit {
             newAction.label);
 
         this.customActions.push(newAction);
-        this.apiService.createTemplate(newAction).subscribe(o => {
+        this.apiService.saveAction(newAction).subscribe(o => {
             console.log("Template saved");
             this.prepareTemplate(newAction, false);
             newAction.isConfiguring = true;

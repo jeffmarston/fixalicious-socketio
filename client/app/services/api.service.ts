@@ -47,13 +47,13 @@ export class ApiService {
             .map(res => res.json());
     }
 
-    public deleteTemplate(template) {
-        let url = `/template/${template.label}`;
+    public deleteAction(action) {
+        let url = `/template/${action.label}`;
         return this.http.delete(url);
     }
 
-    public createTemplate(template) {
-        let url = `/template/${template.label}`;
-        return this.http.post(url, template);
+    public saveAction(action) {
+        let url = `/template/${action.label}`;
+        return this.http.post(url, action);
     }
 }
