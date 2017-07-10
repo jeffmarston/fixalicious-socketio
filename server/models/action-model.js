@@ -16,6 +16,12 @@ class ActionModel {
         });
     }
 
+    static getById(label) {
+        return redisClient.hgetAsync('ui-actions', label).then(item => {
+            return JSON.parse(item);
+        });
+    }
+
     static seedInitial(seedActions) {
         let cmds = [];
         seedActions.forEach(action => {

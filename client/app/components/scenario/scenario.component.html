@@ -11,16 +11,18 @@
 </div>
 
 <div class="editor-area">
-    <code #codeId
+    <textarea #codeId
         class="code"
-        contentEditable
-        (blur)="leaveCode(codeId)">{{action.code}}
-    </code>
+        [(ngModel)]="action.code"
+        (blur)="leaveCode(codeId)"></textarea>
 
-    <code class="output"
+    <textarea readonly class="output">{{output}}
+    </textarea>
+
+    <!--<code class="output"
         #output
         [scrollTop]="9999999">
         <span class="output" *ngFor="let line of outputLines" [style.color]="line.err ? 'red' : 'white'">{{line.text}}</span>
         <span class="output"> </span>
-    </code>
+    </code>-->
 </div>

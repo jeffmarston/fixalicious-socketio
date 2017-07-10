@@ -5,18 +5,26 @@
     padding: 6px;
 }
 
+textarea {
+    border: 1px solid gray;
+    padding: 4px;
+    resize: none;
+    font-family: 'Source Sans Pro', monospace;
+}
+
 .code{
     color: blue;    
     height: 50%; 
     background: #fcfcfc;   
-    border: 1px solid gray;
 }
 
 .output{
     height: 50%;
     background: #222;
-    display: block;
-    overflow: auto;
+    color: whitesmoke;  
+    /*display: block;
+    overflow: auto;*/
+    margin-top: 6px;
 }
 span.output{
     margin-left: 4px; 

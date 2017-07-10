@@ -23,6 +23,7 @@ export class ScenarioComponent implements OnInit {
 
     private socket;
     private outputLines = [];
+    private output = "";
 
     constructor(
         private scenarioService: ScenarioService,
@@ -43,6 +44,8 @@ export class ScenarioComponent implements OnInit {
 
                 this.socket.removeAllListeners(`scenario-output[${oldSession}]`);
                 this.outputLines = [];
+                this.output = "";
+
 
                 // this.scenarioService.getAll().subscribe(allScenarios => {
                 //     this.scenarios = allScenarios;
@@ -65,9 +68,11 @@ export class ScenarioComponent implements OnInit {
                     if (outputObj.scenario === this.name) {
                         if (outputObj.log) {
                             this.outputLines.push({ err: false, text: outputObj.log });
+                            this.output += outputObj.log + "\n";
                         }
                         if (outputObj.error) {
                             this.outputLines.push({ err: true, text: outputObj.error });
+                            this.output += outputObj.log + "\n";
                         }
                     }
                 });
@@ -76,11 +81,11 @@ export class ScenarioComponent implements OnInit {
     }
 
     public leaveCode(srcElement) {
-        this.action.code = srcElement.innerText;
+        //this.action.code = srcElement.innerText;
 
         this.apiService.saveAction(this.action).subscribe(o => {
-             console.log(o);
-         });
+            console.log(o);
+        });
 
     }
 

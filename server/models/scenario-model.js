@@ -9,6 +9,7 @@ let redisClient = redis.createClient();
 bluebird.promisifyAll(redis.RedisClient.prototype);
 
 let TransactionModel = require("./transaction-model");
+let ActionModel = require("./action-model");
 
 class ScenarioModel {
 
@@ -77,9 +78,11 @@ class ScenarioModel {
         };
 
         console.log(`======== run : ${scenarioName} ==========`);
-        return ScenarioModel.getById(scenarioName).then(scenario => {
-            if (scenario) {
+        return ActionModel.getById(scenarioName).then(scenario => {
+            if (scenario.code) {
                 ScenarioModel.executeCode(sessionName, scenario, fixIn);
+            } else {
+                console.error(scenario.label + " has no code to run.");
             }
         });
     }

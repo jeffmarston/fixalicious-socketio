@@ -46,11 +46,9 @@ class Subscriber {
             console.log("Session update received: " + result[1]);
             let session = JSON.parse(result[1]);
             global.io.emit('session', session);
-
-
             if (session.status == "up") {
                 addTransactionPoller(session.session);
-                sessionModel.enableScenarios(session.session, session.scenarios);
+                sessionModel.enableScenarios(session.session);
             } else {
                 //removeTransactionPoller(session.session);
             }

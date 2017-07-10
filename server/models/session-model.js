@@ -28,29 +28,29 @@ class SessionModel {
         return client.lremAsync('ui-sessions', 1, JSON.stringify(session));
     }
 
-    static enableScenarios(sessionName, enable, disable) {
-        return client.hgetAsync('ui-sessions', sessionName).then((item) => {
-            let session = JSON.parse(item);
-            enable = enable || [];
-            disable = disable || [];
-            session.scenarios = session.scenarios || [];
-            _.remove(session.scenarios, o => {
-                return (disable.indexOf(o) > -1) || (enable.indexOf(o) > -1);
-            })
-            session.scenarios = session.scenarios.concat(enable);
+    static enableScenarios(sessionName) {
+        // return client.hgetAsync('ui-sessions', sessionName).then((item) => {
+        //     let session = JSON.parse(item);
+        //     enable = enable || [];
+        //     disable = disable || [];
+        //     session.scenarios = session.scenarios || [];
+        //     _.remove(session.scenarios, o => {
+        //         return (disable.indexOf(o) > -1) || (enable.indexOf(o) > -1);
+        //     })
+        //     session.scenarios = session.scenarios.concat(enable);
 
-            // disable
-            disable.forEach(scenarioId => {
-                scenarioModel.disable(session, scenarioId);
-            }, this);
+        //     // disable
+        //     disable.forEach(scenarioId => {
+        //         scenarioModel.disable(session, scenarioId);
+        //     }, this);
 
-            // enable
-            session.scenarios.forEach(scenarioId => {
-                scenarioModel.enable(session, scenarioId);
-            }, this);
+        //     // enable
+        //     session.scenarios.forEach(scenarioId => {
+        //         scenarioModel.enable(session, scenarioId);
+        //     }, this);
 
-            return client.hset('ui-sessions', sessionName, JSON.stringify(session));
-        });
+        //     return client.hset('ui-sessions', sessionName, JSON.stringify(session));
+        // });
 
     }
 }
