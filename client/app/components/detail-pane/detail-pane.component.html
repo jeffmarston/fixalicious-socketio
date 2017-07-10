@@ -27,9 +27,9 @@
 
         <span style="display: inline-flex;">
             <button class="add-action"
-                title="Add a new quick action button"
+                title="Add a new template"
                 [hidden]="collapsed"
-                (click)="addAction()"
+                (click)="addAction('template')"
                 style="color:#777;">
                 <i class="fa fa-plus-circle"></i>
             </button>
@@ -37,7 +37,7 @@
             <button class="add-action"
                 title="Add a new scenario"
                 [hidden]="collapsed || hideScenario"
-                (click)="addScenario()"
+                (click)="addAction('scenario')"
                 style="color:#484;">
                 <i class="fa fa-plus-circle"></i>
             </button>
@@ -60,7 +60,7 @@
         </div>
 
         <div class="inner-editor">
-            <field-editor [hidden]="editor!='field'"
+            <field-editor *ngIf="editor=='template'"
                 [action]="selectedAction"
                 [template]="selectedAction.template"
                 [session]="session"
@@ -68,11 +68,11 @@
             </field-editor>
 
 
-            <!--<scenario [hidden]="editor!='scenario'"
+            <scenario *ngIf="editor=='scenario'"
                 [name]="selectedAction.label"
-                [template]="selectedAction.template"
+                [action]="selectedAction"
                 [session]="session"
                 [sourceFix]="detail?.original">
-            </scenario>-->
+            </scenario>
         </div>
     </div>

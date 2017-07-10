@@ -5,7 +5,7 @@ let util = require('util');
 let vm = require('vm');
 let bluebird = require('bluebird');
 let redis = require('redis');
-let client = redis.createClient();
+let redisClient = redis.createClient();
 bluebird.promisifyAll(redis.RedisClient.prototype);
 
 let TransactionModel = require("./transaction-model");
@@ -13,7 +13,7 @@ let TransactionModel = require("./transaction-model");
 class ScenarioModel {
 
     static getAll() {
-        return client.hvalsAsync('ui-scenarios').then((items) => {
+        return redisClient.hvalsAsync('ui-scenarios').then((items) => {
             let result = _.map(items, item => {
                 return JSON.parse(item);
             });
@@ -22,17 +22,17 @@ class ScenarioModel {
     }
 
     static getById(label) {
-        return client.hgetAsync('ui-scenarios', label).then((item) => {
+        return redisClient.hgetAsync('ui-scenarios', label).then((item) => {
             return JSON.parse(item);
         });
     }
 
     static create(label, scenario) {
-        return client.hsetAsync('ui-scenarios', label, JSON.stringify(scenario));
+        return redisClient.hsetAsync('ui-scenarios', label, JSON.stringify(scenario));
     }
 
     static delete(label) {
-        return client.hdelAsync('ui-scenarios', 1, label);
+        return redisClient.hdelAsync('ui-scenarios', 1, label);
     }
 
     static refreshAll() {

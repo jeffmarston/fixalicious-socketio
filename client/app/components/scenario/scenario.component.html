@@ -1,0 +1,26 @@
+<div class="command-panel">
+    <input type=checkbox
+        [checked]="enabled"
+        (change)="toggleEnabled()" /> Enable
+
+    <button title="Run scenario"
+        [disabled]="!sourceFix"
+        (click)="runScenario()">
+        <i class="fa fa-send"></i> Run
+    </button>
+</div>
+
+<div class="editor-area">
+    <code #codeId
+        class="code"
+        contentEditable
+        (blur)="leaveCode(codeId)">{{action.code}}
+    </code>
+
+    <code class="output"
+        #output
+        [scrollTop]="9999999">
+        <span class="output" *ngFor="let line of outputLines" [style.color]="line.err ? 'red' : 'white'">{{line.text}}</span>
+        <span class="output"> </span>
+    </code>
+</div>

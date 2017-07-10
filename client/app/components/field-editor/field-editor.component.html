@@ -45,7 +45,8 @@
             </div>
 
             <div class="menu-column"
-                [hidden]="!editMode">
+                [hidden]="!editMode"
+                [style.width]="(editMode) ? '24px' : '0'">
                 <nav>
                     <button><i class="fa fa-ellipsis-h"></i>
                         <nav>

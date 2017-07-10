@@ -6,54 +6,54 @@ let redisClient = redis.createClient();
 bluebird.promisifyAll(redis.RedisClient.prototype);
 
 let _ = require('lodash');
-let TemplateModel = require('../../models/template-model');
+let ActionModel = require('../../models/action-model');
 let ErrorResource = require('../../resources/error-resource');
 
-class TemplateController {
+class ActionController {
     static getSeedActions() {
         return [
-            { label: "Ack", template: TemplateController.createAck() },
-            { label: "Partial", template: TemplateController.createPartial() },
-            { label: "Fill", template: TemplateController.createFill() },
-            { label: "Reject", template: TemplateController.createReject() }
+            { label: "Ack", type: "template", template: ActionController.createAck() },
+            { label: "Partial", type: "template", template: ActionController.createPartial() },
+            { label: "Fill", type: "template", template: ActionController.createFill() },
+            { label: "Reject", type: "template", template: ActionController.createReject() }
         ];
     }
 
-    static getAllTemplates(req, res) {
-        console.log("Get all Templates.");
+    static getAllActions(req, res) {
+        console.log("Get all Actions.");
 
-        TemplateModel.getAll().then((result) => {
+        ActionModel.getAll().then((result) => {
             if (result.length === 0) {
-                TemplateModel.seedInitial(TemplateController.getSeedActions()).then(seeded => {
+                ActionModel.seedInitial(ActionController.getSeedActions()).then(seeded => {
                     res.status(200).json(seeded);
                 });
             } else {
                 res.status(200).json(result);
             }
         }).catch((error) => {
-            res.status(500).json(new ErrorResource(500, req.url, "Get all templates failed.", error));
+            res.status(500).json(new ErrorResource(500, req.url, "Get all actions failed.", error));
         });
     }
 
-    static createTemplate(req, res) {
+    static createAction(req, res) {
         let label = req.swagger.params.label.value;
-        let template = req.swagger.params.template.value;
+        let action = req.swagger.params.action.value;
 
-        TemplateModel.create(label, template).then((result) => {
+        ActionModel.create(label, action).then((result) => {
             res.status(200).json(result);
         }).catch((error) => {
-            res.status(500).json(new ErrorResource(500, req.url, "Create template failed.", error));
+            res.status(500).json(new ErrorResource(500, req.url, "Create action failed.", error));
         });
     }
 
-    static deleteTemplate(req, res) {
+    static deleteAction(req, res) {
         let label = req.swagger.params.label.value;
-        console.log("Delete template: " + label);
+        console.log("Delete action: " + label);
                
-        TemplateModel.delete(label).then((result) => {
-            res.status(200).json("{ message: 'Deleted " + result + " template(s)'");
+        ActionModel.delete(label).then((result) => {
+            res.status(200).json("{ message: 'Deleted " + result + " action(s)'");
         }).catch((error) => {
-            res.status(500).json(new ErrorResource(500, req.url, "Delete template failed.", error));
+            res.status(500).json(new ErrorResource(500, req.url, "Delete action failed.", error));
         });
     }
 
@@ -156,7 +156,7 @@ class TemplateController {
 }
 
 module.exports = {
-    getAllTemplates: TemplateController.getAllTemplates,
-    createTemplate: TemplateController.createTemplate,
-    deleteTemplate: TemplateController.deleteTemplate
+    getAllActions: ActionController.getAllActions,
+    createAction: ActionController.createAction,
+    deleteAction: ActionController.deleteAction
 }

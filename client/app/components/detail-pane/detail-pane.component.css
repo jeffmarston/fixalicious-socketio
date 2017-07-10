@@ -22,7 +22,7 @@
     height: 24px;
     padding: 2px;
     margin: 2px;  
-    width: 69px;
+    min-width: 50px;
     border: 1px gray solid; 
 }
 .action-panel>button:hover {
@@ -68,6 +68,7 @@
     border: 1px solid gray;
     flex: 1 1 auto;
     box-sizing: border-box;
+    display: flex;
 }
 
 .outer-editor {
@@ -85,7 +86,10 @@
 
 .button-panel>button {
     float: right;
-    margin: 2px;
+    height: 24px;
+    padding: 2px;
+    margin: 2px;  
+    width: 70px;
 }
 
 div.row {

@@ -58,7 +58,7 @@ export class FieldEditorComponent implements OnInit {
         // apply and save
         if (!this.editMode) {
             // Remove all empty ones
-            _.remove(this.template, o=>(o.key==="" && o.formula===""));
+            _.remove(this.template, o=>o.key==="");
 
             this.apiService.saveAction(this.action).subscribe(o => {
                 console.log("Action saved");

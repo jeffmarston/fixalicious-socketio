@@ -23,8 +23,8 @@ export class DetailPaneComponent implements OnInit {
     private isConfiguring = false;
     private customActions = [];
     private selectedAction = null;
-    private editor = "field";
-    private hideScenario = true;
+    private editor = "template";
+    private hideScenario = false;
 
     constructor(
         private apiService: ApiService,
@@ -65,17 +65,30 @@ export class DetailPaneComponent implements OnInit {
         localStorage.setItem("detail-pane-collapsed", this.collapsed.toString());
     }
 
-    private addAction() {
+    private addAction(type) {
         if (this.selectedAction.invalid) {
             this.pullAction(this.selectedAction);
         }
-        let newAction = {
-            label: "Action", isEditing: true, template: [
-                { key: "", formula: "" }
-            ]
-        };
-        this.customActions.push(newAction);
-        this.selectedAction = newAction;
+        if (type === "template") {
+            this.selectedAction = {
+                label: "Template",
+                type: type,
+                isEditing: true,
+                template: [
+                    { key: "", formula: "" }
+                ]
+            };
+        } else if (type === "scenario") {
+            this.selectedAction = {
+                label: "Scenario",
+                type: type,
+                isEditing: true,
+                code: "// Language = JavaScript ",
+                enabledSessions: []
+            };
+        }
+        this.customActions.push(this.selectedAction);
+        this.prepareTemplate(this.selectedAction, false);
     }
 
     private doneEditingActionLabel($event, action) {
@@ -83,9 +96,7 @@ export class DetailPaneComponent implements OnInit {
             action.isEditing = false;
             action.invalid = null;
 
-            //if (_.countBy(this.customActions, o => o.label.toUpperCase() === action.label.toUpperCase()).true > 1) {
             action.label = this.uniquify(_.map(this.customActions, o => o.label), action.label);
-            //}
 
             if (action.label.trim() === "") {
                 action.invalid = "Label cannot be empty";
@@ -112,7 +123,7 @@ export class DetailPaneComponent implements OnInit {
         if (action.type == "scenario") {
             this.editor = "scenario";
         } else {
-            this.editor = "field";
+            this.editor = "template";
         }
 
         // [JWM] - Implement onLeave?

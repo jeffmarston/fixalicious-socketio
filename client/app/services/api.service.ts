@@ -40,20 +40,20 @@ export class ApiService {
             .subscribe(o => { console.log(o); });
     }
 
-    // ============== Templates =================
+    // ============== Actions =================
 
     public getActions(): Observable<any> {
-        return this.http.get("/template")
+        return this.http.get("/action")
             .map(res => res.json());
     }
 
     public deleteAction(action) {
-        let url = `/template/${action.label}`;
+        let url = `/action/${action.label}`;
         return this.http.delete(url);
     }
 
     public saveAction(action) {
-        let url = `/template/${action.label}`;
+        let url = `/action/${action.label}`;
         return this.http.post(url, action);
     }
 }

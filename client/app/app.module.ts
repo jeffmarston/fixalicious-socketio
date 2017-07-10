@@ -11,7 +11,7 @@ import { SessionNavComponent } from "./components/session-nav/session-nav.compon
 import { DetailPaneComponent } from "./components/detail-pane/detail-pane.component";
 import { FieldEditorComponent } from "./components/field-editor/field-editor.component";
 import { SessionConfigComponent } from "./components/session-config/session-config.component";
-import { ScenarioComponent } from "./components/scenario/scenario-component";
+import { ScenarioComponent } from "./components/scenario/scenario.component";
 import { ApiService } from "./services/api.service";
 import { FixParserService } from "./services/fix-parser.service";
 import { ScenarioService } from "./services/scenario.service";
