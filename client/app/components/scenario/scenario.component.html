@@ -1,7 +1,7 @@
 <div class="command-panel">
     <input type=checkbox
-        [checked]="enabled"
-        (change)="toggleEnabled()" /> Enable
+        [(ngModel)]="isEnabled"
+        (change)="toggleEnabled(isEnabled)" /> Enable
 
     <button title="Run scenario"
         [disabled]="!sourceFix"
@@ -16,7 +16,9 @@
         [(ngModel)]="action.code"
         (blur)="leaveCode(codeId)"></textarea>
 
-    <textarea readonly class="output">{{output}}
+    <textarea readonly #outputScroll
+        (change)="outputChanged($event)"
+        class="output">{{output}}
     </textarea>
 
     <!--<code class="output"

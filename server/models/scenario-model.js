@@ -14,56 +14,62 @@ let ActionModel = require("./action-model");
 class ScenarioModel {
 
     static getAll() {
-        return redisClient.hvalsAsync('ui-scenarios').then((items) => {
-            let result = _.map(items, item => {
-                return JSON.parse(item);
-            });
-            return result.sort((a, b) => { return a.label > b.label });
-        });
+        // return redisClient.hvalsAsync('ui-scenarios').then((items) => {
+        //     let result = _.map(items, item => {
+        //         return JSON.parse(item);
+        //     });
+        //     return result.sort((a, b) => { return a.label > b.label });
+        // });
     }
 
     static getById(label) {
-        return redisClient.hgetAsync('ui-scenarios', label).then((item) => {
-            return JSON.parse(item);
-        });
+        // return redisClient.hgetAsync('ui-scenarios', label).then((item) => {
+        //     return JSON.parse(item);
+        // });
     }
 
     static create(label, scenario) {
-        return redisClient.hsetAsync('ui-scenarios', label, JSON.stringify(scenario));
+        // return redisClient.hsetAsync('ui-scenarios', label, JSON.stringify(scenario));
     }
 
     static delete(label) {
-        return redisClient.hdelAsync('ui-scenarios', 1, label);
+        // return redisClient.hdelAsync('ui-scenarios', 1, label);
     }
 
     static refreshAll() {
-        if (ScenarioModel.activeSessions) {
-            for (let session in ScenarioModel.activeSessions) {
-                let scenario = ScenarioModel.activeSessions[session];
-                ScenarioModel.getById(scenario.label).then(scenario => {
-                    ScenarioModel.activeSessions[session] = scenario;
-                });
-            }
-        }
+        // if (ScenarioModel.activeSessions) {
+        //     for (let session in ScenarioModel.activeSessions) {
+        //         let scenario = ScenarioModel.activeSessions[session];
+        //         ScenarioModel.getById(scenario.label).then(scenario => {
+        //             ScenarioModel.activeSessions[session] = scenario;
+        //         });
+        //     }
+        // }
     }
 
     static refreshScenario() {
         // get from DB and set a collection
     }
 
-    static enable(session, scenarioId) {
-        console.log(`Starting scenario: ${scenarioId} on session: ${session.session}`);
-        ScenarioModel.activeSessions = ScenarioModel.activeSessions || {};
-        ScenarioModel.getById(scenarioId).then(scenario => {
-            ScenarioModel.activeSessions[session.session] = scenario;
-        });
+    static enable(scenarioId, sessions) {
+        console.log(`Enabled scenario [${scenarioId}] on sessions: [${sessions.join()}]`);
+        //sessions.forEach(session => {
+        // ScenarioModel.activeSessions = ScenarioModel.activeSessions || {};
+        // ActionModel.getById(scenarioId).then(scenario => {
+
+        //     ScenarioModel.activeSessions[session] = ScenarioModel.activeSessions[session] || [];
+        //     ScenarioModel.activeSessions[session].push(scenario);
+        // });
+        //}, this);
     }
 
-    static disable(session, scenarioId) {
-        console.log(`Stopping scenario: ${scenarioId} on session: ${session.session}`);
-        if (ScenarioModel.activeSessions) {
-            delete ScenarioModel.activeSessions[session.session];
-        }
+    static disable(scenarioId, sessions) {
+        console.log(`Enabled scenario [${scenarioId}] on sessions: [${sessions.join()}]`);
+        // sessions.forEach(session => {
+        //     if (ScenarioModel.activeSessions) {
+        //         delete ScenarioModel.activeSessions[session];
+        //     }
+        // }, this);
     }
 
     static run(scenarioName, transaction) {
@@ -100,11 +106,15 @@ class ScenarioModel {
             trailer: _.keyBy(transaction.message.trailer, "Name")
         };
 
-        console.log(`======== triggered on: ${sessionName} ==========`);
-        let scenarioToRun = (ScenarioModel.activeSessions) ? ScenarioModel.activeSessions[sessionName] : null;
-        if (scenarioToRun) {
-            ScenarioModel.executeCode(sessionName, scenarioToRun, fixIn);
-        }
+        ActionModel.getEnabledScenarios(sessionName).then(scenariosToRun => {
+            if (scenariosToRun) {
+                // console.log(scenariosToRun);
+                scenariosToRun.forEach(scenarioToRun => {
+                    console.log(`==> ${scenarioToRun.label} triggered on: ${sessionName}`);
+                    ScenarioModel.executeCode(sessionName, scenarioToRun, fixIn);
+                }, this);
+            }
+        });
     }
 
 

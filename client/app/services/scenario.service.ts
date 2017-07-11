@@ -14,19 +14,19 @@ export class ScenarioService {
         this.template = {};
     }
 
-    public enable(session, scenario) {
-        let url = "/session/" + encodeURIComponent(session.session) + "/scenario";
-        let postBody = { enable: [], disable: [] };
-        if (scenario.enabled) {
-            postBody.enable.push(scenario.label);
-        } else {
-            postBody.disable.push(scenario.label);
-        }
+    // public enable(session, scenario) {
+    //     let url = "/session/" + encodeURIComponent(session.session) + "/scenario";
+    //     let postBody = { enable: [], disable: [] };
+    //     if (scenario.enabled) {
+    //         postBody.enable.push(scenario.label);
+    //     } else {
+    //         postBody.disable.push(scenario.label);
+    //     }
 
-        return this.http.post(url, postBody).subscribe(o=>{
-            console.log(o);
-        });
-    }
+    //     return this.http.post(url, postBody).subscribe(o=>{
+    //         console.log(o);
+    //     });
+    // }
 
     public runScenario(scenarioName: string, fixIn: any) {
         let url = "/scenario/run/" + encodeURIComponent(scenarioName);

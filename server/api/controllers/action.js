@@ -7,6 +7,7 @@ bluebird.promisifyAll(redis.RedisClient.prototype);
 
 let _ = require('lodash');
 let ActionModel = require('../../models/action-model');
+let ScenarioModel = require('../../models/scenario-model');
 let ErrorResource = require('../../resources/error-resource');
 
 class ActionController {
@@ -39,7 +40,11 @@ class ActionController {
         let label = req.swagger.params.label.value;
         let action = req.swagger.params.action.value;
 
-        ActionModel.create(label, action).then((result) => {
+        if (action.type=="scenario") {
+            ScenarioModel.enable(label, action.enabledSessions);
+        } 
+
+        ActionModel.save(label, action).then((result) => {
             res.status(200).json(result);
         }).catch((error) => {
             res.status(500).json(new ErrorResource(500, req.url, "Create action failed.", error));
