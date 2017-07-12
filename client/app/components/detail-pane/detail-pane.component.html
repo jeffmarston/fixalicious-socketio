@@ -9,12 +9,18 @@
             </button>
 
         <button [ngClass]="(!collapsed && selectedAction==action) ? 'selected' : '' "
+            [class.scenario]="action.type=='scenario'"
             [style.border-color]="(action.invalid) ? 'red' : 'gray' "
             [title]="(action.invalid) ? action.invalid : action.label "
             *ngFor="let action of customActions"
             (click)="prepareTemplate(action, true)"
             class="invalid">
-            <input 
+            <i class="fa"
+                [class.fa-code]="action.type=='template'"
+                [class.fa-circle]="action.enabled && action.type=='scenario'"
+                [class.fa-circle-o]="action.type=='scenario'"
+                [class.enabled]="action.enabled"></i>
+             <input 
                 maxlength="10"
                 (blur)="doneEditingActionLabel($event, action)"
                 [readonly]="!action.isEditing"
@@ -72,7 +78,8 @@
                 [name]="selectedAction.label"
                 [action]="selectedAction"
                 [session]="session"
-                [sourceFix]="detail?.original">
+                [sourceFix]="detail?.original"
+                (onEnabled)="toggleEnabled($event)">
             </scenario>
         </div>
     </div>

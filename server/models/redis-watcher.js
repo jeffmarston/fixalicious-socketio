@@ -20,6 +20,9 @@ class Subscriber {
 
         let pollers = [];
 
+        // * 
+        // * Create a new poller for transactions (recursive, kind of)
+        // *
         function addTransactionPoller(sessionName) {
             let sub_transactionKey = "fix-svr-" + sessionName + suffix;
             let ui_transactionKey = "ui-transactions-" + sessionName;
@@ -29,18 +32,40 @@ class Subscriber {
             newClient.name = "[" + sessionName + "]";
             pollers.push(newClient);
 
+            // * Function to run when a new transaction is found 
             let handleTransactions = (err, message) => {
-                //console.log(newClient.name + " - received message on: " + sub_transactionKey);
+                console.log(newClient.name + " - received message on: " + sub_transactionKey);
+
                 //notify consumers
                 global.io.emit("transaction", message);
 
+                // if there is an active scenario for this session, trigger it
                 scenarioModel.trigger(sessionName, JSON.parse(message));
 
-                // go look for the next one
+                // go look for the next message
                 newClient.brpoplpush(sub_transactionKey, ui_transactionKey, 0, handleTransactions);
-            };
-            newClient.brpoplpush(sub_transactionKey, ui_transactionKey, 0, handleTransactions);
+            }; newClient.brpoplpush(sub_transactionKey, ui_transactionKey, 0, handleTransactions);
         }
+
+
+        // * 
+        // * Create a new poller for session changes (recursive, kind of)
+        // *
+        var redisSessions = redis.createClient();
+        redisSessions.hvalsAsync(my_sessionKey).then((items) => {
+            let sessionArray = _.map(items, o => JSON.parse(o));
+            sessionArray.forEach((session) => {
+                if (session.status == "up") {
+                    addTransactionPoller(session.session);
+                    sessionModel.enableScenarios(session.session, session.scenarios);
+                } else {
+                    //removeTransactionPoller(session.session);
+                }
+
+            }, this);
+        });
+
+
 
         function pollForSessions(err, result) {
             console.log("Session update received: " + result[1]);
@@ -59,20 +84,6 @@ class Subscriber {
         }
         console.log("Watching for session changes on: " + sub_sessionKey);
         redisSessionsPoller.brpop(sub_sessionKey, 0, pollForSessions);
-
-        var redisSessions = redis.createClient();
-        redisSessions.hvalsAsync(my_sessionKey).then((items) => {
-            let sessionArray = _.map(items, o => JSON.parse(o));
-            sessionArray.forEach((session) => {
-                if (session.status == "up") {
-                    addTransactionPoller(session.session);
-                    sessionModel.enableScenarios(session.session, session.scenarios);
-                } else {
-                    //removeTransactionPoller(session.session);
-                }
-
-            }, this);
-        });
     }
 }
 

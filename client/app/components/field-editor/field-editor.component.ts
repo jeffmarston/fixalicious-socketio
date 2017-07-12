@@ -79,29 +79,7 @@ export class FieldEditorComponent implements OnInit {
     }
 
     private send() {
-        let mapToSend = (array) => {
-            let obj = {};
-            array.forEach(element => {
-                if (!obj[element.key]) {
-                    // if element has children, recurse into them
-                    if (Array.isArray(element.value)) {
-                        obj[element.key] = mapToSend(element.value);
-                    } else {
-                        obj[element.key] = element.value;
-                    }
-                } else {
-                    // element already exists, transform element into an array
-                    if (Array.isArray(obj[element.key])) {
-                        obj[element.key].push(mapToSend(element.value));
-                    } else {
-                        obj[element.key] = [obj[element.key], mapToSend(element.value)];
-                    }
-                }
-            });
-            return obj;
-        };
-
-        let fixToSend = mapToSend(this.template);
+        let fixToSend = this.fixParserService.mapToSend(this.template);
         console.log(fixToSend);
         this.apiService.createTransaction(this.session.session, fixToSend);
     }

@@ -46,27 +46,6 @@ paths:
       responses:
         "200":
           description: Success
-  /session/{name}/scenario:
-    x-swagger-router-controller: session
-    post:
-      summary: Enable/disable scenarios for this session
-      operationId: enableScenarios
-      tags : [Session]
-      parameters:
-        - name: name
-          in: path
-          description: Name of the session
-          required: true
-          type: string     
-        - name: changes
-          in: body
-          description: lists of scenarios to enable and disable
-          required: true
-          schema:
-            $ref: "#/definitions/SessionScenarioChangeResource"
-      responses:
-        "200":
-          description: Success   
   /transaction/{session}:
     x-swagger-router-controller: transaction
     get:
@@ -161,7 +140,7 @@ paths:
         "200":
           description: Success
     delete:
-      summary: Delete a action
+      summary: Delete an action
       operationId: deleteAction
       tags : [Action]
       parameters:
@@ -173,63 +152,12 @@ paths:
       responses:
         "200":
           description: Success
-  /scenario:
-    x-swagger-router-controller: scenario
-    get:
-      summary: Get all Scenario
-      operationId: getAll
-      tags : [Scenario]
-      responses:
-        "200":
-          description: Success
-          schema:
-            type: array
-            items: 
-              $ref: "#/definitions/ScenarioResource"
-        default:
-          description: Error
-          schema: 
-            $ref: "#/definitions/ErrorResponse"
-  /scenario/{label}:
-    x-swagger-router-controller: scenario
-    post:
-      summary: Create a new scenario to run on incoming FIX messages
-      operationId: create
-      tags : [Scenario]
-      parameters:
-        - name: label
-          in: path
-          description: scenario label
-          required: true
-          type: string
-        - name: scenario
-          in: body
-          description: code to execute when scenario is active
-          required: true
-          schema:
-            $ref: "#/definitions/ScenarioResource"
-      responses:
-        "200":
-          description: Success
-    delete:
-      summary: Delete a scenario
-      operationId: delete
-      tags : [Scenario]
-      parameters:
-        - name: label
-          in: path
-          description: Name of the session
-          required: true
-          type: string
-      responses:
-        "200":
-          description: Success
-  /scenario/run/{label}:
-    x-swagger-router-controller: scenario
+  /action/run/{label}:
+    x-swagger-router-controller: action
     post:
       summary: Run a scenario against a provided FIX messages
       operationId: run
-      tags : [Scenario]
+      tags : [Action]
       parameters:
         - name: label
           in: path
@@ -279,23 +207,5 @@ definitions:
         type: array
         items: 
           $ref: "#/definitions/ActionItemResource"
-  ScenarioResource:
-    description: Scenario
-    properties:
-      label:
-        type: string
-      code:
-        type: string
-  SessionScenarioChangeResource:
-    description: Scenarios to enable and disable on a session
-    properties:
-      enable:
-        type: array
-        items:
-          type: string
-      disable:
-        type: array
-        items:
-          type: string
   AnyObject:
     type: object

@@ -1,36 +1,30 @@
 import { Injectable } from '@angular/core';
-import { IFixParserService } from "../types.d";
 import * as _ from "lodash";
 
 @Injectable()
-export class FixParserService implements IFixParserService {
+export class FixParserService {
 
-    public parseFix(fix: string): any {
-        let obj: any = {};
-        let lines: string[] = fix.split("\n");
-
-        lines.forEach((line: string) => {
-            if (line.startsWith(" ") && line.trim() != "") {
-                let parts = line.split(":");
-                let key = parts[0].trim();
-                obj[key] = parts[1].trim();
+    public mapToSend(array) {
+        let obj = {};
+        array.forEach(element => {
+            if (!obj[element.key]) {
+                // if element has children, recurse into them
+                if (Array.isArray(element.value)) {
+                    obj[element.key] = this.mapToSend(element.value);
+                } else {
+                    obj[element.key] = element.value;
+                }
+            } else {
+                // element already exists, transform element into an array
+                if (Array.isArray(obj[element.key])) {
+                    obj[element.key].push(this.mapToSend(element.value));
+                } else {
+                    obj[element.key] = [obj[element.key], this.mapToSend(element.value)];
+                }
             }
         });
         return obj;
-    }
-
-    public stringify(fix: any) {
-        // We can replace this with prettier-printing FIX in the future
-        return JSON.stringify(fix);
-    }
-
-    public generateFix(fix: any[]) {
-        let obj = _.keyBy(fix, o => o.key);
-        for (var property in obj) {
-            obj[property] = obj[property].value;
-        }
-        return obj;
-    }
+    };
 
     // returns an array indexed by FIX tag 
     private mapIdToValue(obj): any[] {

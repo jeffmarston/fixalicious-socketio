@@ -33,7 +33,3 @@ export interface IPair{
     value: string | IPair[];
     formula: string;
 }
-
-export interface IFixParserService {
-    parseFix(fix: string): any;
-}

@@ -16,6 +16,18 @@ class ActionModel {
         });
     }
 
+    static getEnabledScenarios(sessionName) {
+        return redisClient.hvalsAsync('ui-actions').then((items) => {
+            let mapped = _.map(items, o => {
+                return JSON.parse(o);
+            });
+            let filtered = _.filter(mapped, o => { 
+                return (o.type === "scenario") && (o.enabledSessions.indexOf(sessionName) > -1)
+            });
+            return filtered;
+        });
+    }
+
     static getById(label) {
         return redisClient.hgetAsync('ui-actions', label).then(item => {
             return JSON.parse(item);
@@ -34,16 +46,18 @@ class ActionModel {
         });
     }
 
-    static create(label, action) {
+    static save(label, action) {
         let actionJson = JSON.stringify(action);
         return redisClient.hsetAsync("ui-actions", label, actionJson).then(o => {
-            console.log("created action: " + label);
+            console.log("saved action: " + label);
         });
     }
 
     static delete(label) {
         return redisClient.hdelAsync("ui-action", label);
     }
+
+
 }
 
 module.exports = ActionModel;

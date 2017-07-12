@@ -47,6 +47,10 @@ select, button:focus {
   outline:none;
 }
 
+split-gutter {
+    background-color: transparent !important;
+}
+
 h1 {
   font-family: 'Orbitron', sans-serif;
   font-family: 'Titillium Web', sans-serif;

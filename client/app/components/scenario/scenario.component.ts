@@ -1,8 +1,7 @@
-import { Component, OnInit, EventEmitter, Input, Output, SimpleChange } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input, Output, SimpleChange, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from "@angular/common";
 import { Http, Response } from "@angular/http";
 import { ApiService } from "../../services/api.service"
-import { ScenarioService } from "../../services/scenario.service"
 import { SetFocusDirective } from "../../directives/set-focus";
 import { ISession } from "../../types.d"
 import * as io from 'socket.io-client';
@@ -15,18 +14,19 @@ import * as _ from 'lodash';
     providers: [ApiService]
 })
 export class ScenarioComponent implements OnInit {
+    @ViewChild('outputScroll') private outputScroll: ElementRef;
     @Output() onEnabled = new EventEmitter<any>();
     @Input() name: string;
     @Input() action: any;
-    @Input() session: any;
+    @Input() session: ISession;
     @Input() sourceFix: any;
 
     private socket;
+    private isEnabled = false;
     private outputLines = [];
     private output = "";
 
     constructor(
-        private scenarioService: ScenarioService,
         private apiService: ApiService) {
         this.socket = io();
     }
@@ -46,24 +46,6 @@ export class ScenarioComponent implements OnInit {
                 this.outputLines = [];
                 this.output = "";
 
-
-                // this.scenarioService.getAll().subscribe(allScenarios => {
-                //     this.scenarios = allScenarios;
-                //     // if (allScenarios.length > 0) {
-                //     //     this.selectedScenario = allScenarios[0];
-                //     // }
-                //     // set enabled on each scenario
-                //     this.scenarios.forEach(scenario => {
-                //         scenario.enabled = false;
-                //         if (this.session.scenarios.indexOf(scenario.label) > -1) {
-                //             scenario.enabled = true;
-                //             this.selectedScenario = scenario;
-                //         }
-                //     });
-                // });
-
-
-
                 this.socket.on(`scenario-output[${this.session.session}]`, outputObj => {
                     if (outputObj.scenario === this.name) {
                         if (outputObj.log) {
@@ -72,55 +54,44 @@ export class ScenarioComponent implements OnInit {
                         }
                         if (outputObj.error) {
                             this.outputLines.push({ err: true, text: outputObj.error });
-                            this.output += outputObj.log + "\n";
+                            this.output += "(!) " + outputObj.error + "\n";
                         }
+
+                        //scroll to bottom of output window
+                        try {
+                            this.outputScroll.nativeElement.scrollTop = this.outputScroll.nativeElement.scrollHeight;
+                        } catch (err) { }
                     }
                 });
             }
         }
+        this.isEnabled = this.action.enabledSessions.indexOf(this.session.session) > -1;
     }
 
     public leaveCode(srcElement) {
-        //this.action.code = srcElement.innerText;
-
         this.apiService.saveAction(this.action).subscribe(o => {
             console.log(o);
         });
-
     }
 
     public toggleEnabled() {
-        // this.selectedScenario.enabled = !this.selectedScenario.enabled;
-        // this.scenarioService.enable(this.session, this.selectedScenario);
-    }
+        this.isEnabled = !this.isEnabled;
+        this.action.enabledSessions || [];
 
-    public saveScenario() {
-        // this.isAdding = false;
-        // this.scenarioService.saveScenario(this.selectedScenario).subscribe(o => {
-        //     console.log(o);
-        // });
-    }
+        _.pull(this.action.enabledSessions, this.session.session);
+        if (this.isEnabled) {
+            this.action.enabledSessions.push(this.session.session);
+        }
 
-    public runScenario() {
-        this.scenarioService.runScenario(this.name, this.sourceFix).subscribe(o => {
-            console.log(o);
+        this.apiService.saveAction(this.action).subscribe(o => {
+            this.isEnabled = this.action.enabledSessions.indexOf(this.session.session) > -1;
+            this.onEnabled.emit(this.isEnabled);
         });
     }
 
-    // public addScenario() {
-    //     this.isAdding = true;
-    //     this.selectedScenario = { label: "", code: "// Your code goes here!" };
-    //     this.scenarios.splice(0, 0, this.selectedScenario);
-    // }
-
-    // public deleteScenario() {
-    //     this.scenarioService.deleteScenario(this.selectedScenario).subscribe(o => {
-    //         _.pull(this.scenarios, this.selectedScenario);
-    //         if (this.scenarios.length > 0) {
-    //             this.selectedScenario = this.scenarios[0];
-    //         } else {
-    //             this.addScenario();
-    //         }
-    //     });
-    // }
+    public runScenario() {
+        this.apiService.runScenario(this.name, this.sourceFix).subscribe(o => {
+            console.log(o);
+        });
+    }
 }

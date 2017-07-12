@@ -7,6 +7,7 @@ bluebird.promisifyAll(redis.RedisClient.prototype);
 
 let _ = require('lodash');
 let ActionModel = require('../../models/action-model');
+let ScenarioModel = require('../../models/scenario-model');
 let ErrorResource = require('../../resources/error-resource');
 
 class ActionController {
@@ -39,7 +40,7 @@ class ActionController {
         let label = req.swagger.params.label.value;
         let action = req.swagger.params.action.value;
 
-        ActionModel.create(label, action).then((result) => {
+        ActionModel.save(label, action).then((result) => {
             res.status(200).json(result);
         }).catch((error) => {
             res.status(500).json(new ErrorResource(500, req.url, "Create action failed.", error));
@@ -54,6 +55,17 @@ class ActionController {
             res.status(200).json("{ message: 'Deleted " + result + " action(s)'");
         }).catch((error) => {
             res.status(500).json(new ErrorResource(500, req.url, "Delete action failed.", error));
+        });
+    }
+    
+    static run(req, res) {
+        let label = req.swagger.params.label.value;
+        let fixIn = req.swagger.params.fixIn.value;
+
+        ScenarioModel.run(label, fixIn).then((result) => {
+            res.status(200).json(result);
+        }).catch((error) => {
+            res.status(500).json(new ErrorResource(500, req.url, "Run scenario failed.", error));
         });
     }
 
@@ -158,5 +170,6 @@ class ActionController {
 module.exports = {
     getAllActions: ActionController.getAllActions,
     createAction: ActionController.createAction,
-    deleteAction: ActionController.deleteAction
+    deleteAction: ActionController.deleteAction,
+    run: ActionController.run
 }

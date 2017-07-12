@@ -31,7 +31,8 @@ export class DetailPaneComponent implements OnInit {
         private fixParserService: FixParserService) {
 
         this.apiService.getActions().subscribe(o => {
-            this.customActions = o;
+            // sort alphabetically for now
+            this.customActions = o.sort(this.sortAction);
             if (this.customActions.length > 0) {
                 this.prepareTemplate(this.customActions[0], false);
             }
@@ -58,6 +59,14 @@ export class DetailPaneComponent implements OnInit {
                 }
             }
         }
+        this.customActions.forEach(o => {
+            o.enabled = o.enabledSessions
+                && (o.enabledSessions.indexOf(this.session.session) > -1);
+        });
+    }
+
+    private toggleEnabled($event) {
+        this.selectedAction.enabled = $event;
     }
 
     private toggleExpanded() {
@@ -91,6 +100,18 @@ export class DetailPaneComponent implements OnInit {
         this.prepareTemplate(this.selectedAction, false);
     }
 
+    private sortAction(a, b) {
+        var nameA = a.label;
+        var nameB = b.label;
+        if (nameA < nameB) {
+            return -1;
+        } else if (nameA > nameB) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
     private doneEditingActionLabel($event, action) {
         if (action.isEditing) {
             action.isEditing = false;
@@ -109,6 +130,7 @@ export class DetailPaneComponent implements OnInit {
                 this.apiService.saveAction(action).subscribe(o => {
                     this.selectedAction = action;
                     this.isConfiguring = true;
+                    this.customActions.sort(this.sortAction);
                 });
             }
         }
@@ -165,24 +187,6 @@ export class DetailPaneComponent implements OnInit {
                 console.error("Failed to delete template: " + error);
             });
     }
-
-    // private configureTemplate() {
-    //     if (this.isConfiguring) {
-    //         this.apiService.createTemplate(this.selectedAction).subscribe(o => {
-    //             console.log("Template saved");
-    //         });
-    //     }
-    //     this.isConfiguring = !this.isConfiguring;
-    //     this.displayFixMessage();
-    // }
-
-    // private displayFixMessage() {
-    //     this.selectedAction.template.forEach(element => {
-    //         this.fixParserService.eval(element, this.sourceFixObj);
-    //     });
-
-    //     console.log(this.selectedAction);
-    // }
 
     private uniquify(allNames: string[], origName: string): string {
         // if it's already unique, return it
