@@ -1,13 +1,18 @@
-<div class="command-panel">
-    <input type=checkbox
-        [(ngModel)]="isEnabled"
-        (change)="toggleEnabled(isEnabled)" /> Enable
-
+<div class="button-panel">
     <button title="Run scenario"
         [disabled]="!sourceFix"
         (click)="runScenario()">
         <i class="fa fa-send"></i> Run
     </button>
+
+    <div class="toggle-button"
+        [class.enabled]="isEnabled"
+        (click)="toggleEnabled()"
+        title="Automatically run this scenario for session {{session.session}}">
+        <i class="fa"
+            [ngClass]="isEnabled ? 'fa-toggle-on' : 'fa-toggle-off'"></i> 
+            <span style="margin: 5px;">Auto-run</span>
+    </div>
 </div>
 
 <div class="editor-area">
@@ -16,15 +21,9 @@
         [(ngModel)]="action.code"
         (blur)="leaveCode(codeId)"></textarea>
 
-    <textarea readonly #outputScroll
+    <textarea readonly
+        #outputScroll
         (change)="outputChanged($event)"
         class="output">{{output}}
     </textarea>
-
-    <!--<code class="output"
-        #output
-        [scrollTop]="9999999">
-        <span class="output" *ngFor="let line of outputLines" [style.color]="line.err ? 'red' : 'white'">{{line.text}}</span>
-        <span class="output"> </span>
-    </code>-->
 </div>

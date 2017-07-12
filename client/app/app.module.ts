@@ -14,7 +14,6 @@ import { SessionConfigComponent } from "./components/session-config/session-conf
 import { ScenarioComponent } from "./components/scenario/scenario.component";
 import { ApiService } from "./services/api.service";
 import { FixParserService } from "./services/fix-parser.service";
-import { ScenarioService } from "./services/scenario.service";
 import { SetFocusDirective } from "./directives/set-focus";
 
 @NgModule({
@@ -37,8 +36,7 @@ import { SetFocusDirective } from "./directives/set-focus";
     ],
     providers: [
         ApiService,
-        FixParserService,
-        ScenarioService
+        FixParserService
     ],
     bootstrap: [AppComponent]
 })

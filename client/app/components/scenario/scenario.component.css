@@ -4,6 +4,37 @@
     flex-direction: column;
     padding: 6px;
 }
+.button-panel {
+    height: 30px;
+}
+
+.button-panel>button {
+    float: right;
+    height: 24px;
+    padding: 2px;
+    margin: 2px;  
+    width: 70px;
+}
+.button-panel>button:active {
+    background: #b0e0e6;
+}
+.button-panel>button.enabled {
+    background: #bfb;
+}
+
+.toggle-button {
+    display: flex;
+    float: left;
+}
+.toggle-button>i {
+    font-size: 24px;
+    color: gray;
+    float: left;
+    cursor: pointer;
+}
+.toggle-button.enabled>i {
+    color: green;
+}
 
 textarea {
     border: 1px solid gray;
@@ -15,7 +46,8 @@ textarea {
 .code{
     color: blue;    
     height: 50%; 
-    background: #fcfcfc;   
+    background: whitesmoke;   
+    white-space: nowrap;
 }
 
 .output{

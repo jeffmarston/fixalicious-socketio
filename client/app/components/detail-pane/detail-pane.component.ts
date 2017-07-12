@@ -31,7 +31,8 @@ export class DetailPaneComponent implements OnInit {
         private fixParserService: FixParserService) {
 
         this.apiService.getActions().subscribe(o => {
-            this.customActions = o;
+            // sort alphabetically for now
+            this.customActions = o.sort((a,b) => a.label>b.label);
             if (this.customActions.length > 0) {
                 this.prepareTemplate(this.customActions[0], false);
             }
@@ -58,6 +59,14 @@ export class DetailPaneComponent implements OnInit {
                 }
             }
         }
+        this.customActions.forEach(o => {
+            o.enabled = o.enabledSessions
+                && (o.enabledSessions.indexOf(this.session.session) > -1);
+        });
+    }
+
+    private toggleEnabled($event) {
+        this.selectedAction.enabled = $event;
     }
 
     private toggleExpanded() {

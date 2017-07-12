@@ -4,7 +4,6 @@ import { Http, Response } from "@angular/http";
 import { GridOptions } from 'ag-grid/main';
 import { ApiService } from "../../services/api.service";
 import { FixParserService } from "../../services/fix-parser.service"
-import { ScenarioService } from "../../services/scenario.service"
 import { ITransaction, ISession } from "../../types.d";
 import * as io from 'socket.io-client';
 import * as _ from 'lodash';
@@ -48,7 +47,6 @@ export class MessageGridComponent implements OnInit {
     constructor(
         private apiService: ApiService,
         private fixParserService: FixParserService,
-        private scenarioService: ScenarioService,
         private http: Http) {
 
         this.createColumnDefs();

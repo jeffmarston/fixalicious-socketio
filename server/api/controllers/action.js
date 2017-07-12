@@ -40,10 +40,6 @@ class ActionController {
         let label = req.swagger.params.label.value;
         let action = req.swagger.params.action.value;
 
-        if (action.type=="scenario") {
-            ScenarioModel.enable(label, action.enabledSessions);
-        } 
-
         ActionModel.save(label, action).then((result) => {
             res.status(200).json(result);
         }).catch((error) => {
@@ -59,6 +55,17 @@ class ActionController {
             res.status(200).json("{ message: 'Deleted " + result + " action(s)'");
         }).catch((error) => {
             res.status(500).json(new ErrorResource(500, req.url, "Delete action failed.", error));
+        });
+    }
+    
+    static run(req, res) {
+        let label = req.swagger.params.label.value;
+        let fixIn = req.swagger.params.fixIn.value;
+
+        ScenarioModel.run(label, fixIn).then((result) => {
+            res.status(200).json(result);
+        }).catch((error) => {
+            res.status(500).json(new ErrorResource(500, req.url, "Run scenario failed.", error));
         });
     }
 
@@ -163,5 +170,6 @@ class ActionController {
 module.exports = {
     getAllActions: ActionController.getAllActions,
     createAction: ActionController.createAction,
-    deleteAction: ActionController.deleteAction
+    deleteAction: ActionController.deleteAction,
+    run: ActionController.run
 }

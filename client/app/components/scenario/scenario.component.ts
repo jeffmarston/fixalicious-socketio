@@ -2,7 +2,6 @@ import { Component, OnInit, EventEmitter, Input, Output, SimpleChange, ElementRe
 import { CommonModule } from "@angular/common";
 import { Http, Response } from "@angular/http";
 import { ApiService } from "../../services/api.service"
-import { ScenarioService } from "../../services/scenario.service"
 import { SetFocusDirective } from "../../directives/set-focus";
 import { ISession } from "../../types.d"
 import * as io from 'socket.io-client';
@@ -28,7 +27,6 @@ export class ScenarioComponent implements OnInit {
     private output = "";
 
     constructor(
-        private scenarioService: ScenarioService,
         private apiService: ApiService) {
         this.socket = io();
     }
@@ -56,7 +54,7 @@ export class ScenarioComponent implements OnInit {
                         }
                         if (outputObj.error) {
                             this.outputLines.push({ err: true, text: outputObj.error });
-                            this.output += outputObj.log + "\n";
+                            this.output += "(!) " + outputObj.error + "\n";
                         }
 
                         //scroll to bottom of output window
@@ -71,30 +69,28 @@ export class ScenarioComponent implements OnInit {
     }
 
     public leaveCode(srcElement) {
-        //this.action.code = srcElement.innerText;
-
         this.apiService.saveAction(this.action).subscribe(o => {
             console.log(o);
         });
-
     }
 
-    public toggleEnabled(isEnabled: boolean) {
-        console.log(isEnabled);
+    public toggleEnabled() {
+        this.isEnabled = !this.isEnabled;
         this.action.enabledSessions || [];
 
         _.pull(this.action.enabledSessions, this.session.session);
-        if (isEnabled) {
+        if (this.isEnabled) {
             this.action.enabledSessions.push(this.session.session);
         }
 
         this.apiService.saveAction(this.action).subscribe(o => {
-            //this.scenarioService.enable(this.session, this.action);
+            this.isEnabled = this.action.enabledSessions.indexOf(this.session.session) > -1;
+            this.onEnabled.emit(this.isEnabled);
         });
     }
 
     public runScenario() {
-        this.scenarioService.runScenario(this.name, this.sourceFix).subscribe(o => {
+        this.apiService.runScenario(this.name, this.sourceFix).subscribe(o => {
             console.log(o);
         });
     }

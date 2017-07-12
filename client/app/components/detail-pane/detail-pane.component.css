@@ -24,6 +24,7 @@
     margin: 2px;  
     min-width: 50px;
     border: 1px gray solid; 
+    display: flex;
 }
 .action-panel>button:hover {
     background: #eee;
@@ -36,6 +37,12 @@
     margin-right: -1px;
     background: #eee;
     z-index: 100;
+}
+button>i {
+    margin: 2px 4px;
+}
+button>i.enabled {
+    color: green;
 }
 
 .action-panel>.editable-input {
