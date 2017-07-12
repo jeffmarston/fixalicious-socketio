@@ -1,5 +1,5 @@
 {
-  "name": "fixalicious-socketio",
+  "name": "fixalicious-ui",
   "version": "0.0.1",
   "description": "Fixalicious UI using socket.io",
   "scripts": {

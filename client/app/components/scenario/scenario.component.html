@@ -10,19 +10,21 @@
     </button>
 </div>
 
-<div class="editor-area">
-    <textarea #codeId
-        class="code"
-        [(ngModel)]="action.code"
-        (blur)="leaveCode(codeId)"></textarea>
+<split direction="vertical">
+    <split-area [size]="50" style="display:flex">
 
-    <textarea readonly class="output">{{output}}
-    </textarea>
-
+        <textarea #codeId
+            class="code"
+            [(ngModel)]="action.code"
+            (blur)="leaveCode(codeId)"></textarea>
+    </split-area>
+    <split-area [size]="50" style="display:flex">
+        <textarea readonly class="output">{{output}}</textarea>
+    </split-area>
     <!--<code class="output"
         #output
         [scrollTop]="9999999">
         <span class="output" *ngFor="let line of outputLines" [style.color]="line.err ? 'red' : 'white'">{{line.text}}</span>
         <span class="output"> </span>
     </code>-->
-</div>
+</split>

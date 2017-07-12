@@ -16,13 +16,13 @@ class TransactionController {
         let sessionName = req.swagger.params.session.value;
         console.log("Get all transactions for session: " + sessionName);
 
-         res.status(200).json(JSON.parse(dummy));
+    //     res.status(200).json(JSON.parse(dummy));
 
-        // TransactionModel.getAll(sessionName).then((result) => {
-        //     res.status(200).json(result);
-        // }).catch((error) => {
-        //     res.status(500).json(new ErrorResource(500, req.url, "Request to get all transactions failed.", error));
-        // });
+        TransactionModel.getAll(sessionName).then((result) => {
+            res.status(200).json(result);
+        }).catch((error) => {
+            res.status(500).json(new ErrorResource(500, req.url, "Request to get all transactions failed.", error));
+        });
     }
 
 

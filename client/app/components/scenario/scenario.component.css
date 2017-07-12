@@ -14,12 +14,14 @@ textarea {
 
 .code{
     color: blue;    
-    height: 50%; 
+    height: 100%; 
+    width: 100%;
     background: #fcfcfc;   
 }
 
 .output{
-    height: 50%;
+    height: 100%;
+    width: 100%;
     background: #222;
     color: whitesmoke;  
     /*display: block;
