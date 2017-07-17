@@ -1,4 +1,5 @@
-.container {
+:host {
+    flex: 1 1 auto;
 }
 .first-level {
     display: flex;
@@ -86,10 +87,6 @@ nav {
     list-style-type: none;
 }
 
-nav:hover {
-    background: gray;
-}
-
 nav li a {
     display: flex;
     justify-content: flex-start;
@@ -113,7 +110,7 @@ nav nav {
     opacity: 0;
     transition: opacity 0.25s linear;
     height: 0;
-    right: 6px;
+    margin-left: -130px;
 }
 
 nav nav li {
@@ -130,7 +127,7 @@ nav nav li:last-child {
     border-bottom: 1px solid gray;
 }
 
-nav button:hover nav {
+nav button:hover:focus nav {
     margin-top: 0;
     visibility: visible;
     opacity: 1;
