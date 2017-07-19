@@ -1,0 +1,47 @@
+<div class="button-panel">
+    <button title="Run scenario"
+        [disabled]="!sourceFix"
+        (click)="runScenario()">
+        <i class="fa fa-send"></i> Run
+    </button>
+
+    <div class="toggle-button"
+        [class.enabled]="isEnabled"
+        (click)="toggleEnabled()"
+        title="Automatically run this scenario for session {{session?.session}}">
+        <i class="fa"
+            [ngClass]="isEnabled ? 'fa-toggle-on' : 'fa-toggle-off'"></i>
+        <label style="margin: 5px;">Auto-run</label>
+    </div>
+</div>
+
+<split direction="vertical"
+    gutterSize="6">
+    <split-area [size]="50"
+        style="display:flex">
+
+        <!-- <textarea #codeId
+            class="code"
+            [(ngModel)]="action.code"
+            (blur)="leaveCode(codeId)"></textarea> -->
+        <ace-editor #codeId
+            mode="javascript"
+            [(text)]="action.code"
+            (blur)="leaveCode(codeId)"></ace-editor>
+
+    </split-area>
+    <split-area [size]="50"
+        style="display:flex">
+        <textarea readonly
+            #outputScroll
+            (change)="outputChanged($event)"
+            class="output">{{output}}
+        </textarea>
+    </split-area>
+    <!--<code class="output"
+        #output
+        [scrollTop]="9999999">
+        <span class="output" *ngFor="let line of outputLines" [style.color]="line.err ? 'red' : 'white'">{{line.text}}</span>
+        <span class="output"> </span>
+    </code>-->
+</split>

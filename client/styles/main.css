@@ -28,8 +28,7 @@ body {
   margin: 0;
 }
 
-*{
-  font-family: 'Ubuntu', sans-serif;
+button, input, li, a, label {
   font-family: 'Roboto', sans-serif;
 }
 

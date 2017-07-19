@@ -74,12 +74,12 @@
             </field-editor>
 
 
-            <scenario *ngIf="editor=='scenario'"
+            <ace-code-editor *ngIf="editor=='scenario'"
                 [name]="selectedAction.label"
                 [action]="selectedAction"
                 [session]="session"
                 [sourceFix]="detail?.original"
                 (onEnabled)="toggleEnabled($event)">
-            </scenario>
+            </ace-code-editor>
         </div>
     </div>

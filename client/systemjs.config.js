@@ -11,16 +11,24 @@
             '@angular/http': 'node_modules/@angular/http/bundles/http.umd.js',
             '@angular/router': 'node_modules/@angular/router/bundles/router.umd.js',
             '@angular/forms': 'node_modules/@angular/forms/bundles/forms.umd.js',
-            // other libraries
-            'rxjs': 'node_modules/rxjs',
-            'angular2-in-memory-web-api': 'node_modules/angular2-in-memory-web-api',
             // ag libraries
             'ag-grid-angular': 'node_modules/ag-grid-angular',
             'ag-grid': 'node_modules/ag-grid',
+            // other libraries
+            'rxjs': 'node_modules/rxjs',
+            'angular2-in-memory-web-api': 'node_modules/angular2-in-memory-web-api',
             'socket.io-client': 'node_modules/socket.io-client/dist',
             'lodash': 'node_modules/lodash',
             'angular-split': 'node_modules/angular-split/dist',
-            'traceur': 'node_modules/traceur/bin'
+            'traceur': 'node_modules/traceur/bin',
+            // ace-editor
+            'ng2-ace-editor': 'node_modules/ng2-ace-editor',
+            'brace': 'node_modules/brace',
+            'ace': 'node_modules/brace',
+            'w3c-blob': 'node_modules/w3c-blob/index.js',
+            'buffer': 'node_modules/buffer/index.js',
+            'base64-js': 'node_modules/base64-js/index.js',
+            'ieee754': 'node_modules/ieee754/index.js'
         },
         packages: {
             'lib': { main: './boot.js', defaultExtension: 'js' },
@@ -31,7 +39,14 @@
             'socket.io-client': { main: './socket.io.js', defaultExtension: 'js' },
             'lodash': { main: 'index.js', defaultExtension: 'js' },
             'angular-split': { main: 'index.js', defaultExtension: 'js' },
-            'traceur': { main: 'traceur.js', defaultExtension: 'js' }
+            'traceur': { main: 'traceur.js', defaultExtension: 'js' },
+            'ng2-ace-editor': { main: 'dist/index.js' },
+            //    'ng2-ace-editor2': {
+            //     main: 'ng2-ace-editor',
+            //     defaultExtension: 'js'
+            // },
+            'brace': { main: 'index', defaultExtension: 'js' }
+
         }
     }
     );
