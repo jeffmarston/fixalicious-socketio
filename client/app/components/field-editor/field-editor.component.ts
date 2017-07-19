@@ -58,7 +58,7 @@ export class FieldEditorComponent implements OnInit {
         // apply and save
         if (!this.editMode) {
             // Remove all empty ones
-            _.remove(this.template, o=>o.key==="");
+            _.remove(this.template, o => o.key === "");
 
             this.apiService.saveAction(this.action).subscribe(o => {
                 console.log("Action saved");
@@ -85,10 +85,16 @@ export class FieldEditorComponent implements OnInit {
     }
 
     private leaveValue(pair) {
-        let index = this.template.indexOf(pair);
-        if (index === this.template.length - 1) {
-            this.insertAtBottom();
-        }
+        // let index = this.template.indexOf(pair);
+        // if (index === this.template.length - 1) {
+        //     this.insertAtBottom();
+        // }
+    }
+
+    private insertSubItem(pair) {
+        let item = { key: "", formula: "", value: "", focus: false };
+        pair.formula.push(item);
+        item.focus = true;
     }
 
     private insertAbove(pair) {
@@ -110,15 +116,7 @@ export class FieldEditorComponent implements OnInit {
 
     private insertGroup(pair) {
         let index = this.template.indexOf(pair);
-        let groupItem = {
-            key: "",
-            value: "",
-            formula: [{
-                key: "",
-                formula: "",
-                value: ""
-            }]
-        };
+        let groupItem = { key: "", value: "", formula: [] };
         this.template.splice(index, 0, groupItem);
     }
     private delete(pair) {

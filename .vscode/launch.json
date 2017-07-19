@@ -1,6 +1,13 @@
 {
     "version": "0.2.0",
     "configurations": [
+         {
+            "name": "Launch localhost",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:4400/client/",
+            "webRoot": "${workspaceRoot}/client"
+        },
         {
             "name": "Launch",
             "type": "node",

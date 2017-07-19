@@ -57,7 +57,7 @@ textarea {
 }
 span.output{
     margin-left: 4px; 
-    font-family: 'Ubuntu', sans-serif;
+    font-family: 'Source Sans Pro', monospace;
     font-size: 13px; 
     display: block;
     white-space: pre-wrap;

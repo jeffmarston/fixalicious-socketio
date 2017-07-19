@@ -28,7 +28,6 @@ div.key-column {
 }
 div.value-column{
     width: 50%;
-    margin: 0 0 0 5px;
     display: flex;
 }
 div.row>div{
@@ -39,26 +38,20 @@ div.row>div{
     font-style:italic; 
     color: #777;
     margin-top: 4px;
+    flex: 1 1 auto;
+}
+
+.group-placeholder>button {
     float: right;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: #888;
 }
 
 .group-row {
     background: rgba(187, 204, 221, 0.25);
-}
-
-button.repeating-group {
-    color: #777;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: transparent;
-    border: none;
-}
-
-button.repeating-group-add {
-    position: absolute;
-    right: 20px;    
-    margin-top: -3px;
+    /* border-left: 4px solid cadetblue; */
 }
 
 .configure-input {

@@ -24,11 +24,13 @@
             <div class="key-column">
                 <input class="configure-key"
                     [placeholder]="(editMode) ? 'key' : ''"
-                    (setFocus)="true"
+                    [setFocus]="pair.key==''"
                     [(ngModel)]="pair.key" />
             </div>
             <div class="value-column">
-                <div [style.width.px]="isRepeatingGroup(pair) ? ((level+1)*15) : (level*15)"></div>
+                <div style="flex: 0 0 auto;"
+                    [style.width.px]="isRepeatingGroup(pair) ? ((level+1)*15) : (level*15)">
+                </div>
                 <input class="configure-input"
                     [class.editing]="editMode"
                     [hidden]="editMode || isRepeatingGroup(pair)"
@@ -41,7 +43,13 @@
                     [(ngModel)]="pair.formula" />
 
                 <div class="group-placeholder"
-                    [hidden]="!isRepeatingGroup(pair)">group</div>
+                    [hidden]="!isRepeatingGroup(pair)">
+                    <label>group</label>
+                    <button (click)="insertSubItem(pair)"
+                        [hidden]="!editMode">
+                        <i class="fa fa-plus-circle"></i>
+                    </button>
+                </div>
             </div>
 
             <div class="menu-column"

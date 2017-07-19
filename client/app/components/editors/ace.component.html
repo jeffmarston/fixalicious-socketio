@@ -32,16 +32,18 @@
     </split-area>
     <split-area [size]="50"
         style="display:flex">
-        <textarea readonly
+        <!-- <textarea readonly
             #outputScroll
             (change)="outputChanged($event)"
             class="output">{{output}}
-        </textarea>
-    </split-area>
-    <!--<code class="output"
+        </textarea> -->
+        
+    <code class="output"
         #output
         [scrollTop]="9999999">
         <span class="output" *ngFor="let line of outputLines" [style.color]="line.err ? 'red' : 'white'">{{line.text}}</span>
         <span class="output"> </span>
-    </code>-->
+    </code>
+
+    </split-area>
 </split>
