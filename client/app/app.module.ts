@@ -13,7 +13,6 @@ import { DetailPaneComponent } from "./components/detail-pane/detail-pane.compon
 import { FieldEditorComponent } from "./components/field-editor/field-editor.component";
 import { SessionConfigComponent } from "./components/session-config/session-config.component";
 import { AceComponent } from "./components/editors/ace.component";
-import { ScenarioComponent } from "./components/scenario/scenario.component";
 import { ApiService } from "./services/api.service";
 import { FixParserService } from "./services/fix-parser.service";
 import { SetFocusDirective } from "./directives/set-focus";
@@ -34,7 +33,6 @@ import { SetFocusDirective } from "./directives/set-focus";
         DetailPaneComponent,
         FieldEditorComponent,
         SessionConfigComponent,
-        ScenarioComponent,
         AceComponent,
         SetFocusDirective,
         AceEditorComponent
