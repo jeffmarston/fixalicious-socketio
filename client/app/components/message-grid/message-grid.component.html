@@ -5,10 +5,11 @@
             [session]="selectedSession"
             (onSave)="saveSessionConfig($event)"></session-config>-->
 
-        <split direction="horizontal">
+        <split direction="horizontal" 
+                (dragEnd)="saveSize($event)"
+                (dragProgress)="splitterSizing($event)">
             <split-area [size]="splitSize"
                 style="display:flex">
-
 
                 <div *ngIf="showGrid"
                     class="grid-pane">
@@ -38,7 +39,7 @@
             <split-area [size]="100-splitSize"
                 style="display: flex">
                 <detail-pane class="detail-pane"
-                    [hidden]="this.detailCollapsed"
+                    [collapsed]="this.detailCollapsed"
                     [detail]="selectedMessage"
                     [session]="selectedSession">
                 </detail-pane>

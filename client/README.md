@@ -27,13 +27,12 @@ x `Persist action templates via REST API, redis`
 x `Ability to delete template keys`
 x `Get sessions from redis, update status when they change`
 
-- `Scenarios!`
-    - `save sessions in scenarios (not vice versa)`
-    - `handle deleting scenarios (foreign key)`
-    - `call quickActions (Ack, Partial) - or get resulting object back`
+x `Scenarios!`
+    x `save sessions in scenarios (not vice versa)`
+    x `handle deleting scenarios (foreign key)`
+    x `call quickActions (Ack, Partial) - or get resulting object back`
 
-- `Repeating Groups!`
-    - `two-way bindings`
+x `Repeating Groups!`
 - `Parse Fix XML in Node and expose via REST API`
     - `Template keys use <select>`
 - `Angular router, url matching session`

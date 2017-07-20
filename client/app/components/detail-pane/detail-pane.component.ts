@@ -17,8 +17,8 @@ import * as _ from "lodash";
 export class DetailPaneComponent implements OnInit {
     @Input() detail: ITransaction;
     @Input() session: ISession;
-
-    private collapsed: boolean;
+    @Input() collapsed: boolean;
+    
     private sourceFixObj = {};
     private isConfiguring = false;
     private customActions = [];

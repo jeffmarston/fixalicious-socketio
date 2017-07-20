@@ -110,8 +110,8 @@ export class MessageGridComponent implements OnInit {
         }
     }
 
-    private getValueFromTag(array, tag){
-        let item = _.find(array, o=> o.Tag===tag);
+    private getValueFromTag(array, tag) {
+        let item = _.find(array, o => o.Tag === tag);
         return (item) ? item.Value : null;
     }
 
@@ -164,6 +164,14 @@ export class MessageGridComponent implements OnInit {
             allColumnIds.push(columnDef.field);
         });
         this.gridOptions.columnApi.autoSizeColumns(allColumnIds);
+    }
+
+    private saveSize($event) {
+        this.splitSize = Math.trunc($event[0]);
+        localStorage.setItem("split-size", this.splitSize.toString());
+    }
+    private splitterSizing($event) {
+        this.detailCollapsed = ($event[0] > 80);
     }
 
     private onResize() {
