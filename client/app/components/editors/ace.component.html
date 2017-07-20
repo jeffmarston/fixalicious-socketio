@@ -24,10 +24,8 @@
             class="code"
             [(ngModel)]="action.code"
             (blur)="leaveCode(codeId)"></textarea> -->
-        <ace-editor #codeId
-            mode="javascript"
-            [(text)]="action.code"
-            (blur)="leaveCode(codeId)"></ace-editor>
+        <ace-editor #codeEditor
+            [(text)]="action.code"></ace-editor>
 
     </split-area>
     <split-area [size]="50"

@@ -1,4 +1,7 @@
-import { Component, OnInit, EventEmitter, Input, Output, SimpleChange, ElementRef, ViewChild } from '@angular/core';
+import {
+    Component, EventEmitter, Input, Output,
+    SimpleChange, ElementRef, AfterViewInit, ViewChild
+} from '@angular/core';
 import { CommonModule } from "@angular/common";
 import { Http, Response } from "@angular/http";
 import { ApiService } from "../../services/api.service"
@@ -7,14 +10,19 @@ import { ISession } from "../../types.d"
 import * as io from 'socket.io-client';
 import * as _ from 'lodash';
 
+import "brace";
+import "brace/mode/javascript";
+import "brace/theme/chrome";
+
 @Component({
     selector: 'ace-code-editor',
     templateUrl: 'app/components/editors/ace.component.html',
     styleUrls: ['app/components/editors/ace.component.css'],
     providers: [ApiService]
 })
-export class AceComponent implements OnInit {
+export class AceComponent implements AfterViewInit {
     @ViewChild('outputScroll') private outputScroll: ElementRef;
+    @ViewChild('codeEditor') private editor;
     @Output() onEnabled = new EventEmitter<any>();
     @Input() name: string;
     @Input() action: any;
@@ -31,7 +39,13 @@ export class AceComponent implements OnInit {
         this.socket = io();
     }
 
-    ngOnInit() {
+    ngAfterViewInit() {
+        this.editor.getEditor().on('blur', ()=> this.saveCode());
+        
+        this.editor.getEditor().$blockScrolling = Infinity;
+        this.editor.setMode("javascript");
+        //this.editor.setTheme("chrome");
+        
     }
 
     private ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
@@ -70,7 +84,7 @@ export class AceComponent implements OnInit {
         }
     }
 
-    public leaveCode(srcElement) {
+    public saveCode() {
         this.apiService.saveAction(this.action).subscribe(o => {
             console.log(o);
         });
