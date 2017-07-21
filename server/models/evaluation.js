@@ -9,17 +9,17 @@ class Evaluation {
         array.forEach(element => {
             if (!obj[element.key]) {
                 // if element has children, recurse into them
-                if (Array.isArray(element.value)) {
-                    obj[element.key] = mapToSend(element.value);
+                if (Array.isArray(element.formula)) {
+                    obj[element.key] = [this.mapToSend(element.formula)];
                 } else {
                     obj[element.key] = element.value;
                 }
             } else {
                 // element already exists, transform element into an array
                 if (Array.isArray(obj[element.key])) {
-                    obj[element.key].push(mapToSend(element.value));
+                    obj[element.key].push(this.mapToSend(element.value));
                 } else {
-                    obj[element.key] = [obj[element.key], mapToSend(element.value)];
+                    obj[element.key] = [obj[element.key], this.mapToSend(element.value)];
                 }
             }
         });
@@ -29,11 +29,11 @@ class Evaluation {
     // take the name of a template and return fixOut object
     static evaluateTemplate(templateName, sourceFix) {
 
-        // returns an array indexed by FIX tag 
-        function mapIdToValue(obj) {
-            let header = _.keyBy(obj.header, o => o.Tag);
-            let body = _.keyBy(obj.body, o => o.Tag);
-            let trailer = _.keyBy(obj.trailer, o => o.Tag);
+        // returns an array indexed by FIX tag or name 
+        function mapToValue(obj, mapProp) {
+            let header = _.keyBy(obj.header, o => o[mapProp]);
+            let body = _.keyBy(obj.body, o => o[mapProp]);
+            let trailer = _.keyBy(obj.trailer, o => o[mapProp]);
             let everything = [];
             _.merge(everything, header, body, trailer);
 
@@ -44,28 +44,34 @@ class Evaluation {
             return everything;
         }
 
-        function generateId() {
-            return (Math.random().toString(36) + '00000000000000000').slice(2, 11 + 2).toUpperCase();
+        function generateId(length) {
+            var text = "";
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            for (var i = 0; i < (length || 10); i++)
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+            return text;
         }
 
         function evaluate(field, sourceFix) {
+
+            const regex_newId = /\$\{newId\((\d*)\)\}/g;
+            const regex_tag = /\$\{tag\((\d+)\)\}/g;
+            const regex_name = /\$\{name\(\"([a-zA-Z]+)\"\)\}/g;
+
             field.value = field.formula;
             if (Array.isArray(field.formula)) {
                 field.formula.forEach(element => {
                     evaluate(element, sourceFix);
-                    //element.value = resolved;
                 });
             } else if (typeof field.formula == "string") {
-                field.value = field.formula.replace("{{newid}}", generateId());
 
-                let lookupMatches = field.formula.match(/\{\{\d+\}\}/g);  // matches {{num}} pattern
-                if (lookupMatches) {
-                    let lookup = mapIdToValue(sourceFix);
-                    lookupMatches.forEach(match => {
-                        let num = parseInt(match.substring(2, match.length - 2));
-                        field.value = field.formula.replace("{{" + num + "}}", (lookup[num] || ""));
-                    });
-                }
+                let tagLookup = mapToValue(sourceFix, "Tag");
+                let nameLookup = mapToValue(sourceFix, "Name");
+
+                field.value = field.formula;
+                field.value = field.value.replace(regex_newId, (a, b) => generateId(b));
+                field.value = field.value.replace(regex_tag, (a, b) => tagLookup[b]);
+                field.value = field.value.replace(regex_name, (a, b) => nameLookup[b]);
             }
         }
 

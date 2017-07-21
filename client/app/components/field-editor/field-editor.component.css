@@ -49,6 +49,11 @@ div.row>div{
     color: #888;
 }
 
+.group-placeholder>button:focus {
+    outline-offset: -2px;
+    outline: -webkit-focus-ring-color auto 5px;
+}
+
 .group-row {
     background: rgba(187, 204, 221, 0.25);
     /* border-left: 4px solid cadetblue; */
@@ -104,6 +109,7 @@ nav nav {
     transition: opacity 0.25s linear;
     height: 0;
     margin-left: -130px;
+    margin-top: -13px;
 }
 
 nav nav li {
@@ -129,6 +135,10 @@ nav button:hover:focus nav {
 nav button {
     border:none;
     background: transparent;
+}
+nav button:focus {
+    outline-offset: -2px;
+    outline: -webkit-focus-ring-color auto 5px;
 }
 nav button:hover {
     background: #ccc;

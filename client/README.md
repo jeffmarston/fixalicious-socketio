@@ -26,15 +26,16 @@ x `Create all actions from metadata, even Ack, Fill, Reject`
 x `Persist action templates via REST API, redis`
 x `Ability to delete template keys`
 x `Get sessions from redis, update status when they change`
-
 x `Scenarios!`
     x `save sessions in scenarios (not vice versa)`
     x `handle deleting scenarios (foreign key)`
     x `call quickActions (Ack, Partial) - or get resulting object back`
-
 x `Repeating Groups!`
+- `consolidate "Evaluation" and "fix-parser" logic into one file/library`
+- `fix collapse button to actually shrink the splitter`
+- `Modal popup to show FIX message received detail`
+
 - `Parse Fix XML in Node and expose via REST API`
     - `Template keys use <select>`
 - `Angular router, url matching session`
 - `Indicate activity on non-visible pages`
-- `Modal popup to show FIX message received detail`

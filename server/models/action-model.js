@@ -54,7 +54,9 @@ class ActionModel {
     }
 
     static delete(label) {
-        return redisClient.hdelAsync("ui-action", label);
+        return redisClient.hdelAsync("ui-actions", label).then(o => {
+            console.log("deleted action: " + o);
+        });
     }
 
 
