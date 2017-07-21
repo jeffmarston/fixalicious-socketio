@@ -28,15 +28,15 @@ export class MessageGridComponent implements OnInit {
     private debugMessage: string;
     private detailCollapsed = false;
     private splitSize = 70;
-    private filterValue;
-    private socket;
+    private filterValue = null;
+    private bufferSize = 500;
 
     ngOnInit() {
         this.showGrid = true;
         this.splitSize = parseInt(localStorage.getItem("split-size") || "70");
 
-        this.socket = io();
-        this.socket.on('transaction', msg => {
+        let socket = io();
+        socket.on('transaction', msg => {
             let transaction: ITransaction = JSON.parse(msg);
             if (transaction.session.toLowerCase() === this.selectedSession.session.toLowerCase()) {
                 this.addRowsToDataSource([transaction]);
@@ -152,11 +152,17 @@ export class MessageGridComponent implements OnInit {
             this.visibleRows = this.filterOut(this.rowData, this.filterValue);
             this.gridOptions.api.setRowData(this.visibleRows);
         } else {
+            this.rowData = this.rowData.concat(newRows);
             let newVisRows = this.filterOut(newRows, this.filterValue);
-
             this.gridOptions.api.updateRowData({ add: newVisRows, addIndex: 0 });
         }
 
+        // limit grid to (bufferSize) lines
+        let rowsToRemove = [];
+        while(this.rowData.length > this.bufferSize) {
+            rowsToRemove.push(this.rowData.shift());
+        }
+        this.gridOptions.api.updateRowData({ remove: rowsToRemove });
 
         // resize columns 
         var allColumnIds = [];

@@ -20,28 +20,29 @@
     <split-area [size]="50"
         style="display:flex">
 
-        <!-- <textarea #codeId
-            class="code"
-            [(ngModel)]="action.code"
-            (blur)="leaveCode(codeId)"></textarea> -->
         <ace-editor #codeEditor
             [(text)]="action.code"></ace-editor>
 
     </split-area>
     <split-area [size]="50"
         style="display:flex">
-         <textarea readonly
-            #outputScroll
-            (change)="outputChanged($event)"
-            class="output">{{output}}
-        </textarea> 
-        
-    <!-- <code class="output"
-        #output
-        [scrollTop]="9999999">
-        <span class="output" *ngFor="let line of outputLines" [style.color]="line.err ? 'red' : 'white'">{{line.text}}</span>
-        <span class="output"> </span>
-    </code> -->
 
+        <div style="display:flex; flex-direction: column; flex: 1 1 auto">
+            <div class="button-panel">
+                <button title="Clear"
+                    (click)="clearOutput()">
+                    <i class="fa fa-eraser"></i> Clear
+                </button>
+            </div>
+
+            <code class="output"
+                #output
+                [scrollTop]="9999999">
+                <span *ngFor="let line of outputLines" 
+                    [style.color]="line.err ? 'red' : 'lightgray'"
+                    >{{line.text}}</span>
+                <span> </span>
+            </code>
+        </div>
     </split-area>
 </split>

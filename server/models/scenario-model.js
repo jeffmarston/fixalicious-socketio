@@ -64,11 +64,14 @@ class ScenarioModel {
         let cons = {
             log: (txt) => {
                 if (typeof(txt)=="object") {
-                    txt = JSON.stringify(txt);
+                    txt = JSON.stringify(txt, null, 2);
                 }
                 global.io.emit(channel, { scenario: scenario.label, log: txt });
             },
             error: (txt) => {
+                if (typeof(txt)=="object") {
+                    txt = JSON.stringify(txt, null, 2);
+                }
                 global.io.emit(channel, { scenario: scenario.label, error: txt });
             },
         };

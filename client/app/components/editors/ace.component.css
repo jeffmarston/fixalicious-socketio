@@ -42,20 +42,22 @@ textarea {
     resize: none;
     font-family: 'Source Sans Pro', monospace;
 }
-
+/* 
 .code{
     color: blue;
     width: 100%;
     background: whitesmoke;   
     white-space: nowrap;
-}
+} */
 
 .output{
-    width: 100%;
+    flex: 1 1 auto;
     background: #222;
     color: whitesmoke;
+    word-break: break-all;
+    overflow: auto;
 }
-span.output{
+.output>span{
     margin-left: 4px; 
     font-family: 'Source Sans Pro', monospace;
     font-size: 13px; 

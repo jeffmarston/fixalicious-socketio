@@ -32,7 +32,8 @@ export class AceComponent implements AfterViewInit {
     private socket;
     private isEnabled = false;
     private outputLines = [];
-    private output = "";
+
+    private bufferSize = 500;
 
     constructor(
         private apiService: ApiService) {
@@ -40,12 +41,12 @@ export class AceComponent implements AfterViewInit {
     }
 
     ngAfterViewInit() {
-        this.editor.getEditor().on('blur', ()=> this.saveCode());
-        
+        this.editor.getEditor().on('blur', () => this.saveCode());
+
         this.editor.getEditor().$blockScrolling = Infinity;
         this.editor.setMode("javascript");
         //this.editor.setTheme("chrome");
-        
+
     }
 
     private ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
@@ -58,17 +59,26 @@ export class AceComponent implements AfterViewInit {
 
                 this.socket.removeAllListeners(`scenario-output[${oldSession}]`);
                 this.outputLines = [];
-                this.output = "";
 
                 this.socket.on(`scenario-output[${this.session.session}]`, outputObj => {
                     if (outputObj.scenario === this.name) {
                         if (outputObj.log) {
-                            this.outputLines.push({ err: false, text: outputObj.log });
-                            this.output += outputObj.log + "\n";
+                            let preppedLines = outputObj.log.split("\n");
+                            preppedLines.forEach(line => {
+                                this.outputLines.push({ err: false, text: line });
+                            });
                         }
                         if (outputObj.error) {
-                            this.outputLines.push({ err: true, text: outputObj.error });
-                            this.output += "(!) " + outputObj.error + "\n";
+                            let preppedLines = outputObj.error.split("\n");
+                            preppedLines.forEach(line => {
+                                this.outputLines.push({ err: true, text: line });
+                            });
+                        }
+
+                        // limit output to (bufferSize) lines
+                        let itemsToRemove = this.outputLines.length - this.bufferSize;
+                        if (itemsToRemove > 0) {
+                            this.outputLines.splice(0, itemsToRemove);
                         }
 
                         //scroll to bottom of output window
@@ -109,5 +119,9 @@ export class AceComponent implements AfterViewInit {
         this.apiService.runScenario(this.name, this.sourceFix).subscribe(o => {
             console.log(o);
         });
+    }
+
+    public clearOutput() {
+        this.outputLines = [];
     }
 }
