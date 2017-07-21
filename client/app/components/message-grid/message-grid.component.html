@@ -25,7 +25,6 @@
                         style="height: 100%; width: 100%;"
                         class="ag-theme"
                         [gridOptions]="gridOptions"
-                        
                         enableColResize
                         enableSorting
                         enableFilter
@@ -39,7 +38,8 @@
             <split-area [size]="100-splitSize"
                 style="display: flex">
                 <detail-pane class="detail-pane"
-                    [collapsed]="this.detailCollapsed"
+                    (onCollapse)="onCollapse($event)"
+                    [collapsed]="splitConfig?.collapsed"
                     [detail]="selectedMessage"
                     [session]="selectedSession">
                 </detail-pane>

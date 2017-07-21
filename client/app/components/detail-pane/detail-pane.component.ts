@@ -18,6 +18,7 @@ export class DetailPaneComponent implements OnInit {
     @Input() detail: ITransaction;
     @Input() session: ISession;
     @Input() collapsed: boolean;
+    @Output() onCollapse = new EventEmitter<boolean>();
     
     private sourceFixObj = {};
     private isConfiguring = false;
@@ -31,7 +32,7 @@ export class DetailPaneComponent implements OnInit {
         private fixParserService: FixParserService) {
 
         this.apiService.getActions().subscribe(o => {
-            // sort alphabetically for now
+            // sort alphabetically
             this.customActions = o.sort(this.sortAction);
             if (this.customActions.length > 0) {
                 this.prepareTemplate(this.customActions[0], false);
@@ -72,6 +73,7 @@ export class DetailPaneComponent implements OnInit {
     private toggleExpanded() {
         this.collapsed = !this.collapsed;
         localStorage.setItem("detail-pane-collapsed", this.collapsed.toString());
+        this.onCollapse.emit(this.collapsed);
     }
 
     private addAction(type) {

@@ -30,10 +30,12 @@ export class MessageGridComponent implements OnInit {
     private splitSize = 70;
     private filterValue = null;
     private bufferSize = 500;
+    private splitConfig: any;
 
     ngOnInit() {
         this.showGrid = true;
-        this.splitSize = parseInt(localStorage.getItem("split-size") || "70");
+        this.splitConfig = localStorage.getItem("splitConfig") || { collapsed: false, collapsedSize: 90, expandedSize: 60 };
+        this.splitSize = parseInt(this.splitConfig.collapsed ? this.splitConfig.collapsedSize : this.splitConfig.expandedSize);
 
         let socket = io();
         socket.on('transaction', msg => {
@@ -173,9 +175,14 @@ export class MessageGridComponent implements OnInit {
     }
 
     private saveSize($event) {
-        this.splitSize = Math.trunc($event[0]);
-        localStorage.setItem("split-size", this.splitSize.toString());
+        if (this.splitConfig.collapsed) {
+            this.splitConfig.collapsedSize = $event[0];
+        } else {
+            this.splitConfig.expandedSize = $event[0];
+        }        
+        localStorage.setItem("splitConfig", JSON.stringify(this.splitConfig));
     }
+
     private splitterSizing($event) {
         this.detailCollapsed = ($event[0] > 80);
     }
@@ -188,7 +195,12 @@ export class MessageGridComponent implements OnInit {
         this.selectedMessage = $event.data;
     }
 
-    private toggleDetails() {
-        this.detailCollapsed = !this.detailCollapsed;
+    private onCollapse($event: boolean) {
+            this.splitConfig = localStorage.getItem("splitConfig");
+        if ($event) {
+            this.splitSize = parseInt(this.splitConfig.collapsedSize);
+        } else {
+            this.splitSize = parseInt(this.splitConfig.expandedSize);
+        }
     }
 }
