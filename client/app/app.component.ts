@@ -4,6 +4,7 @@ import { Observable } from "rxjs/Observable";
 @Component({
     selector: 'my-app',
     template: `
+    
     <div class="app-container">
 
         <div class="header-bar">
@@ -31,6 +32,9 @@ import { Observable } from "rxjs/Observable";
 
         </div>
     </div>
+
+    <modal-placeholder></modal-placeholder>
+
     `,
     styles: [` 
         .app-container { 
@@ -63,12 +67,14 @@ export class AppComponent {
     private connectionState$: Observable<string>;
     private session = null;
     private isNavCollapsed: boolean;
+    private showModal: boolean;
 
     ngOnInit() {
     }
 
     toggleNavBar(){
         this.isNavCollapsed = !this.isNavCollapsed;
+        this.showModal = !this.showModal;
     }
 
     onSelected($event) {

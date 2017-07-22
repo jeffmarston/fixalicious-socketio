@@ -4,6 +4,7 @@ import { Http, Response } from "@angular/http";
 import { GridOptions } from 'ag-grid/main';
 import { ApiService } from "../../services/api.service";
 import { FixParserService } from "../../services/fix-parser.service"
+import { ModalService } from "../../services/modal.service"
 import { ITransaction, ISession } from "../../types.d";
 import * as io from 'socket.io-client';
 import * as _ from 'lodash';
@@ -50,6 +51,7 @@ export class MessageGridComponent implements OnInit {
     constructor(
         private apiService: ApiService,
         private fixParserService: FixParserService,
+        private modalService: ModalService,
         private http: Http) {
 
         this.createColumnDefs();
@@ -182,6 +184,12 @@ export class MessageGridComponent implements OnInit {
 
     private onCellClicked($event) {
         this.selectedMessage = $event.data;
+    }
+
+    private showFixMessage() {
+        this.modalService.show(
+            JSON.stringify(JSON.parse(this.selectedMessage.message), null, 2)
+        );
     }
 
     private saveSize($event) {

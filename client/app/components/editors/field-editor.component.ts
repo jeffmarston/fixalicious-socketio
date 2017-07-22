@@ -15,7 +15,7 @@ import * as _ from "lodash";
     providers: [ApiService]
 })
 export class FieldEditorComponent implements OnInit {
-    @Input() action: string;
+    @Input() action: any;
     @Input() template: any;
     @Input() level: number = 0;
     @Input() editMode = false;
@@ -33,23 +33,22 @@ export class FieldEditorComponent implements OnInit {
     private ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
         for (let propName in changes) {
             let changedProp = changes[propName];
-
-            // if (propName == "name" && !changedProp.currentValue) {
-            //     if (!this.template || this.template.length === 0) {
-            //         this.template = [{}]
-            //     };
-            // }
-            // if (propName == "sourceFix" && changedProp.currentValue != undefined) {
-            //     this.sourceFix = changedProp.currentValue;
-            // }
-            // if (propName == "session" && changedProp.currentValue != undefined) {
-            //     this.editMode = changedProp.currentValue;
-            // }
         }
         this.evalAll();
         if (this.template && this.template.length === 1 && this.template[0].key === "") {
             this.editMode = true;
         }
+    }
+
+    private cleanupTemplate(template) {
+        return _.map(template, o => {
+            return {
+                key: o.key,
+                formula: Array.isArray(o.formula)
+                    ? this.cleanupTemplate(o.formula)
+                    : o.formula
+            };
+        });
     }
 
     private edit() {
@@ -60,7 +59,14 @@ export class FieldEditorComponent implements OnInit {
             // Remove all empty ones
             _.remove(this.template, o => o.key === "");
 
-            this.apiService.saveAction(this.action).subscribe(o => {
+            // save a "cleaned" version
+            let actionToSave = {
+                label: this.action.label,
+                type: this.action.type,
+                template: this.cleanupTemplate(this.action.template)
+            };
+
+            this.apiService.saveAction(actionToSave).subscribe(o => {
                 console.log("Action saved");
             });
 

@@ -34,6 +34,8 @@ x `Repeating Groups!`
 - `consolidate "Evaluation" and "fix-parser" logic into one file/library`
 - `fix collapse button to actually shrink the splitter`
 - `Modal popup to show FIX message received detail`
+- `Unit tests!`
+
 
 - `Parse Fix XML in Node and expose via REST API`
     - `Template keys use <select>`

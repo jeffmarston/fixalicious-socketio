@@ -12,8 +12,10 @@ import { SessionNavComponent } from "./components/session-nav/session-nav.compon
 import { DetailPaneComponent } from "./components/detail-pane/detail-pane.component";
 import { FieldEditorComponent } from "./components/editors/field-editor.component";
 import { AceComponent } from "./components/editors/ace.component";
+import { ModalComponent } from "./components/modal/modal.component";
 import { ApiService } from "./services/api.service";
 import { FixParserService } from "./services/fix-parser.service";
+import { ModalService } from "./services/modal.service";
 import { SetFocusDirective } from "./directives/set-focus";
 
 
@@ -32,12 +34,14 @@ import { SetFocusDirective } from "./directives/set-focus";
         DetailPaneComponent,
         FieldEditorComponent,
         AceComponent,
+        ModalComponent,
         SetFocusDirective,
         AceEditorComponent
     ],
     providers: [
         ApiService,
-        FixParserService
+        FixParserService,
+        ModalService
     ],
     bootstrap: [AppComponent]
 })
