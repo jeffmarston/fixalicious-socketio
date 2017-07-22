@@ -1,10 +1,7 @@
 <div class="outer-div"
     (window:resize)="onResize()">
     <div class="all-content">
-        <!--<session-config 
-            [session]="selectedSession"
-            (onSave)="saveSessionConfig($event)"></session-config>-->
-
+        
         <split direction="horizontal" 
                 (dragEnd)="saveSize($event)"
                 (dragProgress)="splitterSizing($event)">

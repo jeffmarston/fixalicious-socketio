@@ -11,7 +11,6 @@ import { MessageGridComponent } from "./components/message-grid/message-grid.com
 import { SessionNavComponent } from "./components/session-nav/session-nav.component";
 import { DetailPaneComponent } from "./components/detail-pane/detail-pane.component";
 import { FieldEditorComponent } from "./components/field-editor/field-editor.component";
-import { SessionConfigComponent } from "./components/session-config/session-config.component";
 import { AceComponent } from "./components/editors/ace.component";
 import { ApiService } from "./services/api.service";
 import { FixParserService } from "./services/fix-parser.service";
@@ -32,7 +31,6 @@ import { SetFocusDirective } from "./directives/set-focus";
         SessionNavComponent,
         DetailPaneComponent,
         FieldEditorComponent,
-        SessionConfigComponent,
         AceComponent,
         SetFocusDirective,
         AceEditorComponent

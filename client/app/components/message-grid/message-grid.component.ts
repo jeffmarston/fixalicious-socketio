@@ -34,7 +34,8 @@ export class MessageGridComponent implements OnInit {
 
     ngOnInit() {
         this.showGrid = true;
-        this.splitConfig = localStorage.getItem("splitConfig") || { collapsed: false, collapsedSize: 90, expandedSize: 60 };
+        let savedStr = localStorage.getItem("splitConfig");
+        this.splitConfig = savedStr ? JSON.parse(savedStr) : { collapsed: false, collapsedSize: 90, expandedSize: 60 };
         this.splitSize = parseInt(this.splitConfig.collapsed ? this.splitConfig.collapsedSize : this.splitConfig.expandedSize);
 
         let socket = io();
@@ -143,12 +144,13 @@ export class MessageGridComponent implements OnInit {
     }
 
     private addRowsToDataSource(newItems: ITransaction[]) {
-        // First process te raw message and transform raw message into a row
+        // First process the raw message and transform raw message into a row
         let newRows = [];
         newItems.forEach(item => {
             newRows.push(this.createRow(item));
         });
 
+        // visibleRows is how the custom filtering is implemented
         if (!this.rowData) {
             this.rowData = newRows;
             this.visibleRows = this.filterOut(this.rowData, this.filterValue);
@@ -161,7 +163,7 @@ export class MessageGridComponent implements OnInit {
 
         // limit grid to (bufferSize) lines
         let rowsToRemove = [];
-        while(this.rowData.length > this.bufferSize) {
+        while (this.rowData.length > this.bufferSize) {
             rowsToRemove.push(this.rowData.shift());
         }
         this.gridOptions.api.updateRowData({ remove: rowsToRemove });
@@ -174,19 +176,6 @@ export class MessageGridComponent implements OnInit {
         this.gridOptions.columnApi.autoSizeColumns(allColumnIds);
     }
 
-    private saveSize($event) {
-        if (this.splitConfig.collapsed) {
-            this.splitConfig.collapsedSize = $event[0];
-        } else {
-            this.splitConfig.expandedSize = $event[0];
-        }        
-        localStorage.setItem("splitConfig", JSON.stringify(this.splitConfig));
-    }
-
-    private splitterSizing($event) {
-        this.detailCollapsed = ($event[0] > 80);
-    }
-
     private onResize() {
         this.gridOptions.api.doLayout();
     }
@@ -195,12 +184,27 @@ export class MessageGridComponent implements OnInit {
         this.selectedMessage = $event.data;
     }
 
-    private onCollapse($event: boolean) {
-            this.splitConfig = localStorage.getItem("splitConfig");
-        if ($event) {
-            this.splitSize = parseInt(this.splitConfig.collapsedSize);
+    private saveSize($event) {
+        if (this.splitConfig.collapsed) {
+            this.splitConfig.collapsedSize = Math.trunc($event[0]);
         } else {
-            this.splitSize = parseInt(this.splitConfig.expandedSize);
+            this.splitConfig.expandedSize = Math.trunc($event[0]);
+        }
+        localStorage.setItem("splitConfig", JSON.stringify(this.splitConfig));
+    }
+
+    private splitterSizing($event) {
+        // "snap" to one view or other as splitter is draggeed within range
+        this.detailCollapsed = ($event[0] > 80);
+    }
+
+    private onCollapse($event: boolean) {
+        if ($event) {
+            this.splitConfig.collapsed = true;
+            this.splitSize = this.splitConfig.collapsedSize;
+        } else {
+            this.splitConfig.collapsed = false;
+            this.splitSize = this.splitConfig.expandedSize;
         }
     }
 }
