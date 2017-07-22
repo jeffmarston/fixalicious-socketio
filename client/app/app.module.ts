@@ -10,7 +10,7 @@ import { AppComponent } from "./app.component";
 import { MessageGridComponent } from "./components/message-grid/message-grid.component";
 import { SessionNavComponent } from "./components/session-nav/session-nav.component";
 import { DetailPaneComponent } from "./components/detail-pane/detail-pane.component";
-import { FieldEditorComponent } from "./components/field-editor/field-editor.component";
+import { FieldEditorComponent } from "./components/editors/field-editor.component";
 import { AceComponent } from "./components/editors/ace.component";
 import { ApiService } from "./services/api.service";
 import { FixParserService } from "./services/fix-parser.service";

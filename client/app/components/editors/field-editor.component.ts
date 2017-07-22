@@ -10,8 +10,8 @@ import * as _ from "lodash";
 
 @Component({
     selector: 'field-editor',
-    templateUrl: "app/components/field-editor/field-editor.component.html",
-    styleUrls: ["app/components/field-editor/field-editor.component.css"],
+    templateUrl: "app/components/editors/field-editor.component.html",
+    styleUrls: ["app/components/editors/field-editor.component.css"],
     providers: [ApiService]
 })
 export class FieldEditorComponent implements OnInit {
