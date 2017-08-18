@@ -140,6 +140,8 @@ export class DetailPaneComponent implements OnInit {
         }
     }
 
+    // After an action has been selected, 
+    // we need to update the contents of the details panel
     private prepareTemplate(action) {
         if (this.selectedAction && this.selectedAction.invalid) {
             return;
@@ -155,28 +157,9 @@ export class DetailPaneComponent implements OnInit {
         if (this.collapsed) {
             this.selectedAction = null;
         }
-
-
-        // [JWM] - Implement onLeave?
-
-        // if (this.isConfiguring) {
-        //     //finalize and save changes
-        //     this.configureTemplate();
-        // }
-
-        // this.selectedAction = action;
-        // action.processedFix = {};
-        // action.template.forEach(element => {
-        //     let resolved = this.fixParserService.eval(element, this.sourceFixObj);
-        //     action.processedFix[element.key] = { value: resolved, formula: element.formula };
-        // });
-
-        // this.displayFixMessage();
-        // if (autoSend && this.collapsed) {
-        //     this.send = true;
-        // }
     }
 
+    // remove action from list and refocus a new one
     private pullAction(action) {
         let index = this.customActions.indexOf(action);
         _.pull(this.customActions, action);
@@ -197,6 +180,7 @@ export class DetailPaneComponent implements OnInit {
             });
     }
 
+    // return a string that is gauranteed to be unique in the provide list
     private uniquify(allNames: string[], origName: string): string {
         // if it's already unique, return it
         if (_.countBy(allNames, o => o === origName).true === 0) {
@@ -218,6 +202,7 @@ export class DetailPaneComponent implements OnInit {
         return newName;
     }
 
+    // Create a clone of the currently selected action
     private copyAction() {
         let json = JSON.stringify(this.selectedAction);
         let newAction = JSON.parse(json);
