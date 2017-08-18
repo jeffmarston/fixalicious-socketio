@@ -31,14 +31,14 @@ export class FixParserService {
         let header = _.keyBy(obj.header, o => o[mapProp]);
         let body = _.keyBy(obj.body, o => o[mapProp]);
         let trailer = _.keyBy(obj.trailer, o => o[mapProp]);
-        let everything = [];
-        _.merge(everything, header, body, trailer);
+        let combined = [];
+        _.merge(combined, header, body, trailer);
 
         // return object with the property=Tag, and value=Value
-        for (var property in everything) {
-            everything[property] = everything[property].Value;
+        for (var property in combined) {
+            combined[property.toString()] = combined[property].Value;
         }
-        return everything;
+        return combined;
     }
 
     private generateId(length): string {
@@ -67,8 +67,8 @@ export class FixParserService {
 
             field.value = field.formula;
             field.value = field.value.replace(regex_newId, (a, b) => this.generateId(b));
-            field.value = field.value.replace(regex_tag, (a, b) => tagLookup[b]);
-            field.value = field.value.replace(regex_name, (a, b) => nameLookup[b]);
+            field.value = field.value.replace(regex_tag, (a, b) => (tagLookup[b] || ""));
+            field.value = field.value.replace(regex_name, (a, b) => (nameLookup[b] || ""));
 
         }
     }

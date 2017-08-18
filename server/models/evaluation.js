@@ -70,8 +70,8 @@ class Evaluation {
 
                 field.value = field.formula;
                 field.value = field.value.replace(regex_newId, (a, b) => generateId(b));
-                field.value = field.value.replace(regex_tag, (a, b) => tagLookup[b]);
-                field.value = field.value.replace(regex_name, (a, b) => nameLookup[b]);
+                field.value = field.value.replace(regex_tag, (a, b) => (tagLookup[b] || ""));
+                field.value = field.value.replace(regex_name, (a, b) => (nameLookup[b] || ""));
             }
         }
 

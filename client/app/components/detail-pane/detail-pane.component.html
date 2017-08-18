@@ -13,7 +13,7 @@
             [style.border-color]="(action.invalid) ? 'red' : 'gray' "
             [title]="(action.invalid) ? action.invalid : action.label "
             *ngFor="let action of customActions"
-            (click)="prepareTemplate(action, true)"
+            (click)="prepareTemplate(action)"
             class="invalid">
             <i class="fa"
                 [class.fa-code]="action.type=='template'"
@@ -65,8 +65,9 @@
                     </button>
         </div>
 
-        <div class="inner-editor">
+        <div class="inner-editor" *ngIf="selectedAction">
             <field-editor *ngIf="editor=='template'"
+                [autoSend]="collapsed"
                 [action]="selectedAction"
                 [template]="selectedAction.template"
                 [session]="session"
@@ -75,6 +76,7 @@
 
 
             <ace-code-editor *ngIf="editor=='scenario'"
+                [autoSend]="collapsed"
                 [name]="selectedAction.label"
                 [action]="selectedAction"
                 [session]="session"

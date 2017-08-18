@@ -19,13 +19,14 @@ export class DetailPaneComponent implements OnInit {
     @Input() session: ISession;
     @Input() collapsed: boolean;
     @Output() onCollapse = new EventEmitter<boolean>();
-    
+
     private sourceFixObj = {};
     private isConfiguring = false;
     private customActions = [];
     private selectedAction = null;
     private editor = "template";
     private hideScenario = false;
+    private autoSend: boolean = false;
 
     constructor(
         private apiService: ApiService,
@@ -35,7 +36,7 @@ export class DetailPaneComponent implements OnInit {
             // sort alphabetically
             this.customActions = o.sort(this.sortAction);
             if (this.customActions.length > 0) {
-                this.prepareTemplate(this.customActions[0], false);
+                this.prepareTemplate(this.customActions[0]);
             }
         });
 
@@ -55,8 +56,8 @@ export class DetailPaneComponent implements OnInit {
             if (propName == "detail" && changedProp.currentValue != undefined) {
                 let transaction = changedProp.currentValue;
                 this.sourceFixObj = JSON.parse(transaction.message);
-                if (this.selectedAction) {
-                    this.prepareTemplate(this.selectedAction, false);
+                if (this.selectedAction && !this.collapsed) {
+                    this.prepareTemplate(this.selectedAction);
                 }
             }
         }
@@ -99,7 +100,7 @@ export class DetailPaneComponent implements OnInit {
             };
         }
         this.customActions.push(this.selectedAction);
-        this.prepareTemplate(this.selectedAction, false);
+        this.prepareTemplate(this.selectedAction);
     }
 
     private sortAction(a, b) {
@@ -138,8 +139,8 @@ export class DetailPaneComponent implements OnInit {
         }
     }
 
-    private prepareTemplate(action, autoSend: boolean) {
-        if (this.selectedAction.invalid) {
+    private prepareTemplate(action) {
+        if (this.selectedAction && this.selectedAction.invalid) {
             return;
         }
         this.selectedAction = action;
@@ -149,6 +150,11 @@ export class DetailPaneComponent implements OnInit {
         } else {
             this.editor = "template";
         }
+        
+        if (this.collapsed) {
+            this.selectedAction = null;
+        } 
+        
 
         // [JWM] - Implement onLeave?
 
@@ -166,7 +172,7 @@ export class DetailPaneComponent implements OnInit {
 
         // this.displayFixMessage();
         // if (autoSend && this.collapsed) {
-        //     this.send();
+        //     this.send = true;
         // }
     }
 

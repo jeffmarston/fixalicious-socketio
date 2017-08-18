@@ -27,7 +27,6 @@ export class MessageGridComponent implements OnInit {
     private selectedMessage: ITransaction;
     private showDetails: boolean;
     private debugMessage: string;
-    private detailCollapsed = false;
     private splitSize = 70;
     private filterValue = null;
     private bufferSize = 500;
@@ -35,11 +34,21 @@ export class MessageGridComponent implements OnInit {
 
     ngOnInit() {
         this.showGrid = true;
-        let savedStr = localStorage.getItem("splitConfig");
-        this.splitConfig = savedStr ? JSON.parse(savedStr) : { collapsed: false, collapsedSize: 90, expandedSize: 60 };
-        this.splitSize = parseInt(this.splitConfig.collapsed ? this.splitConfig.collapsedSize : this.splitConfig.expandedSize);
 
-        let socket = io();
+        let savedStr = localStorage.getItem("splitConfig");
+        try {
+            this.splitConfig = JSON.parse(savedStr);
+        } catch (err) {
+            this.splitConfig = null;
+        }
+        if (!(this.splitConfig && this.splitConfig.collapsed && this.splitConfig.collapsedSize && this.splitConfig.expandedSize)) {
+            this.splitConfig = { collapsed: false, collapsedSize: 90, expandedSize: 60 };
+            localStorage.setItem("splitConfig", JSON.stringify(this.splitConfig));
+        }
+        this.splitSize = parseInt((this.splitConfig.collapsed) ? this.splitConfig.collapsedSize : this.splitConfig.expandedSize);
+
+
+        let socket = io();)
         socket.on('transaction', msg => {
             let transaction: ITransaction = JSON.parse(msg);
             if (transaction.session.toLowerCase() === this.selectedSession.session.toLowerCase()) {
@@ -203,7 +212,7 @@ export class MessageGridComponent implements OnInit {
 
     private splitterSizing($event) {
         // "snap" to one view or other as splitter is draggeed within range
-        this.detailCollapsed = ($event[0] > 80);
+        this.splitConfig.collapsed = ($event[0] > 80);
     }
 
     private onCollapse($event: boolean) {

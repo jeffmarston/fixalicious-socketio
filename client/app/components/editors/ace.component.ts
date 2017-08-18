@@ -28,6 +28,7 @@ export class AceComponent implements AfterViewInit {
     @Input() action: any;
     @Input() session: ISession;
     @Input() sourceFix: any;
+    @Input() autoSend: boolean = false;
 
     private socket;
     private isEnabled = false;
@@ -52,6 +53,10 @@ export class AceComponent implements AfterViewInit {
     private ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
         for (let propName in changes) {
             let changedProp = changes[propName];
+                       
+            if (propName == "action" && changedProp.currentValue != undefined && this.autoSend) {
+                this.runScenario();
+            }
 
             if (propName == "session" && changedProp.currentValue != undefined) {
                 this.session = changedProp.currentValue;

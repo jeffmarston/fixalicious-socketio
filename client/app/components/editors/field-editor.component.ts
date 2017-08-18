@@ -21,6 +21,7 @@ export class FieldEditorComponent implements OnInit {
     @Input() editMode = false;
     @Input() sourceFix: any;
     @Input() session: any;
+    @Input() autoSend: boolean;
 
     constructor(
         private apiService: ApiService,
@@ -31,12 +32,21 @@ export class FieldEditorComponent implements OnInit {
     }
 
     private ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
-        for (let propName in changes) {
-            let changedProp = changes[propName];
-        }
         this.evalAll();
         if (this.template && this.template.length === 1 && this.template[0].key === "") {
             this.editMode = true;
+        }
+
+        for (let propName in changes) {
+            let changedProp = changes[propName];
+            if (propName == "action"
+                && changedProp.currentValue != undefined
+                && this.session
+                && this.autoSend) {
+                setTimeout(o => {
+                    this.send();
+                }, 20);
+            }
         }
     }
 
