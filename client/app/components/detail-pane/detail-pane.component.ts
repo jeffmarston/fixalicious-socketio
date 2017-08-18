@@ -100,6 +100,7 @@ export class DetailPaneComponent implements OnInit {
             };
         }
         this.customActions.push(this.selectedAction);
+        this.customActions = this.customActions.sort(this.sortAction);
         this.prepareTemplate(this.selectedAction);
     }
 
@@ -150,11 +151,11 @@ export class DetailPaneComponent implements OnInit {
         } else {
             this.editor = "template";
         }
-        
+
         if (this.collapsed) {
             this.selectedAction = null;
-        } 
-        
+        }
+
 
         // [JWM] - Implement onLeave?
 
@@ -198,7 +199,7 @@ export class DetailPaneComponent implements OnInit {
 
     private uniquify(allNames: string[], origName: string): string {
         // if it's already unique, return it
-        if (_.countBy(allNames, o => o === origName).true === 1) {
+        if (_.countBy(allNames, o => o === origName).true === 0) {
             return origName;
         }
 
@@ -225,9 +226,11 @@ export class DetailPaneComponent implements OnInit {
             _.map(this.customActions, o => o.label),
             newAction.label);
 
-        this.customActions.push(newAction);
         this.apiService.saveAction(newAction).subscribe(o => {
             console.log("Template saved");
+            this.customActions.push(newAction);
+            this.customActions = this.customActions.sort(this.sortAction);
+
             this.prepareTemplate(newAction);
             newAction.isConfiguring = true;
         });
