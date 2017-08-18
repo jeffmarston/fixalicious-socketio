@@ -48,7 +48,7 @@ export class MessageGridComponent implements OnInit {
         this.splitSize = parseInt((this.splitConfig.collapsed) ? this.splitConfig.collapsedSize : this.splitConfig.expandedSize);
 
 
-        let socket = io();)
+        let socket = io();
         socket.on('transaction', msg => {
             let transaction: ITransaction = JSON.parse(msg);
             if (transaction.session.toLowerCase() === this.selectedSession.session.toLowerCase()) {

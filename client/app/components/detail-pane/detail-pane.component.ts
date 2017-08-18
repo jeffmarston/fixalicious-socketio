@@ -184,7 +184,7 @@ export class DetailPaneComponent implements OnInit {
         } else if (index < this.customActions.length) {
             this.selectedAction = this.customActions[index];
         }
-        this.prepareTemplate(this.selectedAction, false);
+        this.prepareTemplate(this.selectedAction);
     }
 
     private deleteAction() {
@@ -228,7 +228,7 @@ export class DetailPaneComponent implements OnInit {
         this.customActions.push(newAction);
         this.apiService.saveAction(newAction).subscribe(o => {
             console.log("Template saved");
-            this.prepareTemplate(newAction, false);
+            this.prepareTemplate(newAction);
             newAction.isConfiguring = true;
         });
     }
