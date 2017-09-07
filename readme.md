@@ -43,6 +43,18 @@ To see where it's running from (on Windows):
 > where tsc.exe
 ```
 
+## Prerequisites
+
+* Redis: https://github.com/MicrosoftArchive/redis/releases
+
+
+## Fixalicious integration
+
+When you start fix-svr, you must specify the following options:
+```
+--use_redis --redis_listeners ui
+```
+
 ## Server
 
 The server only needs dependencies installed, so change to the server folder, install dependencies, and run the following:
