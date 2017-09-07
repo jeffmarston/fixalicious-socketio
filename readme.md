@@ -88,4 +88,16 @@ Options:
 
 
 # Usage Overview
-Coming soon...
+
+## Functions
+
+Use the following syntax to reference a tag:
+
+```
+${tag(11)}
+```
+
+To generate a new ID
+```
+${newId()}
+```
