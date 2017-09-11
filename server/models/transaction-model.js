@@ -23,7 +23,7 @@ class TransactionModel {
 
     static create(sessionName, transaction) {
         return rp.post(
-            'http://localhost:9999/' + sessionName + '/ExecutionReport',
+            'http://' + global.argv['fixalicious_host'] + ':9999/' + sessionName + '/ExecutionReport',
             { json: transaction },
             function (error, response, body) {
                 if (error) {
