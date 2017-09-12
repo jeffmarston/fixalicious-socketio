@@ -5,7 +5,8 @@ let util = require('util');
 let vm = require('vm');
 let bluebird = require('bluebird');
 let redis = require('redis');
-let redisClient = redis.createClient(6379, 'mrsbuffy');
+let config = require('../config');
+let redisClient = redis.createClient(config.redis.port, config.redis.host);
 bluebird.promisifyAll(redis.RedisClient.prototype);
 
 let TransactionModel = require("./transaction-model");

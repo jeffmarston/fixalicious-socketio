@@ -3,7 +3,8 @@
 let _ = require('lodash');
 let bluebird = require('bluebird');
 let redis = require('redis');
-let client = redis.createClient(6379, 'mrsbuffy');
+let config = require('../config');
+let client = redis.createClient(config.redis.port, config.redis.host);
 bluebird.promisifyAll(redis.RedisClient.prototype);
 var rp = require('request-promise');
 
@@ -23,7 +24,7 @@ class TransactionModel {
 
     static create(sessionName, transaction) {
         return rp.post(
-            'http://mrsbuffy:9999/' + sessionName + '/ExecutionReport',
+            'http://' + config.fixalicious.host + ':9999/' + sessionName + '/ExecutionReport',
             { json: transaction },
             function (error, response, body) {
                 if (error) {

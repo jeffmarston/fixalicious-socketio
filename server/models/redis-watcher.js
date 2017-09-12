@@ -6,8 +6,8 @@ let redis = require('redis');
 let scenarioModel = require("./scenario-model");
 let sessionModel = require("./session-model");
 bluebird.promisifyAll(redis.RedisClient.prototype);
-
-var redisSessionsPoller = redis.createClient(6379, 'mrsbuffy');
+let config = require('../config');
+var redisSessionsPoller = redis.createClient(config.redis.port, config.redis.host);
 var msg_count = 0;
 
 class Subscriber {
@@ -28,7 +28,7 @@ class Subscriber {
             let ui_transactionKey = "ui-transactions-" + sessionName;
             console.log("Watching for new transactions on: " + sub_transactionKey);
 
-            let newClient = redis.createClient(6379, 'mrsbuffy');
+            let newClient = redis.createClient(config.redis.port, config.redis.host);
             newClient.name = "[" + sessionName + "]";
             pollers.push(newClient);
 
@@ -51,7 +51,7 @@ class Subscriber {
         // * 
         // * Create a new poller for session changes (recursive, kind of)
         // *
-        var redisSessions = redis.createClient(6379, 'mrsbuffy');
+        var redisSessions = redis.createClient(config.redis.port, config.redis.host);
         redisSessions.hvalsAsync(my_sessionKey).then((items) => {
             let sessionArray = _.map(items, o => JSON.parse(o));
             sessionArray.forEach((session) => {
