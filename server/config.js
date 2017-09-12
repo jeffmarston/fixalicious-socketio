@@ -9,18 +9,17 @@ var fix_config = require('yargs')
 	.help().alias('help', '?')
 	.argv;
 
-
-var config = {};
-
-config.redis = {};
-config.redis.host = fix_config['redis_host'];
-config.redis.port = fix_config['redis_port'];
-
-config.fixalicious = {};
-config.fixalicious.host = fix_config['fixalicious_host'];
-config.fixalicious.port = fix_config['fixalicious_port'];
-
-config.port = fix_config['port'];
-config.subscriber = fix_config['subscriber'];
+var config = {
+	redis: {
+			host: fix_config['redis_host'],
+			port: fix_config['redis_port']
+	},
+	fixalicious: {
+			host: fix_config['fixalicious_host'],
+			port: fix_config['fixalicious_port']
+	},
+	port: fix_config['port'],
+	subscriber: fix_config['subscriber']
+};
 
 module.exports = config;

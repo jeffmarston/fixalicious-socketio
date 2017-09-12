@@ -1,17 +1,10 @@
 let app = require('./swagger');
 let redisWatcher = require('./models/redis-watcher');
 let debug = require('debug')('swagger-gwy:server');
+let config = require('./config');
 
-// configuration and commandline args
-global.argv = require('yargs')
-  .option('port', { alias: 'p', default: '4400', describe: 'Port to serve HTTP content' })
-	.option('subscriber', { alias: 's', default: 'ui', describe: 'FIXalicious channel' })
-	.option('redis_host', { default: 'localhost', describe: 'Redis server hostname' })
-	.option('redis_port', { default: '6379', describe: 'Redis server port' })
-	.help().alias('help', '?')
-	.argv;
- 
-let port = global.argv.port;
+
+let port = config.port;
 app.set("port", port);
 let server = app.listen(port);
 

@@ -13,7 +13,7 @@ var msg_count = 0;
 class Subscriber {
 
     static subscribeAll() {
-        let suffix = (global.argv.subscriber) ? "-" + global.argv.subscriber : "-ui";
+        let suffix = (config.subscriber) ? "-" + config.subscriber : "-ui";
         console.log("Subscribing to redis channels with suffix: " + suffix)
         let sub_sessionKey = "fix-svr-sessions" + suffix;
         let my_sessionKey = "ui-sessions";

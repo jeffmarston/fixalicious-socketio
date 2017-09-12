@@ -43,7 +43,7 @@ class SessionController {
 {"Tag":60,"Name":"TransactTime","Value":"20170626-13:56:24.000"},{"Tag":207,"Name":"SecurityExchange","Value":"New York"}],
 "trailer":[{"Tag":10,"Name":"CheckSum","Value":"185"}]},"direction":false,"session":"${sessionName}"}`;
 
-                redisClient.rpush(`fix-svr-${sessionName}-${global.argv.subscriber}`, transaction);
+                redisClient.rpush(`fix-svr-${sessionName}-${config.subscriber}`, transaction);
             }, i * 100);
         }
 
