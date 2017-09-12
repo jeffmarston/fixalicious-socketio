@@ -8,7 +8,7 @@ let ErrorResource = require('../../resources/error-resource');
 
 let bluebird = require('bluebird');
 let redis = require('redis');
-let config = require('../../../config');
+let config = require('./../../config');
 let redisClient = redis.createClient(config.redis.port, config.redis.host);
 bluebird.promisifyAll(redis.RedisClient.prototype);
 
