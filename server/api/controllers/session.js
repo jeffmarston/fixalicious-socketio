@@ -8,8 +8,8 @@ let ErrorResource = require('../../resources/error-resource');
 
 let bluebird = require('bluebird');
 let redis = require('redis');
+let redisClient = redis.createClient(6379, 'mrsbuffy');
 bluebird.promisifyAll(redis.RedisClient.prototype);
-let redisClient = redis.createClient();
 
 class SessionController {
 

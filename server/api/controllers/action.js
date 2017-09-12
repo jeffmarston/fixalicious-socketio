@@ -2,7 +2,7 @@
 
 let bluebird = require('bluebird');
 let redis = require('redis');
-let redisClient = redis.createClient();
+let redisClient = redis.createClient(6379, 'mrsbuffy');
 bluebird.promisifyAll(redis.RedisClient.prototype);
 
 let _ = require('lodash');

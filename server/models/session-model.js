@@ -3,7 +3,7 @@
 let _ = require('lodash');
 let bluebird = require('bluebird');
 let redis = require('redis');
-let client = redis.createClient();
+let client = redis.createClient(6379, 'mrsbuffy');
 let scenarioModel = require("./scenario-model");
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
