@@ -24,7 +24,7 @@ class TransactionModel {
 
     static create(sessionName, transaction) {
         return rp.post(
-            'http://' + config.fixalicious.host + ':9999/' + sessionName + '/ExecutionReport',
+            'http://' + config.fixalicious.host + ':' + config.fixalicious.port + '/' + sessionName + '/ExecutionReport',
             { json: transaction },
             function (error, response, body) {
                 if (error) {
