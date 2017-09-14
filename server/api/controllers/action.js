@@ -90,7 +90,7 @@ class ActionController {
             { key: "LeavesQty", formula: "0" },
             { key: "CumQty", formula: "${tag(38)}" },
             { key: "AvgPx", formula: "4.5" },
-            { key: "TransactTime", formula: "now" },
+            { key: "TransactTime", formula: "${timestamp()}" },
             { key: "HandlInst", formula: "3" }
         ];
     }
@@ -114,7 +114,7 @@ class ActionController {
             { key: "LeavesQty", formula: "0" },
             { key: "CumQty", formula: "25" },
             { key: "AvgPx", formula: "4.5" },
-            { key: "TransactTime", formula: "now" },
+            { key: "TransactTime", formula: "${timestamp()}" },
             { key: "HandlInst", formula: "3" }
         ];
     }
@@ -138,7 +138,7 @@ class ActionController {
             { key: "LeavesQty", formula: "0" },
             { key: "CumQty", formula: "${tag(38)}" },
             { key: "AvgPx", formula: "4.5" },
-            { key: "TransactTime", formula: "now" },
+            { key: "TransactTime", formula: "${timestamp()}" },
             { key: "HandlInst", formula: "3" }
         ];
     }
@@ -162,7 +162,7 @@ class ActionController {
             { key: "LeavesQty", formula: "0" },
             { key: "CumQty", formula: "0" },
             { key: "AvgPx", formula: "0" },
-            { key: "TransactTime", formula: "now" },
+            { key: "TransactTime", formula: "${timestamp()}" },
             { key: "HandlInst", formula: "3" }
         ];
     }

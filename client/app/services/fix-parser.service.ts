@@ -49,9 +49,15 @@ export class FixParserService {
         return text;
     }
 
+    private generateTimestamp(input): string {
+    var temp = "fix-parser";
+        return temp;
+    }
+
     public eval(field, sourceFix) {
 
         const regex_newId = /\$\{newId\((\d*)\)\}/g;
+        const regex_newTime = /\$\{timestamp\((\d*)\)\}/g;
         const regex_tag = /\$\{tag\((\d+)\)\}/g;
         const regex_name = /\$\{name\(\"([a-zA-Z]+)\"\)\}/g;
 
@@ -67,6 +73,7 @@ export class FixParserService {
 
             field.value = field.formula;
             field.value = field.value.replace(regex_newId, (a, b) => this.generateId(b));
+            field.value = field.value.replace(regex_newTime, (a, b) => this.generateTimestamp(b));
             field.value = field.value.replace(regex_tag, (a, b) => (tagLookup[b] || ""));
             field.value = field.value.replace(regex_name, (a, b) => (nameLookup[b] || ""));
 
