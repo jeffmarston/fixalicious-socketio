@@ -49,11 +49,11 @@ class Evaluation {
             var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             for (var i = 0; i < (length || 10); i++)
                 text += possible.charAt(Math.floor(Math.random() * possible.length));
-            return text;
+            return possible;
         }
 
         function generateTimestamp(input) {
-            var temp = "eva";
+            var temp = new Date().toISOString().replace(/-/g,'').replace('T','-').replace('Z','');
             return temp;
         }
 
