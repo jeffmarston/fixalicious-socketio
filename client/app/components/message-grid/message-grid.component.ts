@@ -131,7 +131,7 @@ export class MessageGridComponent implements OnInit {
 
     private createRow(item): ITransaction {
         let row = {
-            direction: item.direction ? "sent" : "received",
+            direction: item.direction.localeCompare("OUTBOUND") == 0 ? "sent" : "received",
             seqNum: null,
             cliOrdId: null,
             msgType: null,
