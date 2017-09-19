@@ -50,8 +50,7 @@ export class FixParserService {
     }
 
     private generateTimestamp(input): string {
-        var temp = new Date().toISOString();
-        temp = temp.replace(/-/g,'').replace('T','-').replace('Z','');
+        var temp = new Date().toISOString().replace(/-/g,'').replace('T','-').replace('Z','');
         return temp;
     }
 
