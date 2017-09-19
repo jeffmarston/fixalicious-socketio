@@ -52,7 +52,7 @@ class Evaluation {
             return text;
         }
 
-        function generateTimestamp(input) {
+        function generateTimestamp() {
             var temp = new Date().toISOString().replace(/-/g,'').replace('T','-').replace('Z','');
             return temp;
         }
@@ -76,7 +76,7 @@ class Evaluation {
 
                 field.value = field.formula;
                 field.value = field.value.replace(regex_newId, (a, b) => generateId(b));
-                field.value = field.value.replace(regex_newTime, (a, b) => generateTimestamp(b));
+                field.value = field.value.replace(regex_newTime, (a) => generateTimestamp());
                 field.value = field.value.replace(regex_tag, (a, b) => (tagLookup[b] || ""));
                 field.value = field.value.replace(regex_name, (a, b) => (nameLookup[b] || ""));
             }
