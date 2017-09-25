@@ -55,8 +55,6 @@ class Subscriber {
         redisSessions.hvalsAsync(my_sessionKey).then((items) => {
             let sessionArray = _.map(items, o => JSON.parse(o));
             sessionArray.forEach((session) => {
-                console.log("---------")
-                console.log(session);
                 if (session.status == "up") {
                     addTransactionPoller(session.session);
                     sessionModel.enableScenarios(session.session, session.scenarios);

@@ -78,10 +78,12 @@ For all options, run with the -? switch:
 ```
 > node server.js -?
 Options:
-  --port, -p        Port to serve HTTP content                 [default: "4400"]
-  --subscriber, -s  FIXalicious channel                          [default: "ui"]
-  --redis_host      Redis server hostname                 [default: "localhost"]
-  --redis_port      Redis server port                          [default: "6379"]
+  --port, -p        	Port to serve HTTP content                 [default: "4400"]
+  --subscriber, -s  	FIXalicious channel                          [default: "ui"]
+  --redis_host      	Redis server hostname                 [default: "localhost"]
+  --redis_port      	Redis server port                          [default: "6379"]
+  --fixalicious_host  	FIXalicious server host                          [default: "localhost"]
+  --fixalicious_port    FIXalicious server port                          [default: "6379"]
   --help, -?        Show help                                          [boolean]
 
 ```
@@ -100,4 +102,9 @@ ${tag(11)}
 To generate a new ID
 ```
 ${newId()}
+```
+
+To generate a new timestamp in UTC
+```
+${timestamp()}
 ```

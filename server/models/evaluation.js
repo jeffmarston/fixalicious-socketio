@@ -52,9 +52,15 @@ class Evaluation {
             return text;
         }
 
+        function generateTimestamp() {
+            var temp = new Date().toISOString().replace(/-/g,'').replace('T','-').replace('Z','');
+            return temp;
+        }
+
         function evaluate(field, sourceFix) {
 
             const regex_newId = /\$\{newId\((\d*)\)\}/g;
+            const regex_newTime = /\$\{timestamp\((\d*)\)\}/g;
             const regex_tag = /\$\{tag\((\d+)\)\}/g;
             const regex_name = /\$\{name\(\"([a-zA-Z]+)\"\)\}/g;
 
@@ -70,6 +76,7 @@ class Evaluation {
 
                 field.value = field.formula;
                 field.value = field.value.replace(regex_newId, (a, b) => generateId(b));
+                field.value = field.value.replace(regex_newTime, (a) => generateTimestamp());
                 field.value = field.value.replace(regex_tag, (a, b) => (tagLookup[b] || ""));
                 field.value = field.value.replace(regex_name, (a, b) => (nameLookup[b] || ""));
             }
