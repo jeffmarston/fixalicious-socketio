@@ -111,7 +111,7 @@ ${timestamp()}
 
 # Troubleshooting
 
-1.rxjs versioning issue
+##1.rxjs versioning issue
 
 Symptoms: Error: Resource Not Found
 
