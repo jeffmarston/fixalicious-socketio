@@ -112,6 +112,7 @@ ${timestamp()}
 # Troubleshooting
 
 1.rxjs versioning issue
+
 Symptoms: Error: Resource Not Found
 
 ```
@@ -129,11 +130,14 @@ s\serve-static\node_modules\send\index.js:245:17)
 ```
 
 Causes: rxjs package got updated to rxjs@5.5.2 
+
 Solution: downgrade rxjs package to rxjs@5.4.3
 in the client folder, run cmd as administrator
+```
 >npm uninstall rxjs
 >npm install rxjs@5.4.3
 >npm list >pksversions.txt
+```
   
 
     
