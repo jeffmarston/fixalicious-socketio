@@ -183,7 +183,7 @@ class ActionController {
 
     static createCancelFill() {
         return [
-            { key: "OrderID", formula: "fix-${tag(37)}" },
+            { key: "OrderID", formula: "${tag(37)}" },
             { key: "ClOrdID", formula: "${tag(11)}" },
             { key: "ExecID", formula: "${newId()}" },
             { key: "ExecRefID", formula: "${tag(17)}" },            
@@ -212,7 +212,7 @@ class ActionController {
 
     static createAmendFill() {
         return [
-            { key: "OrderID", formula: "fix-${tag(37)}" },
+            { key: "OrderID", formula: "${tag(37)}" },
             { key: "ClOrdID", formula: "${tag(11)}" },
             { key: "ExecID", formula: "${newId()}" },
             { key: "ExecRefID", formula: "${tag(17)}" },            
