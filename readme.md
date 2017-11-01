@@ -108,3 +108,32 @@ To generate a new timestamp in UTC
 ```
 ${timestamp()}
 ```
+
+# Troubleshooting
+
+1.rxjs versioning issue
+Symptoms: Error: Resource Not Found
+
+```
+Error: Resource Not Found
+    at app.use (D:\Fixacilious-latest\fixalicious-ui\server\swagger.js:69:15)
+    at Layer.handle [as handle_request] (D:\Fixacilious-latest\fixalicious-ui\se
+rver\node_modules\express\lib\router\layer.js:95:5)
+......
+    at SendStream.error (D:\Fixacilious-latest\fixalicious-ui\server\node_module
+s\serve-static\index.js:120:7)
+    at emitOne (events.js:96:13)
+    at SendStream.emit (events.js:188:7)
+    at SendStream.error (D:\Fixacilious-latest\fixalicious-ui\server\node_module
+s\serve-static\node_modules\send\index.js:245:17)
+```
+
+Causes: rxjs package got updated to rxjs@5.5.2 
+Solution: downgrade rxjs package to rxjs@5.4.3
+in the client folder, run cmd as administrator
+>npm uninstall rxjs
+>npm install rxjs@5.4.3
+>npm list >pksversions.txt
+  
+
+    
