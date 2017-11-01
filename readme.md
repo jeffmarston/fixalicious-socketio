@@ -113,7 +113,7 @@ ${timestamp()}
 
 ## 1.rxjs versioning issue
 
-Symptoms: 
+###### Symptoms: 
 
 UI is stuck at "Starting up....". 
 
@@ -138,9 +138,9 @@ s\serve-static\index.js:120:7)
 s\serve-static\node_modules\send\index.js:245:17)
 ```
 
-Causes: rxjs package got updated to rxjs@5.5.2 
+###### Causes: rxjs package got updated to rxjs@5.5.2 
 
-Solution: downgrade rxjs package to rxjs@5.4.3
+###### Solution: downgrade rxjs package to rxjs@5.4.3
 in the client folder, run cmd as administrator
 ```
 >npm uninstall rxjs
