@@ -83,7 +83,7 @@ Options:
   --redis_host      	Redis server hostname                 [default: "localhost"]
   --redis_port      	Redis server port                          [default: "6379"]
   --fixalicious_host  	FIXalicious server host                          [default: "localhost"]
-  --fixalicious_port    FIXalicious server port                          [default: "6379"]
+  --fixalicious_port    FIXalicious server port                          [default: "9999"]
   --help, -?        Show help                                          [boolean]
 
 ```
@@ -113,8 +113,17 @@ ${timestamp()}
 
 ## 1.rxjs versioning issue
 
-Symptoms: Error: Resource Not Found
+###### Symptoms: 
 
+UI is stuck at "Starting up....". 
+
+In F12 Developer tool console, it complains about rxjs  
+
+```
+Error: (SystemJS) XHR error (404 Not Found) loading http://localhost:4400/client/node_modules/rxjs/operators.js  Error: Resource Not Found
+```
+
+On Server side, it shows error:
 ```
 Error: Resource Not Found
     at app.use (D:\Fixacilious-latest\fixalicious-ui\server\swagger.js:69:15)
@@ -129,14 +138,18 @@ s\serve-static\index.js:120:7)
 s\serve-static\node_modules\send\index.js:245:17)
 ```
 
-Causes: rxjs package got updated to rxjs@5.5.2 
+###### Causes: 
 
-Solution: downgrade rxjs package to rxjs@5.4.3
+rxjs package got updated to rxjs@5.5.2 
+
+###### Solution: 
+
+downgrade rxjs package to rxjs@5.4.3
 in the client folder, run cmd as administrator
 ```
 >npm uninstall rxjs
 >npm install rxjs@5.4.3
->npm list >pksversions.txt
+>npm list --depth=0
 ```
   
 
