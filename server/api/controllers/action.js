@@ -80,6 +80,9 @@ class ActionController {
             { key: "OrdStatus", formula: "0" },
             { key: "Symbol", formula: "${tag(55)}" },
             { key: "SecurityExchange", formula: "New York" },
+            { key: "Currency", formula: "EUR" },
+            { key: "LastMkt", formula: "XOFF" },
+            { key: "LastCapacity", formula: "1" },
             { key: "Side", formula: "1" },
             { key: "OrderQty", formula: "${tag(38)}" },
             { key: "OrdType", formula: "1" },
@@ -90,7 +93,7 @@ class ActionController {
             { key: "LeavesQty", formula: "0" },
             { key: "CumQty", formula: "${tag(38)}" },
             { key: "AvgPx", formula: "4.5" },
-            { key: "TransactTime", formula: "now" },
+            { key: "TransactTime", formula: "${timestamp()}" },
             { key: "HandlInst", formula: "3" }
         ];
     }
@@ -104,6 +107,9 @@ class ActionController {
             { key: "OrdStatus", formula: "1" },
             { key: "Symbol", formula: "${tag(55)}" },
             { key: "SecurityExchange", formula: "New York" },
+            { key: "Currency", formula: "EUR" },
+            { key: "LastMkt", formula: "XOFF" },
+            { key: "LastCapacity", formula: "1" },
             { key: "Side", formula: "1" },
             { key: "OrderQty", formula: "${tag(38)}" },
             { key: "OrdType", formula: "1" },
@@ -114,7 +120,7 @@ class ActionController {
             { key: "LeavesQty", formula: "0" },
             { key: "CumQty", formula: "25" },
             { key: "AvgPx", formula: "4.5" },
-            { key: "TransactTime", formula: "now" },
+            { key: "TransactTime", formula: "${timestamp()}" },
             { key: "HandlInst", formula: "3" }
         ];
     }
@@ -128,6 +134,9 @@ class ActionController {
             { key: "OrdStatus", formula: "2" },
             { key: "Symbol", formula: "${tag(55)}" },
             { key: "SecurityExchange", formula: "New York" },
+            { key: "Currency", formula: "EUR" },
+            { key: "LastMkt", formula: "XOFF" },
+            { key: "LastCapacity", formula: "1" },            
             { key: "Side", formula: "1" },
             { key: "OrderQty", formula: "${tag(38)}" },
             { key: "OrdType", formula: "1" },
@@ -138,7 +147,7 @@ class ActionController {
             { key: "LeavesQty", formula: "0" },
             { key: "CumQty", formula: "${tag(38)}" },
             { key: "AvgPx", formula: "4.5" },
-            { key: "TransactTime", formula: "now" },
+            { key: "TransactTime", formula: "${timestamp()}" },
             { key: "HandlInst", formula: "3" }
         ];
     }
@@ -152,6 +161,9 @@ class ActionController {
             { key: "OrdStatus", formula: "8" },
             { key: "Symbol", formula: "${tag(55)}" },
             { key: "SecurityExchange", formula: "New York" },
+            { key: "Currency", formula: "EUR" },
+            { key: "LastMkt", formula: "XOFF" },     
+            { key: "LastCapacity", formula: "1" },
             { key: "Side", formula: "1" },
             { key: "OrderQty", formula: "${tag(38)}" },
             { key: "OrdType", formula: "1" },
@@ -162,7 +174,7 @@ class ActionController {
             { key: "LeavesQty", formula: "0" },
             { key: "CumQty", formula: "0" },
             { key: "AvgPx", formula: "0" },
-            { key: "TransactTime", formula: "now" },
+            { key: "TransactTime", formula: "${timestamp()}" },
             { key: "HandlInst", formula: "3" }
         ];
     }

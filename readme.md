@@ -78,10 +78,12 @@ For all options, run with the -? switch:
 ```
 > node server.js -?
 Options:
-  --port, -p        Port to serve HTTP content                 [default: "4400"]
-  --subscriber, -s  FIXalicious channel                          [default: "ui"]
-  --redis_host      Redis server hostname                 [default: "localhost"]
-  --redis_port      Redis server port                          [default: "6379"]
+  --port, -p        	Port to serve HTTP content                 [default: "4400"]
+  --subscriber, -s  	FIXalicious channel                          [default: "ui"]
+  --redis_host      	Redis server hostname                 [default: "localhost"]
+  --redis_port      	Redis server port                          [default: "6379"]
+  --fixalicious_host  	FIXalicious server host                          [default: "localhost"]
+  --fixalicious_port    FIXalicious server port                          [default: "9999"]
   --help, -?        Show help                                          [boolean]
 
 ```
@@ -101,3 +103,54 @@ To generate a new ID
 ```
 ${newId()}
 ```
+
+To generate a new timestamp in UTC
+```
+${timestamp()}
+```
+
+# Troubleshooting
+
+## 1.rxjs versioning issue
+
+###### Symptoms: 
+
+UI is stuck at "Starting up....". 
+
+In F12 Developer tool console, it complains about rxjs  
+
+```
+Error: (SystemJS) XHR error (404 Not Found) loading http://localhost:4400/client/node_modules/rxjs/operators.js  Error: Resource Not Found
+```
+
+On Server side, it shows error:
+```
+Error: Resource Not Found
+    at app.use (D:\Fixacilious-latest\fixalicious-ui\server\swagger.js:69:15)
+    at Layer.handle [as handle_request] (D:\Fixacilious-latest\fixalicious-ui\se
+rver\node_modules\express\lib\router\layer.js:95:5)
+......
+    at SendStream.error (D:\Fixacilious-latest\fixalicious-ui\server\node_module
+s\serve-static\index.js:120:7)
+    at emitOne (events.js:96:13)
+    at SendStream.emit (events.js:188:7)
+    at SendStream.error (D:\Fixacilious-latest\fixalicious-ui\server\node_module
+s\serve-static\node_modules\send\index.js:245:17)
+```
+
+###### Causes: 
+
+rxjs package got updated to rxjs@5.5.2 
+
+###### Solution: 
+
+downgrade rxjs package to rxjs@5.4.3
+in the client folder, run cmd as administrator
+```
+>npm uninstall rxjs
+>npm install rxjs@5.4.3
+>npm list --depth=0
+```
+  
+
+    
