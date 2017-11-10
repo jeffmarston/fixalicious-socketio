@@ -17,7 +17,9 @@ class ActionController {
             { label: "Ack", type: "template", template: ActionController.createAck() },
             { label: "Partial", type: "template", template: ActionController.createPartial() },
             { label: "Fill", type: "template", template: ActionController.createFill() },
-            { label: "Reject", type: "template", template: ActionController.createReject() }
+            { label: "Reject", type: "template", template: ActionController.createReject() },
+            { label: "AmendFill", type: "template", template: ActionController.createAmendFill() },
+            { label: "CancelFill", type: "template", template: ActionController.createCancelFill() }
         ];
     }
 
@@ -176,6 +178,64 @@ class ActionController {
             { key: "AvgPx", formula: "0" },
             { key: "TransactTime", formula: "${timestamp()}" },
             { key: "HandlInst", formula: "3" }
+        ];
+    }
+
+    static createCancelFill() {
+        return [
+            { key: "OrderID", formula: "${tag(37)}" },
+            { key: "ClOrdID", formula: "${tag(11)}" },
+            { key: "ExecID", formula: "${newId()}" },
+            { key: "ExecRefID", formula: "${tag(17)}" },            
+            { key: "ExecTransType", formula: "1" },
+            { key: "ExecType", formula: "4" },
+            { key: "OrdStatus", formula: "4" },
+            { key: "Symbol", formula: "${tag(55)}" },
+            { key: "SecurityExchange", formula: "${tag(207)}" },
+            { key: "Side", formula: "${tag(54)}" },            
+            { key: "Currency", formula: "${tag(15)}" },
+            { key: "LastMkt", formula: "${tag(30)}" },     
+            { key: "LastCapacity", formula: "1" },
+            { key: "OrderQty", formula: "${tag(38)}" },
+            { key: "OrdType", formula: "${tag(40)}" },
+            { key: "Price", formula: "${tag(44)}" },
+            { key: "TimeInForce", formula: "${tag(59)}" },
+            { key: "LastShares", formula: "${tag(32)}" },
+            { key: "LastPx", formula: "${tag(31)}" },
+            { key: "LeavesQty", formula: "${tag(151)}" },
+            { key: "CumQty", formula: "${tag(14)}" },
+            { key: "AvgPx", formula: "${tag(6)}" },
+            { key: "TransactTime", formula: "${timestamp()}" },
+            { key: "HandlInst", formula: "${tag(21)}" }
+        ];
+    }
+
+    static createAmendFill() {
+        return [
+            { key: "OrderID", formula: "${tag(37)}" },
+            { key: "ClOrdID", formula: "${tag(11)}" },
+            { key: "ExecID", formula: "${newId()}" },
+            { key: "ExecRefID", formula: "${tag(17)}" },            
+            { key: "ExecTransType", formula: "2" },
+            { key: "ExecType", formula: "5" },
+            { key: "OrdStatus", formula: "5" },
+            { key: "Symbol", formula: "${tag(55)}" },
+            { key: "SecurityExchange", formula: "${tag(207)}" },
+            { key: "Side", formula: "${tag(54)}" },            
+            { key: "Currency", formula: "${tag(15)}" },
+            { key: "LastMkt", formula: "${tag(30)}" },     
+            { key: "LastCapacity", formula: "1" },
+            { key: "OrderQty", formula: "${tag(38)}" },
+            { key: "OrdType", formula: "${tag(40)}" },
+            { key: "Price", formula: "${tag(44)}" },
+            { key: "TimeInForce", formula: "${tag(59)}" },
+            { key: "LastShares", formula: "${tag(32)}" },
+            { key: "LastPx", formula: "${tag(31)}" },
+            { key: "LeavesQty", formula: "${tag(151)}" },
+            { key: "CumQty", formula: "${tag(14)}" },
+            { key: "AvgPx", formula: "${tag(6)}" },
+            { key: "TransactTime", formula: "${timestamp()}" },
+            { key: "HandlInst", formula: "${tag(21)}" }
         ];
     }
 }
