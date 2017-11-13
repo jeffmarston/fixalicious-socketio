@@ -65,7 +65,9 @@ export class MessageGridComponent implements OnInit {
 
         this.createColumnDefs();
         this.gridOptions = <GridOptions>{
-            columnDefs: this.columnDefs
+            columnDefs: this.columnDefs,
+            enableFilter: true,
+            floatingFilter: true
         };
     }
 
@@ -103,13 +105,13 @@ export class MessageGridComponent implements OnInit {
 
     private createColumnDefs() {
         this.columnDefs = [
-            { headerName: "Direction", field: "direction" },
-            { headerName: "Message Type", field: "msgType" },
-            { headerName: "Seq Num", field: "seqNum" },
-            { headerName: "CliOrdId", field: "cliOrdId" },
-            { headerName: "Symbol", field: "symbol" },
-            { headerName: "OrdStatus", field: "ordStatus" },
-            { headerName: "Message", field: "message" }
+            { headerName: "Direction", field: "direction", filter:'text' },
+            { headerName: "Message Type", field: "msgType", filter:'text' },
+            { headerName: "Seq Num", field: "seqNum", filter:'number' },
+            { headerName: "CliOrdId", field: "cliOrdId", filter:'text' },
+            { headerName: "Symbol", field: "symbol", filter:'text' },
+            { headerName: "OrdStatus", field: "ordStatus", filter:'text' },
+            { headerName: "Message", field: "message", filter:'text' }
         ];
     }
 
