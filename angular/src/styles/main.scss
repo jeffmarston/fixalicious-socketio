@@ -1,0 +1,94 @@
+
+/*colors:
+
+#223344
+#627C85
+#779CAB
+#A2E8DD
+#32DE8A
+
+#b0e0e6?
+
+*/
+
+html{
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    
+    overflow: hidden;
+    display: flex;
+    flex: 1 1 auto;
+  }
+  
+  body {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+  
+  button, input, li, a, label {
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  code{
+    font-family: 'Source Code Pro', monospace;
+  }
+  
+  .loading {
+    font-family: 'Play', sans-serif;
+    padding: 10px;
+    display: block;
+  }
+  
+  select, button:focus {
+    outline:none;
+  }
+  
+  split-gutter {
+      background-color: transparent !important;
+  }
+  
+  h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-family: 'Titillium Web', sans-serif;
+    font-family: 'Play', sans-serif;
+  
+    margin: 0;
+    font-size: 18px;
+    font-weight: normal;
+  }
+  
+  .header-bar {
+    background: #234; 
+    padding: 14px;
+    color: white;
+    box-sizing: border-box;
+  }
+  
+  .service-status {
+    color: white;
+    padding: 4px;
+    margin: -4px;
+    transition: all .3s ease-in;
+  }
+  
+  .unknown {
+    background: rgba(220, 170,0,1);
+  }
+  
+  .stopped {
+    background: rgba(200, 0,0,1);
+  }
+  
+  .running {
+    background: rgba(0, 130,0,1);
+  }
+  
+  .none {
+    background: transparent;
+    padding: 0;
+    margin: -0;
+  }
+  

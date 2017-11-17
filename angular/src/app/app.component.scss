@@ -1,0 +1,24 @@
+.app-container { 
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.app-content { 
+    display: flex;
+    flex-direction: row;
+    flex: 1 1 auto;
+}
+h1 {
+    display: inline;
+}
+.collapse-button {
+    font-size: 16px;
+    display: inline;
+    cursor: pointer;
+    margin-right: 10px;
+}
+.flex-row {
+    display:flex;
+    flex-direction: row;
+    flex: 1 1 auto;
+}

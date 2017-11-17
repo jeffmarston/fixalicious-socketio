@@ -1,0 +1,88 @@
+
+input {
+    outline: none;
+}
+
+.container {
+    flex-direction: column;
+    height: 100%;
+    background-color: #234;
+    color: #88959E;
+    overflow: hidden;
+    transition: height .25s ease;
+}
+
+input {
+    width: 100%;
+    height: 30px;
+    border: none;
+    font-size: 14px;
+    text-align:center
+}
+
+.editable-input {
+    transition: height .1s ease;
+    background: #88959E;
+}
+
+.editable-input.hidden {
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+
+.editable-input.visible {
+    opacity: 1;
+    width: 100%;
+    height: 30px;
+}
+
+.readonly-input {
+    background: transparent;
+    color: #88959E;
+    cursor: pointer;
+}
+
+.add-session-button {
+    display: none;
+    border-radius: 15px;
+    margin-left: 10px;
+    padding-left: 9px;
+    padding-right: 9px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 24px;
+}
+
+.add-session-button:hover {
+    color: white;
+    background: #36424B;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+li.navbar-item { 
+    width: 100px;
+    float: left;
+    padding: 4px;
+    border-radius: 6px 6px 0 0;
+}
+
+li.navbar-item:hover:not(.active) {
+    background-color: #25404E;
+}
+
+li.active {
+    background-color: #fff;
+    color: white;
+}
+
+input.disconnected {
+    font-style: italic;
+}

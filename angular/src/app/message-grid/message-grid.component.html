@@ -1,0 +1,47 @@
+<div class="outer-div"
+  (window:resize)="onResize()">
+  <div class="all-content">
+
+    <split direction="horizontal"
+      (dragEnd)="saveSize($event)"
+      (dragProgress)="splitterSizing($event)">
+      <split-area [size]="splitSize"
+        style="display:flex">
+
+        <div *ngIf="showGrid"
+          class="grid-pane">
+          <!--<div class="filter" >
+                <input class="filter" 
+                     [(ngModel)]="filterValue"
+                     (ngModelChange)="updateFilter($event)"
+                    placeholder="Filter CliOrdId"
+                    [class.active-filter]="filterValue"
+                    />
+        </div>-->
+          <ag-grid-angular #agGrid
+            style="height: 100%; width: 100%;"
+            class="ag-theme"
+            [gridOptions]="gridOptions"
+            enableColResize
+            enableSorting
+            enableFilter
+            rowSelection="multiple"
+            (cellClicked)="onCellClicked($event)"
+            (rowDoubleClicked)="showFixMessage()">
+          </ag-grid-angular>
+        </div>
+
+      </split-area>
+      <split-area [size]="100-splitSize"
+        style="display: flex">
+        <detail-pane class="detail-pane"
+          (onCollapse)="onCollapse($event)"
+          [collapsed]="splitConfig?.collapsed"
+          [detail]="selectedMessage"
+          [session]="selectedSession">
+        </detail-pane>
+
+      </split-area>
+    </split>
+  </div>
+</div>

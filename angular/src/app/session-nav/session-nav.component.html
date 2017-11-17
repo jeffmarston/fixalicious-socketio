@@ -1,0 +1,33 @@
+<div class="container" [style.height]="isCollapsed ? '0' : '36px'" >
+  <ul>
+      <li class="navbar-item" style="width: 0;"></li>
+      <li *ngFor="let session of sessions"
+              (click)="onClick(session)"
+              (dblclick)="enterEdit(session)"
+              class="navbar-item"
+              [class.active]="session.selected">
+              
+              <input 
+                  (blur)="doneEditingSession(session)"
+                  [readonly]="!session.isEditing"
+                  [(value)]="session.session"
+                  [class.disconnected]="session.disconnected"
+                  [ngClass]="session.isEditing ? 'editable-input' : 'readonly-input' "/>
+
+      </li>
+      <li>
+          <span class="add-session-button navbar-item" 
+              (click)="addSession($event, newSessionInput)"
+              *ngIf="!isAddingSession" 
+              title="Add new session">+</span>
+          <input 
+              #newSessionInput
+              name="newSessionInput"
+              class="editable-input hidden"
+              [ngClass]="{'visible': isAddingSession }"
+              [(ngModel)]="newSessionName" 
+              (blur)="doneEditingSession()"/>
+
+      </li>
+  </ul>
+</div>
