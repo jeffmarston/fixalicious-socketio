@@ -13,6 +13,9 @@ class SessionModel {
 
     static getAll() {
         return client.hvalsAsync('ui-sessions').then((items) => {
+            
+            // return [{ name: "FAKE1", status: "up" }]; 
+
             return _.map(items, o => {
                 return JSON.parse(o);
             });

@@ -39,18 +39,22 @@ export class SessionNavComponent implements OnInit {
     }
 
     ngOnInit() {
-        // this.sessions = [];
-        // this.apiService.getSessions();
-        // var src = this.apiService.getSessions();
-        // src.subscribe(data => {
-        //     this.sessions = data;
-        //     if (data.length > 0) {
-        //         this.selectedSession = data[0];
-        //         this.onClick(this.selectedSession);
-        //     }
-        // }, error => {
-        //     console.error("ERROR: " + error);
-        // });
+        this.sessions = [];
+        this.apiService.getSessions();
+        var src = this.apiService.getSessions();
+        console.log(' -=-=- (init)  SESSIONS -=-=-');
+        src.subscribe(data => {
+            
+            console.log(' -=-=- (init)  SESSIONS back -=-=-');
+
+            this.sessions = data;
+            if (data.length > 0) {
+                this.selectedSession = data[0];
+                this.onClick(this.selectedSession);
+            }
+        }, error => {
+            console.error("ERROR: " + error);
+        });
 
         // let socket = io();
         // socket.on('session', session => {
