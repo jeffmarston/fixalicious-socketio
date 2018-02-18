@@ -1,12 +1,12 @@
 <div class="outer-div"
   (window:resize)="onResize()">
   <div class="all-content">
-
+<!-- 
     <split direction="horizontal"
       (dragEnd)="saveSize($event)"
       (dragProgress)="splitterSizing($event)">
       <split-area [size]="splitSize"
-        style="display:flex">
+        style="display:flex"> -->
 
         <div *ngIf="showGrid"
           class="grid-pane">
@@ -30,18 +30,18 @@
             (rowDoubleClicked)="showFixMessage()">
           </ag-grid-angular>
         </div>
-
+<!-- 
       </split-area>
       <split-area [size]="100-splitSize"
-        style="display: flex">
-        <detail-pane class="detail-pane"
+        style="display: flex"> -->
+        <!-- <detail-pane class="detail-pane"
           (onCollapse)="onCollapse($event)"
           [collapsed]="splitConfig?.collapsed"
           [detail]="selectedMessage"
           [session]="selectedSession">
-        </detail-pane>
-
+        </detail-pane> -->
+<!-- 
       </split-area>
-    </split>
+    </split> -->
   </div>
 </div>

@@ -32,7 +32,7 @@ export class SessionNavComponent implements OnInit {
         for (let propName in changes) {
             let changedProp = changes[propName];
 
-            if (propName == "collapsed" && changedProp.currentValue != undefined) {
+            if (propName === 'collapsed' && changedProp.currentValue !== undefined) {
                 this.isCollapsed = changedProp.currentValue;
             }
         }

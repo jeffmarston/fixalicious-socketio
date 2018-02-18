@@ -18,6 +18,7 @@ if (app.get('env') === 'development') {
 }
 
 app.use('/client', express.static('../client'));
+app.use('/angular', express.static('../angular/src'));
 app.get('/', function (req, res) {
   res.send(`
 <style>a {color: #112; text-decoration: none;
@@ -29,6 +30,7 @@ h4{font-family: sans-serif;}
 </style>
   <h4>Where would you like to go?</h4>
   <a href="/client">Fixalicious Client</a>
+  <a href="/angular">Angular 4 Client</a>
   <a href="/api/v1">API Documentation</a>
   `);
 });

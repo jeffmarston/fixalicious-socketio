@@ -10,13 +10,13 @@ import * as _ from 'lodash';
 
 
 export interface ITransaction {
-    session?: string,
-    direction: string,
-    msgType: string,
-    seqNum: number,
-    cliOrdId: string,
-    ordStatus: string,
-    message: string
+    session?: string;
+    direction: string;
+    msgType: string;
+    seqNum: number;
+    cliOrdId: string;
+    ordStatus: string;
+    message: string;
 }
 
 export interface ISession {
@@ -76,7 +76,7 @@ export class MessageGridComponent implements OnInit {
 
     constructor(
         private apiService: ApiService,
-        //private modalService: ModalService,
+        // private modalService: ModalService,
         private http: Http) {
 
         this.createColumnDefs();
@@ -104,7 +104,7 @@ export class MessageGridComponent implements OnInit {
         for (let propName in changes) {
             let changedProp = changes[propName];
 
-            if (propName == 'session') {
+            if (propName === 'session') {
                 this.selectedSession = changedProp.currentValue;
                 this.rowData = null;
                 this.filterValue = null;
@@ -131,7 +131,7 @@ export class MessageGridComponent implements OnInit {
 
     private fetchRowData(session: ISession) {
         if (session) {
-            var src = this.apiService.getTransactions(session.session);
+            let src = this.apiService.getTransactions(session.session);
             src.subscribe(o => {
                 this.addRowsToDataSource(o);
             }, error => {
@@ -163,8 +163,7 @@ export class MessageGridComponent implements OnInit {
             row.msgType = this.getValueFromTag(item.message.header, 35);  // ['MsgType (35)'];
             row.ordStatus = this.getValueFromTag(item.message.body, 39);  // ['OrdStatus (39)'];
             row.symbol = this.getValueFromTag(item.message.body, 55);  // ['Symbol (55)'];
-        }
-        catch (ex) {
+        } catch (ex) {
             console.error('Unable to parse FIX: ' + JSON.stringify(item));
         }
         return row;
@@ -195,8 +194,8 @@ export class MessageGridComponent implements OnInit {
         }
         this.gridOptions.api.updateRowData({ remove: rowsToRemove });
 
-        // resize columns 
-        var allColumnIds = [];
+        // resize columns
+        let allColumnIds = [];
         this.columnDefs.forEach(function (columnDef) {
             allColumnIds.push(columnDef.field);
         });
