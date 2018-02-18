@@ -21,7 +21,7 @@
     "@angular/platform-browser": "^4.x",
     "@angular/platform-browser-dynamic": "^4.x",
     "@angular/router": "^4.x",
-    "ag-grid": "^14.0.1",
+    "ag-grid": "^14.2.0",
     "ag-grid-angular": "^14.0.0",
     "angular-split": "^0.2.3",
     "core-js": "^2.4.1",

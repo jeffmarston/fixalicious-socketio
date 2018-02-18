@@ -18,7 +18,6 @@ if (app.get('env') === 'development') {
 }
 
 app.use('/client', express.static('../client'));
-app.use('/angular', express.static('../angular/src'));
 app.get('/', function (req, res) {
   res.send(`
 <style>a {color: #112; text-decoration: none;
